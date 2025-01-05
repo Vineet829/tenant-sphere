@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 	description: "Password request reset page",
 };
 
+
 export default function ForgotPassword() {
 	return (
 		<div>
