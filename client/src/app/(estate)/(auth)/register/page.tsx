@@ -11,6 +11,7 @@ import { setAuth } from "@/lib/redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { extractErrorMessage } from "@/utils"
 
+
 export default function RegisterPage() {
 	useRedirectIfAuthenticated();
 	const [loginUser] = useLoginUserMutation();
