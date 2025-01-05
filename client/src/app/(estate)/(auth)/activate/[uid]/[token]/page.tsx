@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useActivateUserMutation } from "@/lib/redux/features/auth/authApiSlice";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
