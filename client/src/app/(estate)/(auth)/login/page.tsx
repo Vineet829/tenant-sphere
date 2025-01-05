@@ -12,6 +12,7 @@ import { useAppDispatch } from "@/lib/redux/hooks/typedHooks";
 import { setAuth } from "@/lib/redux/features/auth/authSlice"; 
 import { extractErrorMessage } from "@/utils"
 export default function LoginPage() {
+	
 	useRedirectIfAuthenticated();
 	const [loginUser, { isLoading }] = useLoginUserMutation();
 	const router = useRouter();
