@@ -21,6 +21,7 @@ from .serializers import (
     TopPostSerializer,
     UpvotePostSerializer,
     PostByTagSerializer,
+    DeletePostSerializer
 )
 
 
@@ -221,6 +222,21 @@ class DownvotePostAPIView(APIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PostDeleteAPIView(APIView):
+   
+
+    def delete(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+
+        
+        if post.author != request.user:
+            raise PermissionDenied("You do not have permission to delete this post.")
+
+        serializer = DeletePostSerializer(data={}, context={'request': request, 'post': post})
+        serializer.is_valid(raise_exception=True)
+        serializer.delete_post()
+
+        return Response({"message": "Post deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
 
 class PopularTagsListAPIView(generics.ListAPIView):
     serializer_class = PopularTagSerializer
@@ -257,3 +273,5 @@ class PostsByTagListAPIView(generics.ListAPIView):
         return Post.objects.filter(tags__slug=tag_slug).annotate(
             replies_count=Count("replies")
         )
+
+

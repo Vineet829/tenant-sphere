@@ -4,6 +4,7 @@ import {
 	MyPostsResponse,
 	PopularTagResponse,
 	PostData,
+	PostDeleteResponse,
 	PostQueryParams,
 	PostResponse,
 	PostsByTagResponse,
@@ -59,6 +60,14 @@ export const postApiSlice = baseApiSlice.injectEndpoints({
 				method: "PATCH",
 			}),
 			invalidatesTags: ["Post"],
+		}),
+		deletePost: builder.mutation<PostDeleteResponse, string>({
+            query: (postId) => ({
+                url: `/posts/${postId}/delete/`,
+                method: "DELETE",
+            }),
+			invalidatesTags: [{ type: 'Post', id: 'LIST' }],
+        
 		}),
 		downvotePost: builder.mutation<UpvoteDownvoteResponse, string>({
 			query: (postId) => ({
@@ -128,4 +137,5 @@ export const {
 	useUnBookmarkPostMutation,
 	useReplyToPostMutation,
 	useGetAllRepliesQuery,
+	useDeletePostMutation
 } = postApiSlice;

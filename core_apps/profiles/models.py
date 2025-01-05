@@ -81,11 +81,11 @@ class Profile(TimeStampedModel):
         default=Occupation.TENANT,
     )
     phone_number = PhoneNumberField(
-        verbose_name=_("Phone Number"), max_length=30, default="+250784123456"
+        verbose_name=_("Phone Number"), max_length=30, default="+919997008000"
     )
-    country_of_origin = CountryField(verbose_name=_("Country"), default="KE")
+    country_of_origin = CountryField(verbose_name=_("Country"), default="IND")
     city_of_origin = models.CharField(
-        verbose_name=_("City"), max_length=180, default="Nairobi"
+        verbose_name=_("City"), max_length=180, default="New Delhi"
     )
     report_count = models.IntegerField(verbose_name=_("Report Count"), default=0)
     reputation = models.IntegerField(verbose_name=_("Reputation"), default=100)

@@ -158,6 +158,9 @@ export interface TopPostsResponse {
 		results: TopPost[];
 	};
 }
+export interface PostDeleteResponse {
+	message: string; 
+}
 interface Report {
 	id: string;
 	title: string;

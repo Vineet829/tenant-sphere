@@ -4,8 +4,10 @@ from django.db.models import F
 from rest_framework import serializers
 from taggit.models import Tag
 from taggit.serializers import TagListSerializerField, TaggitSerializer
+from django.utils import timezone
 from core_apps.common.models import ContentView
 from core_apps.posts.models import Post, Reply
+import pytz
 
 User = get_user_model()
 
@@ -109,6 +111,16 @@ class DownvotePostSerializer(serializers.ModelSerializer):
         return instance
 
 
+class DeletePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = []
+
+    def delete_post(self):
+        post = self.context['post']  
+        post.delete()
+        return post
+
 class BasePostSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source="author.username")
     is_bookmarked = serializers.SerializerMethodField()
@@ -150,12 +162,14 @@ class BasePostSerializer(serializers.ModelSerializer):
         return False
 
     def get_created_at(self, obj):
-        now = obj.created_at
+    
+        now = timezone.localtime(obj.created_at, timezone=pytz.timezone('Asia/Kolkata'))
         formatted_date = now.strftime("%Y-%m-%d %H:%M:%S")
         return formatted_date
 
     def get_updated_at(self, obj):
-        then = obj.updated_at
+    
+        then = timezone.localtime(obj.updated_at, timezone=pytz.timezone('Asia/Kolkata'))
         formatted_date = then.strftime("%Y-%m-%d %H:%M:%S")
         return formatted_date
 
@@ -201,3 +215,5 @@ class PostByTagSerializer(TaggitSerializer, BasePostSerializer):
 
     class Meta(BasePostSerializer.Meta):
         fields = BasePostSerializer.Meta.fields + ["body", "tags"]
+
+

@@ -29,11 +29,7 @@ export default function PostCard() {
 
 	const totalCount = data?.posts.count || 0;
 	const totalPages = Math.ceil(totalCount / 9);
-
-	const sortedPosts = sortByDateDescending(
-		data?.posts.results ?? [],
-		"created_at",
-	);
+	const sortedPosts = sortByDateDescending(data?.posts.results ?? [], "created_at");
 
 	if (isLoading) {
 		return (
@@ -46,7 +42,7 @@ export default function PostCard() {
 	return (
 		<>
 			<div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-				<h1 className="font-robotoSlab dark:text-pumpkin text-5xl">
+				<h1 className="font-robotoSlab dark:text-pumpkin text-3xl sm:text-5xl">
 					All Posts - ({data?.posts.results.length})
 				</h1>
 
@@ -57,21 +53,18 @@ export default function PostCard() {
 				</Link>
 			</div>
 
-			<div className="mt-7 grid grid-cols-2 gap-6">
+			<div className="mt-7 grid grid-cols-1 gap-6 sm:grid-cols-2">
 				{sortedPosts && sortedPosts.length > 0 ? (
 					sortedPosts.map((postItem) => (
-						<Card
-							key={postItem.id}
-							className="dark:border-gray rounded-lg border"
-						>
+						<Card key={postItem.id} className="dark:border-gray rounded-lg border">
 							<CardHeader className="dark:text-platinum w-full pb-4">
-								<CardTitle className="font-robotSlab text-center text-2xl">
+								<CardTitle className="font-robotSlab text-center text-xl sm:text-2xl">
 									{postItem.title.length > 25
 										? `${postItem.title.substring(0, 25)}....`
 										: postItem.title}
 								</CardTitle>
 								<CardDescription>
-									<div className="flex flex-row justify-between">
+									<div className="flex flex-col sm:flex-row sm:justify-between">
 										<div>
 											<span>Posted on</span>
 											<span className="dark:text-pumpkin ml-1">
@@ -99,21 +92,19 @@ export default function PostCard() {
 								</p>
 							</CardContent>
 
-							<div className="flex flex-row items-center justify-between p-2">
-								<div className="">
-									<Link href={`/post/${postItem.slug}`}>
-										<Button size="sm" className="lime-gradient text-babyPowder">
-											View Post
-										</Button>
-									</Link>
-								</div>
+							<div className="flex flex-col sm:flex-row items-center justify-between p-2">
+								<Link href={`/post/${postItem.slug}`} className="w-full sm:w-auto">
+									<Button size="sm" className="lime-gradient text-babyPowder w-full">
+										View Post
+									</Button>
+								</Link>
 
-								<div className="flex-row-center dark:text-platinum">
+								<div className="flex-row-center dark:text-platinum mt-2 sm:mt-0">
 									<EyeIcon className="post-icon text-electricIndigo mr-1" />
 									{getViewText(postItem.view_count)}
 								</div>
 
-								<div className="flex-row-center dark:text-platinum">
+								<div className="flex-row-center dark:text-platinum mt-2 sm:mt-0">
 									<MessageSquareQuoteIcon className="post-icon text-electricIndigo mr-1" />
 									<span>{getRepliesText(postItem.replies_count)}</span>
 								</div>

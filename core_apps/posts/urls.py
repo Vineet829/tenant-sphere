@@ -15,6 +15,7 @@ from .views import (
     PopularTagsListAPIView,
     TopPostsListAPIView,
     PostsByTagListAPIView,
+    PostDeleteAPIView
 )
 
 
@@ -42,4 +43,6 @@ urlpatterns = [
     path(
         "<uuid:post_id>/downvote/", DownvotePostAPIView.as_view(), name="downvote-post"
     ),
+path("<uuid:post_id>/delete/", PostDeleteAPIView.as_view(), name="post-delete"),
+
 ]

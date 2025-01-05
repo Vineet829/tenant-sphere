@@ -1,10 +1,41 @@
 "use client";
+
 import { AuthFormHeader, LoginForm } from "@/components/forms/auth";
 import OauthButtons from "@/components/shared/OauthButtons";
+import GuestButton from "@/components/shared/GuestButton"; 
 import { useRedirectIfAuthenticated } from "@/hooks";
-
+import { useForm } from "react-hook-form";
+import { useLoginUserMutation } from "@/lib/redux/features/auth/authApiSlice"; 
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/redux/hooks/typedHooks";
+import { setAuth } from "@/lib/redux/features/auth/authSlice"; 
+import { extractErrorMessage } from "@/utils"
 export default function LoginPage() {
 	useRedirectIfAuthenticated();
+	const [loginUser, { isLoading }] = useLoginUserMutation();
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const { setValue } = useForm();
+
+	const handleGuestLogin = async () => {
+		const guestCredentials = {
+			email: "testuser@gmail.com",
+			password: "example1234",
+		};
+
+		try {
+			
+			await loginUser(guestCredentials).unwrap();
+			dispatch(setAuth());
+			toast.success("Login Successful");
+			router.push("/welcome");
+		} catch (error) {
+			const errorMessage = extractErrorMessage(error);
+			toast.error(errorMessage || "An error occurred");
+		}
+	};
+
 	return (
 		<div>
 			<AuthFormHeader
@@ -22,6 +53,7 @@ export default function LoginPage() {
 						<div className="bg-richBlack dark:bg-platinum h-px flex-1"></div>
 					</div>
 					<OauthButtons />
+					<GuestButton onClick={handleGuestLogin} /> {/* Use the updated GuestButton */}
 				</div>
 			</div>
 		</div>
