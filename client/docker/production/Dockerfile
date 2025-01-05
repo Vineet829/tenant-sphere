@@ -40,6 +40,7 @@ WORKDIR ${APP_HOME}
 
 ENV NODE_ENV=production
 
+
 RUN addgroup -g 1001 -S nodejs && \
   adduser -S nextjs -u 1001 -G nodejs
 
