@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 		"Tenant Sphere Home Page. Create your account to get started.",
 };
 
+
 export default function HomePage() {
 	return (
 		<div className="relative h-screen">
