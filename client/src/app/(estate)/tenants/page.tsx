@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 		"Authenticated users can view basic information about other tenants within the property. Tenants can also search for other tenants",
 };
 
+
 function TenantsPageContent() {
 	return (
 		<div>
