@@ -13,6 +13,7 @@ import Issues from "@/components/profile/Issues";
 import AssignedIssues from "@/components/profile/AssignedIssues";
 import Reports from "@/components/profile/Reports";
 
+
 export const metadata: Metadata = {
 	title: "Tenant Sphere | User Profile",
 	description: "Signed in users can view all their profile information",
