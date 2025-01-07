@@ -7,6 +7,8 @@ export const metadata: Metadata = {
 		"Tenants can see a list of technicians, what they specialize on and their rating",
 };
 
+
+
 export default function TechniciansPage() {
 	return (
 		<>
