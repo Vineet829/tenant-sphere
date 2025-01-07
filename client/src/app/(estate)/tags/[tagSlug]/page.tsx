@@ -6,11 +6,14 @@ export const metadata: Metadata = {
 	description: "Authenticated users can see the tags details of a post",
 };
 
+
 interface SlugParamsProps {
 	params: {
 		tagSlug: string;
 	};
 }
+
+
 
 export default function TagPostsPage({ params }: SlugParamsProps) {
 	return (
