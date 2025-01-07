@@ -11,22 +11,46 @@ Welcome to the **Tenant Sphere**! This application is designed to facilitate com
 - [License](#license)
 - [Contact](#contact)
 
-## Features
+### Tech Stack Overview
 
-- User authentication and profile management
-- View and manage posts by tenants
-- Report issues related to apartments
-- Report other tenants for misconduct
-- Interact with posts: upvote, downvote, reply, and bookmark
-- View tenants and technicians in dedicated tabs
-- Access to bookmarked posts and posts by tags
-- **Tenant Reporting:** Users can report other tenants for various misconducts.
+### Tech Stack Overview
 
-### Tech Stack
+- **Docker:** 
+  - Utilized for creating consistent development and production environments, facilitating deployment with Docker Compose.
 
-- **Backend:** Django, Django REST Framework, Python 3, Type Hints
-- **Frontend:** React, Next.js 14, TypeScript, Redux, Redux Toolkit
-- **Containerization:** Docker, NGINX, Shell Scripting
+- **NGINX:** 
+  - Implemented as a reverse proxy for the Django API and React/Next.js frontend, enhancing security and managing traffic effectively.
+
+- **Django REST Framework:** 
+  - Employed to build RESTful APIs that support user authentication and various app features.
+
+- **Djoser:** 
+  - Integrated to provide views for user registration, login, and password management seamlessly.
+
+- **Celery & Redis:** 
+  - Leveraged for handling asynchronous tasks and background job processing, with monitoring capabilities via Flower.
+
+- **PostgreSQL:** 
+  - Chosen as the primary database for storing user data, posts, and issues efficiently.
+
+- **React & Next.js 14:** 
+  - Used to power the frontend, delivering a dynamic user experience with server-side rendering capabilities.
+
+- **Redux & Redux Toolkit:** 
+  - Applied to manage application state across React components effectively.
+
+- **Tailwind CSS:** 
+  - Adopted for styling components using utility-first CSS, enabling rapid UI development.
+
+- **Git:** 
+  - Utilized for version control, allowing for effective tracking of code changes and collaboration.
+
+- **Cloudinary:** 
+  - Employed to manage image uploads and storage seamlessly.
+
+- **DigitalOcean:** 
+  - Selected for hosting the application and managing SSL certificates.
+
 
 ## Installation
 
@@ -103,29 +127,32 @@ npm start
 ## Usage
 
 ### Authentication Features
-- **Register a New User:** Create a new account to start using the app.
-- **Login:** Securely log in with your registered credentials.
-- **Logout:** End your session securely to protect your account.
-- **Password Reset:** Request a password reset if you've forgotten your password.
+- **Register a New User:** Easily create a new account to start using the app.
+- **Login:** Securely log in with your registered credentials or use Google OAuth for quick access.
+- **Logout:** End your session securely to protect your account from unauthorized access.
+- **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
 
 ### Tenant and Technician Management
-- **View Tenants:** Access a list of all tenants in the tenants tab.
-- **View Technicians:** Access a list of all technicians in the technicians tab.
+- **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
+- **View Technicians:** Browse through a list of all technicians in the corresponding tab for quick reference and ratings based on performance.
 
 ### Profile Management Features
-- **View Profile:** Access your profile to view personal information.
-- **User Posts:** View all your created posts, including details such as creation and update timestamps.
-- **View Issues and Reports:** Access and manage your reported issues and assigned issues.
+- **View Profile:** Access and update your profile information, including managing your avatar.
+- **User Posts:** View all posts you have created, complete with timestamps for better tracking.
+- **View Issues and Reports:** Manage reported issues and view assigned issues for effective oversight.
 
 ### Post Management Features
-- **View Posts:** Browse all posts made by tenants.
-- **Bookmark Posts:** Save posts for later access in the bookmark tab.
-- **View by Tags:** Filter posts by tags for easier navigation.
-- **Interact with Posts:** Upvote, downvote, reply to, and delete your own posts.
-- **Post Metadata:** See when a post was created and last updated.
+- **View Posts:** Explore all posts made by tenants, including top posts to stay informed about community discussions.
+- **Bookmark Posts:** Save posts for easy access later in the bookmark tab to ensure you don’t miss important information.
+- **View by Tags:** Filter posts by tags to streamline navigation and find relevant content quickly.
+- **Interact with Posts:** Engage with posts by upvoting, downvoting, replying to comments, and deleting your own posts as needed.
+- **Post Metadata:** Access detailed information about when a post was created and last updated for better context.
+- **Pagination and Search:** Utilize pagination and search functionality to easily navigate through posts and tenants.
 
 ### Issue Reporting
-- **Report Issues:** Report issues related to your apartment directly through the app.
-- **Report Other Tenants:** Users can report other tenants for misconduct. The reported tenants will receive a warning from the admin via email, ensuring a safe and respectful community.
+- **Report Issues:** Directly report any issues related to your apartment through the app for prompt attention.
+- **Report Other Tenants:** Users can report other tenants for various misconducts, with reported individuals receiving a warning from the admin via email. This process helps maintain a safe and respectful community environment.
+
+
 
    
