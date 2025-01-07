@@ -7,6 +7,8 @@ export const metadata: Metadata = {
 	description: "Authenticated users can add their apartment details",
 };
 
+
+
 export default function AddApartmentPage() {
 	return (
 		<div>
