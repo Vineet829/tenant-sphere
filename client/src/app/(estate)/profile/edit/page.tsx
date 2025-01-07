@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 	description: "Signed in users can edit their profile information",
 };
 
+
 export default function EditProfilePage() {
 	return (
 		<div>
