@@ -9,6 +9,7 @@ body{
 }
 
 /* Light theme react select styling */
+
 :root {
   --select-background-color: #FBFEF9;
   --select-border-color: black;
