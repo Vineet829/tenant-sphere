@@ -7,6 +7,7 @@ interface LayoutProps {
 	children: React.ReactNode;
 }
 
+
 export default function layout({ children }: LayoutProps) {
 	return (
 		<main className="bg-baby_veryBlack relative">
