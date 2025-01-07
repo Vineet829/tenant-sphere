@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 	description: "Authenticated users can see the details of a post",
 };
 
+
 interface ParamsProps {
 	params: {
 		slug: string;
