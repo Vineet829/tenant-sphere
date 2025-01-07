@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 		"Tenants can report their fellow tenants in cases of misconduct or misbehavior",
 };
 
+
 export default function ReportTenantPage() {
 	return (
 		<div>
