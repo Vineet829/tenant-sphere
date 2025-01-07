@@ -6,6 +6,7 @@ export const metadata: Metadata = {
 	description: "Authenticated users can see the posts they have bookmarked",
 };
 
+
 export default function BookmarkedPostsPage() {
 	return (
 		<>
