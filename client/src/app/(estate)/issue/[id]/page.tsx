@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 		"Authenticated uses can get the details of the issue they have raised. They can also delete the issue",
 };
 
+
 interface ParamsProps {
 	params: {
 		id: string;
