@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 		"Technicians assigned to an issue can update the status of the issue",
 };
 
+
 interface UpdateParamsProps {
 	params: {
 		id: string;
