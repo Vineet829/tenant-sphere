@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 		"Tenants can rate the technicians, if they are satisfied or dissatisfied with the services rendered to them",
 };
 
+
 export default function AddRatingPage() {
 	return (
 		<div>
