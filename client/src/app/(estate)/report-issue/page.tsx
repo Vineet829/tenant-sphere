@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 		"Tenants can report any issues to the management with regards to their apartments",
 };
 
+
 export default function ReportIssuePage() {
 	return (
 		<div>
