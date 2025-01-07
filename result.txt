@@ -1,0 +1,924 @@
+.
+├── client
+│   ├── components.json
+│   ├── docker
+│   │   ├── local
+│   │   │   └── Dockerfile
+│   │   └── production
+│   │       └── Dockerfile
+│   ├── next.config.mjs
+│   ├── next-env.d.ts
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   ├── public
+│   │   ├── assets
+│   │   │   ├── icons
+│   │   │   │   ├── bookmark.svg
+│   │   │   │   ├── clap.svg
+│   │   │   │   ├── gender.svg
+│   │   │   │   ├── home.svg
+│   │   │   │   ├── loading-dark.svg
+│   │   │   │   ├── loading-light.svg
+│   │   │   │   ├── mobile-menu.svg
+│   │   │   │   ├── question-file.svg
+│   │   │   │   ├── report.svg
+│   │   │   │   ├── search.svg
+│   │   │   │   ├── shocked face.svg
+│   │   │   │   ├── speak.svg
+│   │   │   │   ├── tags.svg
+│   │   │   │   ├── technician.svg
+│   │   │   │   ├── tenants.svg
+│   │   │   │   ├── user-profile-circle.svg
+│   │   │   │   ├── user-profile-light-circle.svg
+│   │   │   │   └── user-profile.svg
+│   │   │   └── images
+│   │   │       └── buildings.webp
+│   │   ├── next.svg
+│   │   └── vercel.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── app
+│   │   │   ├── (estate)
+│   │   │   │   ├── add-post
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── add-rating
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── apartment
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── (auth)
+│   │   │   │   │   ├── activate
+│   │   │   │   │   │   └── [uid]
+│   │   │   │   │   │       └── [token]
+│   │   │   │   │   │           └── page.tsx
+│   │   │   │   │   ├── forgot-password
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── google
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── login
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── password-reset
+│   │   │   │   │   │   └── [uid]
+│   │   │   │   │   │       └── [token]
+│   │   │   │   │   │           └── page.tsx
+│   │   │   │   │   └── register
+│   │   │   │   │       └── page.tsx
+│   │   │   │   ├── bookmark
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── issue
+│   │   │   │   │   ├── [id]
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── update-issue
+│   │   │   │   │       └── [id]
+│   │   │   │   │           └── page.tsx
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── post
+│   │   │   │   │   ├── [slug]
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── update-post
+│   │   │   │   │       └── [slug]
+│   │   │   │   │           └── page.tsx
+│   │   │   │   ├── profile
+│   │   │   │   │   ├── edit
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── report-issue
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── report-tenant
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── tags
+│   │   │   │   │   └── [tagSlug]
+│   │   │   │   │       └── page.tsx
+│   │   │   │   ├── technicians
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── tenants
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── welcome
+│   │   │   │       └── page.tsx
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   ├── not-found.tsx
+│   │   │   └── page.tsx
+│   │   ├── components
+│   │   │   ├── cards
+│   │   │   │   ├── BookmarkedPostCard.tsx
+│   │   │   │   ├── IssueCard.tsx
+│   │   │   │   ├── MyPostCard.tsx
+│   │   │   │   ├── PostCard.tsx
+│   │   │   │   ├── PostTagCard.tsx
+│   │   │   │   ├── TechnicianCardDetails.tsx
+│   │   │   │   ├── TechnicianCard.tsx
+│   │   │   │   ├── TenantCard.tsx
+│   │   │   │   └── TenantInfo.tsx
+│   │   │   ├── forms
+│   │   │   │   ├── add-post
+│   │   │   │   │   └── CreatePostForm.tsx
+│   │   │   │   ├── add-rating
+│   │   │   │   │   └── CreateRatingForm.tsx
+│   │   │   │   ├── add-reply
+│   │   │   │   │   └── CreateReplyForm.tsx
+│   │   │   │   ├── apartment
+│   │   │   │   │   └── ApartmentCreateForm.tsx
+│   │   │   │   ├── auth
+│   │   │   │   │   ├── AuthFormHeader.tsx
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── LoginForm.tsx
+│   │   │   │   │   ├── PasswordResetConfirmForm.tsx
+│   │   │   │   │   ├── PasswordResetRequestForm.tsx
+│   │   │   │   │   └── RegisterForm.tsx
+│   │   │   │   ├── FormFieldComponent.tsx
+│   │   │   │   ├── profile
+│   │   │   │   │   ├── EditProfileForm.tsx
+│   │   │   │   │   ├── GenderSelectField.tsx
+│   │   │   │   │   └── OccupationSelectField.tsx
+│   │   │   │   ├── report-issue
+│   │   │   │   │   └── CreateIssueForm.tsx
+│   │   │   │   ├── report-tenant
+│   │   │   │   │   └── CreateReportForm.tsx
+│   │   │   │   ├── selectStyles.ts
+│   │   │   │   ├── update-issue
+│   │   │   │   │   └── UpdateIssueForm.tsx
+│   │   │   │   └── update-post
+│   │   │   │       └── UpdatePostForm.tsx
+│   │   │   ├── issue
+│   │   │   │   └── IssueDetails.tsx
+│   │   │   ├── post
+│   │   │   │   ├── PostActions.tsx
+│   │   │   │   ├── PostBody.tsx
+│   │   │   │   ├── PostDetails.tsx
+│   │   │   │   ├── PostFooter.tsx
+│   │   │   │   ├── PostHeader.tsx
+│   │   │   │   └── RepliesList.tsx
+│   │   │   ├── profile
+│   │   │   │   ├── About.tsx
+│   │   │   │   ├── AssignedIssues.tsx
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── Issues.tsx
+│   │   │   │   ├── Posts.tsx
+│   │   │   │   ├── ProfileItem.tsx
+│   │   │   │   └── Reports.tsx
+│   │   │   ├── shared
+│   │   │   │   ├── GuestButton.tsx
+│   │   │   │   ├── navbar
+│   │   │   │   │   ├── AuthAvatar.tsx
+│   │   │   │   │   ├── LeftNavbar.tsx
+│   │   │   │   │   ├── MobileNavbar.tsx
+│   │   │   │   │   ├── Navbar.tsx
+│   │   │   │   │   ├── RightNavbar.tsx
+│   │   │   │   │   └── ThemeSwitcher.tsx
+│   │   │   │   ├── OauthButtons.tsx
+│   │   │   │   ├── OauthButton.tsx
+│   │   │   │   ├── PaginationSection.tsx
+│   │   │   │   ├── ProtectedRoutes.tsx
+│   │   │   │   ├── search
+│   │   │   │   │   └── UsersSearch.tsx
+│   │   │   │   ├── Spinner.tsx
+│   │   │   │   ├── TagList.tsx
+│   │   │   │   ├── Toast.tsx
+│   │   │   │   └── Tooltip.tsx
+│   │   │   ├── theme-provider.tsx
+│   │   │   └── ui
+│   │   │       ├── avatar.tsx
+│   │   │       ├── badge.tsx
+│   │   │       ├── button.tsx
+│   │   │       ├── card.tsx
+│   │   │       ├── dropdown-menu.tsx
+│   │   │       ├── form.tsx
+│   │   │       ├── input.tsx
+│   │   │       ├── label.tsx
+│   │   │       ├── menubar.tsx
+│   │   │       ├── pagination.tsx
+│   │   │       ├── password-input.tsx
+│   │   │       ├── select.tsx
+│   │   │       ├── sheet.tsx
+│   │   │       ├── skeleton.tsx
+│   │   │       ├── tabs.tsx
+│   │   │       └── textarea.tsx
+│   │   ├── constants
+│   │   │   └── index.ts
+│   │   ├── hooks
+│   │   │   ├── index.ts
+│   │   │   ├── useAuthNavigation.ts
+│   │   │   ├── useRedirectIfAuthenticated.ts
+│   │   │   ├── useSocialAuth.ts
+│   │   │   └── useUseProfile.ts
+│   │   ├── lib
+│   │   │   ├── fonts.ts
+│   │   │   ├── redux
+│   │   │   │   ├── features
+│   │   │   │   │   ├── apartment
+│   │   │   │   │   │   └── apartmentApiSlice.ts
+│   │   │   │   │   ├── api
+│   │   │   │   │   │   └── baseApiSlice.ts
+│   │   │   │   │   ├── auth
+│   │   │   │   │   │   ├── authApiSlice.ts
+│   │   │   │   │   │   └── authSlice.ts
+│   │   │   │   │   ├── issues
+│   │   │   │   │   │   └── issueApiSlice.ts
+│   │   │   │   │   ├── posts
+│   │   │   │   │   │   ├── postApiSlice.ts
+│   │   │   │   │   │   └── postSlice.ts
+│   │   │   │   │   ├── rating
+│   │   │   │   │   │   └── ratingApiSlice.ts
+│   │   │   │   │   ├── reports
+│   │   │   │   │   │   └── reportApiSlice.ts
+│   │   │   │   │   ├── rootReducer.ts
+│   │   │   │   │   └── users
+│   │   │   │   │       ├── usersApiSlice.ts
+│   │   │   │   │       └── userSlice.ts
+│   │   │   │   ├── hooks
+│   │   │   │   │   └── typedHooks.ts
+│   │   │   │   ├── provider.tsx
+│   │   │   │   └── store.ts
+│   │   │   ├── utils.ts
+│   │   │   └── validationSchemas
+│   │   │       ├── ApartmentCreateSchema.ts
+│   │   │       ├── index.ts
+│   │   │       ├── IssueCreateSchema.ts
+│   │   │       ├── IssueUpdateSchema.ts
+│   │   │       ├── LoginSchema.ts
+│   │   │       ├── PasswordResetConfirmSchema.ts
+│   │   │       ├── PasswordResetRequestSchema.ts
+│   │   │       ├── PostReplySchema.ts
+│   │   │       ├── PostSchema.ts
+│   │   │       ├── PostUpdateSchema.ts
+│   │   │       ├── ProfileSchema.ts
+│   │   │       ├── RatingCreateSchema.tsx
+│   │   │       ├── RegisterSchema.ts
+│   │   │       ├── ReplyCreateSchema.ts
+│   │   │       └── ReportCreateSchema.ts
+│   │   ├── types
+│   │   │   └── index.d.ts
+│   │   └── utils
+│   │       ├── capitalizeFirstLetter.ts
+│   │       ├── extractErrorMessage.ts
+│   │       ├── formatDate.ts
+│   │       ├── getRepliesText.ts
+│   │       ├── getViewText.ts
+│   │       ├── index.ts
+│   │       ├── initiateSocialAuth.ts
+│   │       ├── PersistAuth.tsx
+│   │       └── sortByDate.ts
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
+├── config
+│   ├── asgi.py
+│   ├── celery_app.py
+│   ├── __init__.py
+│   ├── settings
+│   │   ├── base.py
+│   │   ├── __init__.py
+│   │   ├── local.py
+│   │   └── production.py
+│   ├── urls.py
+│   └── wsgi.py
+├── core_apps
+│   ├── apartments
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── common
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── cookie_auth.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   └── renderers.py
+│   ├── __init__.py
+│   ├── issues
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── emails.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── posts
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── filters.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── permissions.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── profiles
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── pipeline.py
+│   │   ├── serializers.py
+│   │   ├── signals.py
+│   │   ├── tasks.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── ratings
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── reports
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── emails.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── signals.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── templates
+│   │   └── emails
+│   │       ├── base.html
+│   │       ├── deactivation_email.html
+│   │       ├── issue_assignment_notification.html
+│   │       ├── issue_confirmation.html
+│   │       ├── issue_resolved_notification.html
+│   │       └── warning_email.html
+│   └── users
+│       ├── admin.py
+│       ├── apps.py
+│       ├── forms.py
+│       ├── __init__.py
+│       ├── managers.py
+│       ├── migrations
+│       │   ├── 0001_initial.py
+│       │   └── __init__.py
+│       ├── models.py
+│       ├── serializers.py
+│       ├── urls.py
+│       └── views.py
+├── Django & Next.js Estate Mngt.postman_collection.json
+├── docker
+│   ├── local
+│   │   ├── django
+│   │   │   ├── celery
+│   │   │   │   ├── beat
+│   │   │   │   │   └── start.sh
+│   │   │   │   ├── flower
+│   │   │   │   │   └── start.sh
+│   │   │   │   └── worker
+│   │   │   │       └── start.sh
+│   │   │   ├── Dockerfile
+│   │   │   ├── entrypoint.sh
+│   │   │   └── start.sh
+│   │   ├── nginx
+│   │   │   ├── Dockerfile
+│   │   │   └── nginx.conf
+│   │   └── postgres
+│   │       └── Dockerfile
+│   └── production
+│       ├── django
+│       │   ├── celery
+│       │   │   ├── beat
+│       │   │   │   └── start.sh
+│       │   │   ├── flower
+│       │   │   │   └── start.sh
+│       │   │   └── worker
+│       │   │       └── start.sh
+│       │   ├── Dockerfile
+│       │   ├── entrypoint.sh
+│       │   └── start.sh
+│       ├── nginx
+│       │   ├── Dockerfile
+│       │   └── nginx.conf
+│       └── postgres
+│           └── Dockerfile
+├── do_server_deploy.sh
+├── local.yml
+├── Makefile
+├── manage.py
+├── Pipfile
+├── Pipfile.lock
+├── production.yml
+├── requirements
+│   ├── base.txt
+│   ├── local.txt
+│   └── production.txt
+├── result.txt
+└── staticfiles
+    ├── admin
+    │   ├── css
+    │   │   ├── autocomplete.css
+    │   │   ├── base.css
+    │   │   ├── changelists.css
+    │   │   ├── dark_mode.css
+    │   │   ├── dashboard.css
+    │   │   ├── forms.css
+    │   │   ├── login.css
+    │   │   ├── nav_sidebar.css
+    │   │   ├── responsive.css
+    │   │   ├── responsive_rtl.css
+    │   │   ├── rtl.css
+    │   │   ├── vendor
+    │   │   │   └── select2
+    │   │   │       ├── LICENSE-SELECT2.md
+    │   │   │       ├── select2.css
+    │   │   │       └── select2.min.css
+    │   │   └── widgets.css
+    │   ├── img
+    │   │   ├── calendar-icons.svg
+    │   │   ├── gis
+    │   │   │   ├── move_vertex_off.svg
+    │   │   │   └── move_vertex_on.svg
+    │   │   ├── icon-addlink.svg
+    │   │   ├── icon-alert.svg
+    │   │   ├── icon-calendar.svg
+    │   │   ├── icon-changelink.svg
+    │   │   ├── icon-clock.svg
+    │   │   ├── icon-deletelink.svg
+    │   │   ├── icon-no.svg
+    │   │   ├── icon-unknown-alt.svg
+    │   │   ├── icon-unknown.svg
+    │   │   ├── icon-viewlink.svg
+    │   │   ├── icon-yes.svg
+    │   │   ├── inline-delete.svg
+    │   │   ├── LICENSE
+    │   │   ├── README.txt
+    │   │   ├── search.svg
+    │   │   ├── selector-icons.svg
+    │   │   ├── sorting-icons.svg
+    │   │   ├── tooltag-add.svg
+    │   │   └── tooltag-arrowright.svg
+    │   └── js
+    │       ├── actions.js
+    │       ├── admin
+    │       │   ├── DateTimeShortcuts.js
+    │       │   └── RelatedObjectLookups.js
+    │       ├── autocomplete.js
+    │       ├── calendar.js
+    │       ├── cancel.js
+    │       ├── change_form.js
+    │       ├── collapse.js
+    │       ├── core.js
+    │       ├── filters.js
+    │       ├── inlines.js
+    │       ├── jquery.init.js
+    │       ├── nav_sidebar.js
+    │       ├── popup_response.js
+    │       ├── prepopulate_init.js
+    │       ├── prepopulate.js
+    │       ├── SelectBox.js
+    │       ├── SelectFilter2.js
+    │       ├── theme.js
+    │       ├── urlify.js
+    │       └── vendor
+    │           ├── jquery
+    │           │   ├── jquery.js
+    │           │   ├── jquery.min.js
+    │           │   └── LICENSE.txt
+    │           ├── select2
+    │           │   ├── i18n
+    │           │   │   ├── af.js
+    │           │   │   ├── ar.js
+    │           │   │   ├── az.js
+    │           │   │   ├── bg.js
+    │           │   │   ├── bn.js
+    │           │   │   ├── bs.js
+    │           │   │   ├── ca.js
+    │           │   │   ├── cs.js
+    │           │   │   ├── da.js
+    │           │   │   ├── de.js
+    │           │   │   ├── dsb.js
+    │           │   │   ├── el.js
+    │           │   │   ├── en.js
+    │           │   │   ├── es.js
+    │           │   │   ├── et.js
+    │           │   │   ├── eu.js
+    │           │   │   ├── fa.js
+    │           │   │   ├── fi.js
+    │           │   │   ├── fr.js
+    │           │   │   ├── gl.js
+    │           │   │   ├── he.js
+    │           │   │   ├── hi.js
+    │           │   │   ├── hr.js
+    │           │   │   ├── hsb.js
+    │           │   │   ├── hu.js
+    │           │   │   ├── hy.js
+    │           │   │   ├── id.js
+    │           │   │   ├── is.js
+    │           │   │   ├── it.js
+    │           │   │   ├── ja.js
+    │           │   │   ├── ka.js
+    │           │   │   ├── km.js
+    │           │   │   ├── ko.js
+    │           │   │   ├── lt.js
+    │           │   │   ├── lv.js
+    │           │   │   ├── mk.js
+    │           │   │   ├── ms.js
+    │           │   │   ├── nb.js
+    │           │   │   ├── ne.js
+    │           │   │   ├── nl.js
+    │           │   │   ├── pl.js
+    │           │   │   ├── ps.js
+    │           │   │   ├── pt-BR.js
+    │           │   │   ├── pt.js
+    │           │   │   ├── ro.js
+    │           │   │   ├── ru.js
+    │           │   │   ├── sk.js
+    │           │   │   ├── sl.js
+    │           │   │   ├── sq.js
+    │           │   │   ├── sr-Cyrl.js
+    │           │   │   ├── sr.js
+    │           │   │   ├── sv.js
+    │           │   │   ├── th.js
+    │           │   │   ├── tk.js
+    │           │   │   ├── tr.js
+    │           │   │   ├── uk.js
+    │           │   │   ├── vi.js
+    │           │   │   ├── zh-CN.js
+    │           │   │   └── zh-TW.js
+    │           │   ├── LICENSE.md
+    │           │   ├── select2.full.js
+    │           │   └── select2.full.min.js
+    │           └── xregexp
+    │               ├── LICENSE.txt
+    │               ├── xregexp.js
+    │               └── xregexp.min.js
+    ├── cloudinary
+    │   ├── html
+    │   │   └── cloudinary_cors.html
+    │   └── js
+    │       ├── canvas-to-blob.min.js
+    │       ├── jquery.cloudinary.js
+    │       ├── jquery.fileupload-image.js
+    │       ├── jquery.fileupload.js
+    │       ├── jquery.fileupload-process.js
+    │       ├── jquery.fileupload-validate.js
+    │       ├── jquery.iframe-transport.js
+    │       ├── jquery.ui.widget.js
+    │       └── load-image.all.min.js
+    ├── drf-yasg
+    │   ├── immutable.js
+    │   ├── immutable.min.js
+    │   ├── insQ.js
+    │   ├── insQ.min.js
+    │   ├── README
+    │   ├── redoc
+    │   │   ├── LICENSE
+    │   │   ├── redoc-logo.png
+    │   │   ├── redoc.min.js
+    │   │   └── redoc.standalone.js.map
+    │   ├── redoc-init.js
+    │   ├── redoc-old
+    │   │   ├── LICENSE
+    │   │   ├── redoc.min.js
+    │   │   └── redoc.min.js.map
+    │   ├── style.css
+    │   ├── swagger-ui-dist
+    │   │   ├── absolute-path.js
+    │   │   ├── favicon-32x32.png
+    │   │   ├── index.css
+    │   │   ├── index.js
+    │   │   ├── LICENSE
+    │   │   ├── NOTICE
+    │   │   ├── oauth2-redirect.html
+    │   │   ├── swagger-initializer.js
+    │   │   ├── swagger-ui-bundle.js
+    │   │   ├── swagger-ui-bundle.js.map
+    │   │   ├── swagger-ui.css
+    │   │   ├── swagger-ui.css.map
+    │   │   ├── swagger-ui-es-bundle-core.js
+    │   │   ├── swagger-ui-es-bundle-core.js.map
+    │   │   ├── swagger-ui-es-bundle.js
+    │   │   ├── swagger-ui-es-bundle.js.map
+    │   │   ├── swagger-ui.js.map
+    │   │   ├── swagger-ui-standalone-preset.js
+    │   │   └── swagger-ui-standalone-preset.js.map
+    │   └── swagger-ui-init.js
+    ├── flags
+    │   ├── ad.gif
+    │   ├── ae.gif
+    │   ├── af.gif
+    │   ├── ag.gif
+    │   ├── ai.gif
+    │   ├── al.gif
+    │   ├── am.gif
+    │   ├── ao.gif
+    │   ├── aq.gif
+    │   ├── ar.gif
+    │   ├── as.gif
+    │   ├── at.gif
+    │   ├── au.gif
+    │   ├── aw.gif
+    │   ├── ax.gif
+    │   ├── az.gif
+    │   ├── ba.gif
+    │   ├── bb.gif
+    │   ├── bd.gif
+    │   ├── be.gif
+    │   ├── bf.gif
+    │   ├── bg.gif
+    │   ├── bh.gif
+    │   ├── bi.gif
+    │   ├── bj.gif
+    │   ├── bl.gif
+    │   ├── bm.gif
+    │   ├── bn.gif
+    │   ├── bo.gif
+    │   ├── bq.gif
+    │   ├── br.gif
+    │   ├── bs.gif
+    │   ├── bt.gif
+    │   ├── bv.gif
+    │   ├── bw.gif
+    │   ├── by.gif
+    │   ├── bz.gif
+    │   ├── ca.gif
+    │   ├── cc.gif
+    │   ├── cd.gif
+    │   ├── cf.gif
+    │   ├── cg.gif
+    │   ├── ch.gif
+    │   ├── ci.gif
+    │   ├── ck.gif
+    │   ├── cl.gif
+    │   ├── cm.gif
+    │   ├── cn.gif
+    │   ├── co.gif
+    │   ├── cr.gif
+    │   ├── cu.gif
+    │   ├── cv.gif
+    │   ├── cw.gif
+    │   ├── cx.gif
+    │   ├── cy.gif
+    │   ├── cz.gif
+    │   ├── de.gif
+    │   ├── dj.gif
+    │   ├── dk.gif
+    │   ├── dm.gif
+    │   ├── do.gif
+    │   ├── dz.gif
+    │   ├── ec.gif
+    │   ├── ee.gif
+    │   ├── eg.gif
+    │   ├── eh.gif
+    │   ├── er.gif
+    │   ├── es.gif
+    │   ├── et.gif
+    │   ├── eu.gif
+    │   ├── fi.gif
+    │   ├── fj.gif
+    │   ├── fk.gif
+    │   ├── fm.gif
+    │   ├── fo.gif
+    │   ├── fr.gif
+    │   ├── ga.gif
+    │   ├── gb.gif
+    │   ├── gd.gif
+    │   ├── ge.gif
+    │   ├── gf.gif
+    │   ├── gg.gif
+    │   ├── gh.gif
+    │   ├── __.gif
+    │   ├── gi.gif
+    │   ├── gl.gif
+    │   ├── gm.gif
+    │   ├── gn.gif
+    │   ├── gp.gif
+    │   ├── gq.gif
+    │   ├── gr.gif
+    │   ├── gs.gif
+    │   ├── gt.gif
+    │   ├── gu.gif
+    │   ├── gw.gif
+    │   ├── gy.gif
+    │   ├── hk.gif
+    │   ├── hm.gif
+    │   ├── hn.gif
+    │   ├── hr.gif
+    │   ├── ht.gif
+    │   ├── hu.gif
+    │   ├── id.gif
+    │   ├── ie.gif
+    │   ├── il.gif
+    │   ├── im.gif
+    │   ├── in.gif
+    │   ├── io.gif
+    │   ├── iq.gif
+    │   ├── ir.gif
+    │   ├── is.gif
+    │   ├── it.gif
+    │   ├── je.gif
+    │   ├── jm.gif
+    │   ├── jo.gif
+    │   ├── jp.gif
+    │   ├── ke.gif
+    │   ├── kg.gif
+    │   ├── kh.gif
+    │   ├── ki.gif
+    │   ├── km.gif
+    │   ├── kn.gif
+    │   ├── kp.gif
+    │   ├── kr.gif
+    │   ├── kw.gif
+    │   ├── ky.gif
+    │   ├── kz.gif
+    │   ├── la.gif
+    │   ├── lb.gif
+    │   ├── lc.gif
+    │   ├── li.gif
+    │   ├── lk.gif
+    │   ├── lr.gif
+    │   ├── ls.gif
+    │   ├── lt.gif
+    │   ├── lu.gif
+    │   ├── lv.gif
+    │   ├── ly.gif
+    │   ├── ma.gif
+    │   ├── mc.gif
+    │   ├── md.gif
+    │   ├── me.gif
+    │   ├── mf.gif
+    │   ├── mg.gif
+    │   ├── mh.gif
+    │   ├── mk.gif
+    │   ├── ml.gif
+    │   ├── mm.gif
+    │   ├── mn.gif
+    │   ├── mo.gif
+    │   ├── mp.gif
+    │   ├── mq.gif
+    │   ├── mr.gif
+    │   ├── ms.gif
+    │   ├── mt.gif
+    │   ├── mu.gif
+    │   ├── mv.gif
+    │   ├── mw.gif
+    │   ├── mx.gif
+    │   ├── my.gif
+    │   ├── mz.gif
+    │   ├── na.gif
+    │   ├── nc.gif
+    │   ├── ne.gif
+    │   ├── nf.gif
+    │   ├── ng.gif
+    │   ├── ni.gif
+    │   ├── nl.gif
+    │   ├── no.gif
+    │   ├── np.gif
+    │   ├── nr.gif
+    │   ├── nu.gif
+    │   ├── nz.gif
+    │   ├── om.gif
+    │   ├── pa.gif
+    │   ├── pe.gif
+    │   ├── pf.gif
+    │   ├── pg.gif
+    │   ├── ph.gif
+    │   ├── pk.gif
+    │   ├── pl.gif
+    │   ├── pm.gif
+    │   ├── pn.gif
+    │   ├── pr.gif
+    │   ├── ps.gif
+    │   ├── pt.gif
+    │   ├── pw.gif
+    │   ├── py.gif
+    │   ├── qa.gif
+    │   ├── re.gif
+    │   ├── ro.gif
+    │   ├── rs.gif
+    │   ├── ru.gif
+    │   ├── rw.gif
+    │   ├── sa.gif
+    │   ├── sb.gif
+    │   ├── sc.gif
+    │   ├── sd.gif
+    │   ├── se.gif
+    │   ├── sg.gif
+    │   ├── sh.gif
+    │   ├── si.gif
+    │   ├── sj.gif
+    │   ├── sk.gif
+    │   ├── sl.gif
+    │   ├── sm.gif
+    │   ├── sn.gif
+    │   ├── so.gif
+    │   ├── sprite.css
+    │   ├── sprite-hq.css
+    │   ├── sprite-hq.png
+    │   ├── sprite.png
+    │   ├── sr.gif
+    │   ├── ss.gif
+    │   ├── st.gif
+    │   ├── sv.gif
+    │   ├── sx.gif
+    │   ├── sy.gif
+    │   ├── sz.gif
+    │   ├── tc.gif
+    │   ├── td.gif
+    │   ├── tf.gif
+    │   ├── tg.gif
+    │   ├── th.gif
+    │   ├── tj.gif
+    │   ├── tk.gif
+    │   ├── tl.gif
+    │   ├── tm.gif
+    │   ├── tn.gif
+    │   ├── to.gif
+    │   ├── tr.gif
+    │   ├── tt.gif
+    │   ├── tv.gif
+    │   ├── tw.gif
+    │   ├── tz.gif
+    │   ├── ua.gif
+    │   ├── ug.gif
+    │   ├── um.gif
+    │   ├── us.gif
+    │   ├── uy.gif
+    │   ├── uz.gif
+    │   ├── va.gif
+    │   ├── vc.gif
+    │   ├── ve.gif
+    │   ├── vg.gif
+    │   ├── vi.gif
+    │   ├── vn.gif
+    │   ├── vu.gif
+    │   ├── wf.gif
+    │   ├── ws.gif
+    │   ├── xk.gif
+    │   ├── ye.gif
+    │   ├── yt.gif
+    │   ├── za.gif
+    │   ├── zm.gif
+    │   └── zw.gif
+    └── rest_framework
+        ├── css
+        │   ├── bootstrap.min.css
+        │   ├── bootstrap.min.css.map
+        │   ├── bootstrap-theme.min.css
+        │   ├── bootstrap-theme.min.css.map
+        │   ├── bootstrap-tweaks.css
+        │   ├── default.css
+        │   ├── font-awesome-4.0.3.css
+        │   └── prettify.css
+        ├── docs
+        │   ├── css
+        │   │   ├── base.css
+        │   │   ├── highlight.css
+        │   │   └── jquery.json-view.min.css
+        │   ├── img
+        │   │   ├── favicon.ico
+        │   │   └── grid.png
+        │   └── js
+        │       ├── api.js
+        │       ├── highlight.pack.js
+        │       └── jquery.json-view.min.js
+        ├── fonts
+        │   ├── fontawesome-webfont.eot
+        │   ├── fontawesome-webfont.svg
+        │   ├── fontawesome-webfont.ttf
+        │   ├── fontawesome-webfont.woff
+        │   ├── glyphicons-halflings-regular.eot
+        │   ├── glyphicons-halflings-regular.svg
+        │   ├── glyphicons-halflings-regular.ttf
+        │   ├── glyphicons-halflings-regular.woff
+        │   └── glyphicons-halflings-regular.woff2
+        ├── img
+        │   ├── glyphicons-halflings.png
+        │   ├── glyphicons-halflings-white.png
+        │   └── grid.png
+        └── js
+            ├── ajax-form.js
+            ├── bootstrap.min.js
+            ├── coreapi-0.1.1.js
+            ├── csrf.js
+            ├── default.js
+            ├── jquery-3.7.1.min.js
+            ├── load-ajax-form.js
+            └── prettify-min.js
+
+151 directories, 771 files

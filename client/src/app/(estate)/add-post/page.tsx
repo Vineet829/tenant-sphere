@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 		"Authenticated users can ask any question or post some content for all users to see",
 };
 
+
 export default function AddPostPage() {
 	return (
 		<div>
