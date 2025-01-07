@@ -8,6 +8,7 @@ interface UpdateParamsProps {
 	};
 }
 
+
 export default function UpdatePostPage({ params }: UpdateParamsProps) {
 	return (
 		<div>
