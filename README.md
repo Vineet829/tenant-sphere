@@ -132,16 +132,35 @@ npm start
 - **Logout:** End your session securely to protect your account from unauthorized access.
 - **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png   
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/11.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/12.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg)
+
+
 
 ### Tenant and Technician Management
 - **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
 - **View Technicians:** Browse through a list of all technicians in the corresponding tab for quick reference and ratings based on performance.
 
+
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/5.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg)
+
 ### Profile Management Features
 - **View Profile:** Access and update your profile information, including managing your avatar.
 - **User Posts:** View all posts you have created, complete with timestamps for better tracking.
 - **View Issues and Reports:** Manage reported issues and view assigned issues for effective oversight.
+
+ ![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/4.png)
 
 ### Post Management Features
 - **View Posts:** Explore all posts made by tenants, including top posts to stay informed about community discussions.
@@ -151,10 +170,20 @@ npm start
 - **Post Metadata:** Access detailed information about when a post was created and last updated for better context.
 - **Pagination and Search:** Utilize pagination and search functionality to easily navigate through posts and tenants.
 
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/3.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/9.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/10.png)
+
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg)
+
 ### Issue Reporting
 - **Report Issues:** Directly report any issues related to your apartment through the app for prompt attention.
 - **Report Other Tenants:** Users can report other tenants for various misconducts, with reported individuals receiving a warning from the admin via email. This process helps maintain a safe and respectful community environment.
 
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/7.png)
 
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/8.png)
 
    
