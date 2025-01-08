@@ -132,6 +132,8 @@ npm start
 - **Logout:** End your session securely to protect your account from unauthorized access.
 - **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
 
+![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png   
+
 ### Tenant and Technician Management
 - **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
 - **View Technicians:** Browse through a list of all technicians in the corresponding tab for quick reference and ratings based on performance.
