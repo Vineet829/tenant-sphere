@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import PaginationSection from "../shared/PaginationSection";
 
+
 export default function TechnicianCard() {
 	const { theme } = useTheme();
 	const searchTerm = useAppSelector(
