@@ -9,10 +9,12 @@ import { Control, Controller, UseFormSetValue } from "react-hook-form";
 import Select from "react-select";
 import customStyles from "../selectStyles";
 
+
 const ClientOnly = dynamic<{ children: React.ReactNode }>(
 	() => Promise.resolve(({ children }) => <>{children}</>),
 	{ ssr: false },
 );
+
 
 function isOccupation(value: any): value is Occupation {
 	return [

@@ -20,7 +20,10 @@ import { Input } from "@/components/ui/input";
 import Spinner from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
 
+
+
 export default function EditProfileForm() {
+	
 	const { data } = useGetUserProfileQuery();
 
 	const profile = data?.profile;
