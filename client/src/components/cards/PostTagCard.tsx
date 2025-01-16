@@ -89,6 +89,7 @@ export default function PostTagCard({ params }: SlugParamsProps) {
 								<EyeIcon className="post-icon text-electricIndigo mr-1" />
 								{getViewText(post.view_count)}
 							</div>
+							
 							<div className="flex-row-center dark:text-platinum">
 								<MessageSquareQuoteIcon className="post-icon text-electricIndigo mr-1" />
 								<span>{getRepliesText(post.replies_count)}</span>
