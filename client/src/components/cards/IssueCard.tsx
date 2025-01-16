@@ -26,6 +26,7 @@ interface IssueCardProps {
 
 export default function IssueCard({ issue }: IssueCardProps) {
 	return (
+		
 		<Link href={`/issue/${issue.id}`} key={issue.id}>
 			<Card
 				key={issue.id}
