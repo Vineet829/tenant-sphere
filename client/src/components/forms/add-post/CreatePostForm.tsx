@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Spinner from "@/components/shared/Spinner";
 import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 
+
 function CreatePostFormContent() {
 	const [createPost, { isLoading }] = useCreatePostMutation();
 	const router = useRouter();
