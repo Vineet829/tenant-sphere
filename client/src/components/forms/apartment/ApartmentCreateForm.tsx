@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Spinner from "@/components/shared/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
 export default function ApartmentCreateForm() {
 	const [createApartment, { isLoading }] = useCreateApartmentMutation();
 	const router = useRouter();
