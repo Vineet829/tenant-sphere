@@ -16,6 +16,7 @@ import { UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/shared/Spinner";
 
+
 export default function CreateRatingForm() {
 	const router = useRouter();
 	const [addRating, { isLoading }] = useAddRatingMutation();
