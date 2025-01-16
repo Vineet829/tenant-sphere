@@ -15,6 +15,7 @@ import { Contact2Icon, FlagIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/shared/Spinner";
 
+
 export default function CreateReportForm() {
 	const router = useRouter();
 	const [reportTenant, { isLoading }] = useReportTenantMutation();
