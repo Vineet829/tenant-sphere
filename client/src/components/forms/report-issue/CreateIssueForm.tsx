@@ -23,6 +23,7 @@ const ClientOnly = dynamic<{ children: React.ReactNode }>(
 	{ ssr: false },
 );
 
+
 export default function CreateIssueForm() {
 	const { data } = useGetMyApartmentQuery();
 	const apartment = data?.apartment;
