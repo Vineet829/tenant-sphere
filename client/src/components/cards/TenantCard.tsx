@@ -27,6 +27,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import PaginationSection from "../shared/PaginationSection";
 
+
 function TenantCardContent() {
 	const { theme } = useTheme();
 	const searchTerm = useAppSelector((state) => state.user.searchTerm);
