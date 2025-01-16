@@ -22,6 +22,7 @@ import { CheckCheck, CircleDot, EyeIcon, Hotel } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
+
 interface IssueDetailsProps {
 	params: {
 		id: string;
