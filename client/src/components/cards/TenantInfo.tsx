@@ -4,6 +4,7 @@ interface TenantInfoProps {
 	icon: any;
 }
 
+
 function TenantInfo({ label, value, icon: Icon }: TenantInfoProps) {
 	return (
 		<p className="flex items-center space-x-2 space-y-1">
