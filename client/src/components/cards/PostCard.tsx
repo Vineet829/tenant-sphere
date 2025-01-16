@@ -23,6 +23,7 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { EyeIcon, MessageSquareQuoteIcon } from "lucide-react";
 import PaginationSection from "../shared/PaginationSection";
 
+
 export default function PostCard() {
 	const page = useAppSelector((state: PostState) => state.post.page);
 	const { data, isLoading } = useGetAllPostsQuery({ page });
