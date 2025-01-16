@@ -24,6 +24,7 @@ interface UpdateParamsProps {
 	};
 }
 
+
 export default function UpdateIssueForm({ params }: UpdateParamsProps) {
 	const issueId = params.id;
 	const [updateIssue, { isLoading }] = useUpdateIssueMutation();
