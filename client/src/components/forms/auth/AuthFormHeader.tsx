@@ -14,6 +14,7 @@ export default function AuthFormHeader({
 	linkHref,
 	linkText,
 }: FormHeaderProps) {
+	
 	return (
 		<div className="px-4 sm:mx-auto sm:w-full sm:max-w-md sm:px-6 lg:px-8">
 			<HomeModernIcon className="mx-auto size-16 dark:text-lime-500" />
