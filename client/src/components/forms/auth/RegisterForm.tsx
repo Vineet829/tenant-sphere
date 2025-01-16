@@ -15,6 +15,7 @@ import { FormFieldComponent } from "@/components/forms/FormFieldComponent";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/shared/Spinner";
 
+
 export default function RegisterForm() {
 	const [registerUser, { isLoading }] = useRegisterUserMutation();
 	const router = useRouter();
