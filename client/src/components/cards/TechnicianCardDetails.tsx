@@ -8,6 +8,7 @@ interface TechnicianDetailsProps {
 	average_rating: number;
 }
 
+
 export default function TechnicianCardDetails({
 	country_of_origin,
 	occupation,
