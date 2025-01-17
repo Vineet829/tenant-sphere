@@ -13,6 +13,7 @@ const sizeClasses = {
 	xl: "size-52",
 };
 
+
 export default function Spinner({ size = "md" }: SpinnerProps) {
 	const { theme } = useTheme();
 	const className = clsx("animate-spin", sizeClasses[size]);
