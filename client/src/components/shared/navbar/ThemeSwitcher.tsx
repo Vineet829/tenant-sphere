@@ -18,6 +18,7 @@ const themeOptions = [
 export default function ThemeSwitcher() {
 	const { theme, setTheme } = useTheme();
 
+	
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
