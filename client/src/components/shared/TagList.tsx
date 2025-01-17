@@ -6,6 +6,7 @@ interface TagProps {
 	tags: string[];
 }
 
+
 export default function TagList({ tags }: TagProps) {
 	return (
 		<Link href={`/tags/`} className="flex justify-between gap-2">
