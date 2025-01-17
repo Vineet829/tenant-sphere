@@ -11,6 +11,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(true);
 
+	
 	useEffect(() => {
 		const handleAuthState = async () => {
 			const isLoggedIn = getCookie("logged_in") === "true";
