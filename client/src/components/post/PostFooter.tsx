@@ -8,6 +8,7 @@ interface PostFooterProps {
 	replies_count: number | undefined;
 }
 
+
 export default function PostFooter({ tags, replies_count }: PostFooterProps) {
 	return (
 		<CardFooter className="border-b-eerieBlack dark:text-platinum flex items-center justify-between border-b border-dashed">
