@@ -14,6 +14,7 @@ export default function Navbar() {
 				</p>
 			</Link>
 
+			
 			<div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
 				{/* placeholder theme switcher component */}
 				<ThemeSwitcher />
