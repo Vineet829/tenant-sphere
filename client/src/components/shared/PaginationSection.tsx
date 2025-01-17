@@ -16,6 +16,7 @@ interface PaginationSectionProps {
 	entityType: "user" | "post";
 }
 
+
 const PaginationSection = ({
 	totalPages,
 	entityType,
