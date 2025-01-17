@@ -13,6 +13,7 @@ const UsersSearch = () => {
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch(setSearchTerm(event.target.value));
 	};
+	
 	return (
 		<div className="bg-gray dark:bg-eerieBlack mb-3 flex min-h-[56px] w-full grow rounded-full">
 			<Image
