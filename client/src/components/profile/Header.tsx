@@ -9,6 +9,7 @@ function HeaderContent() {
 	const { data } = useGetUserProfileQuery();
 	const { theme } = useTheme();
 	const profile = data?.profile;
+	
 	return (
 		<div className="flex flex-col gap-2">
 			<Avatar className="border-pumpkin mx-auto size-32 overflow-hidden rounded-full border-4 object-cover">
