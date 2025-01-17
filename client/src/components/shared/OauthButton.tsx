@@ -8,6 +8,7 @@ interface Props {
 	[rest: string]: any;
 }
 
+
 export default function OauthButton({ provider, children, ...rest }: Props) {
 	const className = clsx(
 		"text-babyPowder mt-3 flex-1 rounded-md px-3 py-2 font-medium",
