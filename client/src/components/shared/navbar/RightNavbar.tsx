@@ -12,6 +12,7 @@ export default function RightNavbar() {
 	const topPosts = data?.top_posts.results;
 	const { data: tagData } = useGetPopularTagsQuery();
 	return (
+		
 		<section className="bg-baby_rich light-border custom-scrollbar shadow-platinum sticky right-0 top-0 flex h-screen w-[280px] flex-col justify-between overflow-y-auto border-l p-6 pt-36 max-xl:hidden dark:shadow-none">
 			<div>
 				<h3 className="h3-semibold dark:text-pumpkin">Top Posts</h3>
