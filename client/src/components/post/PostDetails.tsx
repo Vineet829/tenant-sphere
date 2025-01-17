@@ -27,6 +27,7 @@ interface PostDetailsProps {
     };
 }
 
+
 function PostDetailsContent({ params }: PostDetailsProps) {
     const slug = params.slug;
   
