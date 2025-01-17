@@ -16,6 +16,7 @@ interface PostActionsProps {
 	isDeleteLoading: boolean;
 }
 
+
 export default function PostActions({
 	upvotes,
 	downvotes,
