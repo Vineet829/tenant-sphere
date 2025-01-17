@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation";
 function LeftNavContent() {
 	const pathname = usePathname();
 
+	
 	const { filteredNavLinks } = useAuthNavigation();
 	return (
 		<section className="flex h-full flex-col gap-6 pt-16">
