@@ -19,6 +19,7 @@ import {
 import { capitalizeFirstLetter, formatDate } from "@/utils";
 import ProtectedRoute from "../shared/ProtectedRoutes";
 
+
 function AboutContent() {
 	const { data, isLoading } = useGetUserProfileQuery();
 	const profile = data?.profile;
