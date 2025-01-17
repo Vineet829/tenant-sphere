@@ -10,6 +10,7 @@ interface PostBodyProps {
 	slug: string | undefined;
 }
 
+
 export default function PostBody({ body, slug }: PostBodyProps) {
 	const { data: currentUser } = useGetUserProfileQuery();
 	const { data } = useGetSinglePostQuery(slug || "");
