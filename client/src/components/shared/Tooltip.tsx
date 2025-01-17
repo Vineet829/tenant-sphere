@@ -6,6 +6,7 @@ interface TooltipProps {
 	position?: "bottom" | "top" | "left" | "right";
 }
 
+
 export default function Tooltip({
 	children,
 	content,
