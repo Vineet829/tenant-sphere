@@ -15,6 +15,7 @@ import { BookMarked, CircleUser, LogOut, User, Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+
 export default function AuthAvatar() {
 	const { handleLogout } = useAuthNavigation();
 
