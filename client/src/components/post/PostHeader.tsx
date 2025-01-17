@@ -24,6 +24,7 @@ export default function PostHeader({
 
 	return (
 		<>
+			
 			<CardTitle className="dark:text-platinum">
 				<p className="flex items-center space-x-2">
 					<Avatar>
