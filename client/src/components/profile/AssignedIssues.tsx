@@ -19,6 +19,7 @@ export default function AssignedIssues() {
 		);
 	}
 
+	
 	return (
 		<TabsContent value="assigned-issues">
 			<h2 className="h2-semibold flex-center font-robotoSlab dark:text-pumpkin text-xl">
