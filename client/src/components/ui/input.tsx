@@ -9,6 +9,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
+	
 	({ className, type, endIcon, startIcon, ...props }, ref) => {
 		return (
 			<div className="flex w-full items-center gap-2">
