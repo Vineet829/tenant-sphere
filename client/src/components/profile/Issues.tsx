@@ -18,6 +18,7 @@ export default function Issues() {
 		);
 	}
 	return (
+		
 		<TabsContent value="my-issues">
 			<h2 className="h2-semibold flex-center font-robotoSlab dark:text-pumpkin text-xl">
 				Total: ({myIssue?.count})
