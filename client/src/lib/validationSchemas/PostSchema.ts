@@ -6,4 +6,5 @@ export const postSchema = z.object({
 	body: z.string().min(1, "A Post body is required"),
 });
 
+
 export type TPostSchema = z.infer<typeof postSchema>;
