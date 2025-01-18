@@ -1,5 +1,6 @@
 import * as z from "zod";
 
+
 export const profileSchema = z.object({
 	gender: z.enum(["male", "female", "other"]),
 	occupation: z.enum([
