@@ -9,4 +9,5 @@ export const apartmentCreateSchema = z.object({
 		.max(5, { message: "The Floor in the building can't be more than 5" }),
 });
 
+
 export type TApartmentCreateSchema = z.infer<typeof apartmentCreateSchema>;
