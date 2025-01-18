@@ -18,5 +18,6 @@ const userSlice = createSlice({
 	},
 });
 
+
 export const { setSearchTerm, setCurrentPage } = userSlice.actions;
 export default userSlice.reducer;
