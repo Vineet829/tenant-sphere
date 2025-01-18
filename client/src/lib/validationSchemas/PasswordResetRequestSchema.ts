@@ -8,6 +8,7 @@ export const passwordResetRequestSchema = z.object({
 		.toLowerCase(),
 });
 
+
 export type TPasswordResetRequestSchema = z.infer<
 	typeof passwordResetRequestSchema
 >;

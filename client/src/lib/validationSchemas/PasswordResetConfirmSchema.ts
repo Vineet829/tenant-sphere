@@ -16,6 +16,7 @@ export const passwordResetConfirmSchema = z
 		path: ["re_new_password"],
 	});
 
-export type TPasswordResetConfirmSchema = z.infer<
+
+	export type TPasswordResetConfirmSchema = z.infer<
 	typeof passwordResetConfirmSchema
 >;
