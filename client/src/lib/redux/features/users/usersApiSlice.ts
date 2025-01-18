@@ -9,6 +9,7 @@ import {
 
 export const usersApiSlice = baseApiSlice.injectEndpoints({
 	endpoints: (builder) => ({
+		
 		getAllUsers: builder.query<ProfilesResponse, QueryParams>({
 			query: (params = {}) => {
 				const queryString = new URLSearchParams();
