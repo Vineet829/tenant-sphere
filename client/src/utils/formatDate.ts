@@ -3,6 +3,7 @@ export function formatDate(dateString: string | undefined): string {
 
 	const date: Date = new Date(dateString);
 
+	
 	const monthNames: string[] = [
 		"January",
 		"February",
