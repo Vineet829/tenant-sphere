@@ -6,6 +6,7 @@ export const openSans = Open_Sans({
 	variable: "--font-openSans",
 });
 
+
 export const robotoSlab = Roboto_Slab({
 	subsets: ["latin"],
 	variable: "--font-robotoSlab",
