@@ -12,4 +12,5 @@ export const ratingCreateSchema = z.object({
 		.min(1, "Give use more context about your choice of rating"),
 });
 
+
 export type TRatingCreateSchema = z.infer<typeof ratingCreateSchema>;
