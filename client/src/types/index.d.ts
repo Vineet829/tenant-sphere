@@ -11,6 +11,7 @@ export interface PostState {
 	};
 }
 
+
 export interface Reply {
 	id: string;
 	post: number;
