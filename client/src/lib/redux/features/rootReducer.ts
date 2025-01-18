@@ -4,6 +4,7 @@ import userReducer from "@/lib/redux/features/users/userSlice";
 import postReducer from "@/lib/redux/features/posts/postSlice";
 
 export const rootReducer = {
+	
 	[baseApiSlice.reducerPath]: baseApiSlice.reducer,
 	auth: authReducer,
 	user: userReducer,
