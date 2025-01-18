@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/lib/redux/hooks/typedHooks";
 import { useEffect } from "react";
 import { setAuth, setLogout } from "@/lib/redux/features/auth/authSlice";
 
+
 export default function PersistAuth() {
 	const dispatch = useAppDispatch();
 
