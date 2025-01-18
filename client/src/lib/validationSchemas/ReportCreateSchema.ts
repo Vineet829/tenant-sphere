@@ -11,4 +11,5 @@ export const reportCreateSchema = z.object({
 		),
 });
 
+
 export type TReportCreateSchema = z.infer<typeof reportCreateSchema>;
