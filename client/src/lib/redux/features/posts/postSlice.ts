@@ -14,5 +14,6 @@ const postSlice = createSlice({
 	},
 });
 
+
 export const { setCurrentPage } = postSlice.actions;
 export default postSlice.reducer;

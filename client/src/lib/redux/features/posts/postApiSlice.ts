@@ -17,6 +17,7 @@ import {
 } from "@/types";
 import { baseApiSlice } from "../api/baseApiSlice";
 
+
 export const postApiSlice = baseApiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		createPost: builder.mutation<PostResponse, PostData>({
