@@ -5,4 +5,5 @@ export const postUpdateSchema = z.object({
 	body: z.string().min(1, "Add some content"),
 });
 
+
 export type TPostUpdateSchema = z.infer<typeof postUpdateSchema>;
