@@ -19,5 +19,6 @@ export const apartmentApiSlice = baseApiSlice.injectEndpoints({
 	}),
 });
 
+
 export const { useCreateApartmentMutation, useGetMyApartmentQuery } =
 	apartmentApiSlice;
