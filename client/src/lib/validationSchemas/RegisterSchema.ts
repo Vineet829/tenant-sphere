@@ -2,6 +2,7 @@ import * as z from "zod";
 
 const usernameRegex = /^[a-zA-Z0-9_@+.-]+$/;
 
+
 export const registerUserSchema = z
 	.object({
 		username: z.string().regex(usernameRegex, {
