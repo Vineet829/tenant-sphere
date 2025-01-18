@@ -7,4 +7,5 @@ export const issueCreateSchema = z.object({
 	status: z.enum(["reported", "resolved", "in_progress"]),
 });
 
+
 export type TIssueCreateSchema = z.infer<typeof issueCreateSchema>;
