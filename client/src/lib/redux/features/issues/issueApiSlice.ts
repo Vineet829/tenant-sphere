@@ -8,6 +8,7 @@ import {
 } from "@/types";
 import { baseApiSlice } from "../api/baseApiSlice";
 
+
 export const issueApiSlice = baseApiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		reportIssue: builder.mutation<IssueResponse, ReportIssueData>({
