@@ -23,4 +23,5 @@ export const reportApiSlice = baseApiSlice.injectEndpoints({
 	}),
 });
 
+
 export const { useReportTenantMutation, useGetMyReportsQuery } = reportApiSlice;
