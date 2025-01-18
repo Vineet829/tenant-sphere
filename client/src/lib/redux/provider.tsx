@@ -7,6 +7,7 @@ interface ProviderProps {
 	children: React.ReactNode;
 }
 
+
 export default function ReduxProvider({ children }: ProviderProps) {
 	const storeRef = useRef<AppStore>();
 	if (!storeRef.current) {

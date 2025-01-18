@@ -12,6 +12,7 @@ export const makeStore = () => {
 	});
 };
 
+
 setupListeners(makeStore().dispatch);
 
 export type AppStore = ReturnType<typeof makeStore>;
