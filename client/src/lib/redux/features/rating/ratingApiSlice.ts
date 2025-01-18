@@ -14,4 +14,5 @@ export const ratingApiSlice = baseApiSlice.injectEndpoints({
 	}),
 });
 
+
 export const { useAddRatingMutation } = ratingApiSlice;
