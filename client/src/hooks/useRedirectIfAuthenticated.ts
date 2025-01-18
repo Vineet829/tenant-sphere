@@ -13,4 +13,5 @@ const useRedirectIfAuthenticated = () => {
 	}, [isAuthenticated, router]);
 };
 
+
 export default useRedirectIfAuthenticated;
