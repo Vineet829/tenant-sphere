@@ -11,6 +11,7 @@ export default function useSocialAuth(authenticate: any, provider: string) {
 
 	const effectRan = useRef(false);
 
+	
 	useEffect(() => {
 		const state = searchParams.get("state");
 		const code = searchParams.get("code");
