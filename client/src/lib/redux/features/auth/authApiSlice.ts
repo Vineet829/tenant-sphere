@@ -12,6 +12,7 @@ import {
 	UserResponse,
 } from "@/types";
 
+
 export const authApiSlice = baseApiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		registerUser: builder.mutation<RegisterUserResponse, RegisterUserData>({
