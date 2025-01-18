@@ -8,6 +8,7 @@ export default async function InitiateSocialAuth(
 	provider: string,
 	redirect: string,
 ) {
+	
 	try {
 		const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/v1/auth/o/${provider}/?redirect_uri=${process.env.NEXT_PUBLIC_DOMAIN}/api/v1/auth/${redirect}`;
 
