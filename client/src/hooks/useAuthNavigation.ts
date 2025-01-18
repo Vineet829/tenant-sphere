@@ -6,6 +6,7 @@ import { extractErrorMessage } from "@/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
+
 export function useAuthNavigation() {
 	const dispatch = useAppDispatch();
 	const [logoutUser] = useLogoutUserMutation();
