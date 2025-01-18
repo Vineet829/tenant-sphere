@@ -8,5 +8,6 @@ export function useUserProfile() {
 		skip: !isAuthenticated,
 	});
 
+
 	return { profile: data?.profile, isLoading, isError };
 }
