@@ -5,6 +5,7 @@ from core_apps.common.admin import ContentViewInline
 from core_apps.common.models import ContentView
 
 
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "tag_list", "get_total_views"]
