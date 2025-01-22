@@ -3,6 +3,7 @@ import cloudinary.uploader
 from core_apps.profiles.models import Profile
 
 
+
 def save_profile(backend, user, response, *args, **kwargs):
     if backend.name == "google-oauth2":
         avatar_url = response.get("picture", None)
