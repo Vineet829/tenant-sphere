@@ -149,9 +149,7 @@ npm start
 
 <p align="center">
     <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/11.png" alt="alt text 1" width="450" />
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/12.png" alt="alt text 2" width="450" />
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png" alt="alt text 3" width="450" />
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png" alt="alt text 4" width="450" />
+
 </p>
 
 <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text" width="400" height="800">
