@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from core_apps.users.managers import UserManager
 
 
+
 class UsernameValidator(validators.RegexValidator):
     regex = r"^[\w.@+-]+\Z"
     message = _(

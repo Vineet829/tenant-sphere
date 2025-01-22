@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 User = get_user_model()
 
 
+
 class UserChangeForm(BaseUserChangeForm):
     class Meta(BaseUserChangeForm.Meta):
         model = User
