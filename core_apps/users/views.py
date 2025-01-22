@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 logger = logging.getLogger(__name__)
 
 
+
 def set_auth_cookies(
     response: Response, access_token: str, refresh_token: Optional[str] = None
 ) -> None:
