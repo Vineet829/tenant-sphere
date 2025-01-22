@@ -173,7 +173,10 @@ npm start
     <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/5.png" alt="alt text 1" width="850" />
 
 </p>
- <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg" alt="alt text" width="400" height="800">
+
+<p align="center">
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg" alt="alt text" width="300" height="500">
+</p>
 
 ### Profile Management Features
 - **View Profile:** Access and update your profile information, including managing your avatar.
