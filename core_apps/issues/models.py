@@ -12,6 +12,7 @@ from core_apps.apartments.models import Apartment
 from core_apps.common.models import TimeStampedModel
 
 
+
 User = get_user_model()
 
 logger = logging.getLogger(__name__)

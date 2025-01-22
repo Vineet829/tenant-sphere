@@ -11,6 +11,7 @@ from .views import (
 )
 
 
+
 urlpatterns = [
     path("", IssueListAPIView.as_view(), name="issue-list"),
     path("me/", MyIssuesListAPIView.as_view(), name="my-issue-list"),

@@ -19,6 +19,7 @@ from .serializers import IssueSerializer, IssueStatusUpdateSerializer
 logger = logging.getLogger(__name__)
 
 
+
 class IsStaffOrSuperUser(permissions.BasePermission):
     def __init__(self) -> None:
         self.message = None

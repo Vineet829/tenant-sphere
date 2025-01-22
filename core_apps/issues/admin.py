@@ -6,6 +6,7 @@ from core_apps.common.models import ContentView
 from .models import Issue
 
 
+
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     list_display = [

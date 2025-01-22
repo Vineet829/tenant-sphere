@@ -11,6 +11,7 @@ from .models import Issue
 logger = logging.getLogger(__name__)
 
 
+
 def send_issue_confirmation_email(issue: Issue) -> None:
     try:
         subject = "Issue Report Confirmation"

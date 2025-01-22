@@ -11,6 +11,7 @@ from .models import Issue
 logger = logging.getLogger(__name__)
 
 
+
 class IssueSerializer(serializers.ModelSerializer):
     apartment_unit = serializers.ReadOnlyField(source="apartment.unit_number")
     reported_by = serializers.ReadOnlyField(source="reported_by.get_full_name")
