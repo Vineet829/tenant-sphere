@@ -8,6 +8,7 @@ from .views import (
 )
 
 
+
 urlpatterns = [
     re_path(
         r"^o/(?P<provider>\S+)/$",
