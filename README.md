@@ -4,14 +4,14 @@ Welcome to the **Tenant Sphere**! This application is designed to facilitate com
 
 ## Table of Contents
 
-- [Features](#features)
+- [Tech Stack](#techstack)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [License](#license)
 - [Contact](#contact)
 
-### Tech Stack Overview
+
 
 ### Tech Stack Overview
 
@@ -141,8 +141,7 @@ npm start
 
 ![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png)
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg)
-
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text" width="400" height="800">
 
 
 ### Tenant and Technician Management
@@ -153,7 +152,7 @@ npm start
 
 ![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/5.png)
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg)
+ <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg" alt="alt text" width="400" height="800">
 
 ### Profile Management Features
 - **View Profile:** Access and update your profile information, including managing your avatar.
@@ -174,9 +173,9 @@ npm start
 
 ![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/9.png)
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/10.png)
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/10.png" alt="alt text" width="400" height="800">
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg)
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg" alt="alt text" width="400" height="800">
 
 ### Issue Reporting
 - **Report Issues:** Directly report any issues related to your apartment through the app for prompt attention.
