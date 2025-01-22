@@ -209,7 +209,7 @@ npm start
 
 </p>
  <p align="center">
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg" alt="alt text" width="400" height="600">
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg" alt="alt text" width="400" height="400">
 </p>
 
 ### Issue Reporting
