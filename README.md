@@ -2,6 +2,20 @@
 
 Welcome to the **Tenant Sphere**! This application is designed to facilitate communication and management between tenants and property management. It provides various features for tenants to manage their apartments, report issues, and interact with other tenants and technicians.
 
+In my current apartment complex, I’ve run into a lot of frustrating issues with maintenance and services. Here are some of the main problems I’ve faced:
+
+Communication Issues: We have to report problems through a shared WhatsApp account, but messages often get lost in the shuffle. This means many issues go unresolved for too long.
+Unresponsive Technicians: Sometimes, technicians ignore our requests or come up with excuses, making it hard to get the help we really need.
+Reporting Problem Neighbors: It’s tough to report noisy or troublesome neighbors, which can really affect the vibe of our community.
+
+To tackle these challenges, I created an app that makes it easy for tenants to report issues and bad behavior. The app is designed to:
+
+Simplify Communication: Let users easily report apartment problems and tenant misconduct through the app, ensuring they get quick responses and issues are resolved efficiently.
+Hold Technicians Accountable: Assign specific tasks to technicians so we can keep track of how they’re handling the reported issues.
+Create a Safer Community: Make it easy to report noisy or troublesome behavior and send warnings to those involved, so everyone feels safe and comfortable at home.
+
+
+
 ## Table of Contents
 
 - [Tech Stack](#techstack)
