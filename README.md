@@ -139,21 +139,30 @@ npm start
 - **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
 
 
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/11.png)
-
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/12.png)
-
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png)
-
-![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png)
 
 <p align="center">
     <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/11.png" alt="alt text 1" width="850" />
 
 </p>
+<p align="center">
+    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/12.png" alt="alt text 1" width="850" />
 
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text" width="400" height="800">
+</p>
+<p align="center">
+    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png" alt="alt text 1" width="850" />
 
+</p>
+<p align="center">
+    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png" alt="alt text 1" width="850" />
+
+</p>
+
+
+
+<p align="center">
+    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text 1" width="850" />
+
+</p>
 
 ### Tenant and Technician Management
 - **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
