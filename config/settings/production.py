@@ -8,6 +8,7 @@ prod_env_file = path.join(BASE_DIR, ".envs", ".env.production")
 if path.isfile(prod_env_file):
     load_dotenv(prod_env_file)
 
+
 SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 ADMIN_URL = getenv("DJANGO_ADMIN_URL")
 
