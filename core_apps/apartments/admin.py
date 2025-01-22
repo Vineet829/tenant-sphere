@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Apartment
 
 
+
 @admin.register(Apartment)
 class ApartmentAdmin(admin.ModelAdmin):
     list_display = ["id", "unit_number", "building", "floor", "tenant"]

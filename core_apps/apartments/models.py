@@ -6,6 +6,7 @@ from core_apps.common.models import TimeStampedModel
 User = get_user_model()
 
 
+
 class Apartment(TimeStampedModel):
     unit_number = models.CharField(
         max_length=10, unique=True, verbose_name=_("Unit Number")

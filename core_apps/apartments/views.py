@@ -9,6 +9,7 @@ from .models import Apartment
 from .serializers import ApartmentSerializer
 
 
+
 class ApartmentCreateAPIView(generics.CreateAPIView):
     queryset = Apartment.objects.all()
     serializer_class = ApartmentSerializer
