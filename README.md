@@ -57,8 +57,6 @@ To tackle these challenges, I created an app that makes it easy for tenants to r
 
 - **Cloudinary**: Manages image uploads and storage seamlessly.
 
-- **DigitalOcean**: Hosts the application and manages SSL certificates.
-
 
 ## Installation
 
