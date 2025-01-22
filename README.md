@@ -173,8 +173,6 @@ npm start
 
 ![alt text](https://github.com/Vineet829/tenant-sphere/blob/main/imgs/9.png)
 
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/10.png" alt="alt text" width="400" height="800">
-
 <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg" alt="alt text" width="400" height="800">
 
 ### Issue Reporting
