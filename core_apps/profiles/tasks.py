@@ -12,6 +12,7 @@ def upload_avatar_to_cloudinary(profile_id: UUID, image_content: bytes) -> None:
     profile.save()
 
 
+
 @shared_task(name="update_all_reputations")
 def update_all_reputations():
     for profile in Profile.objects.all():
