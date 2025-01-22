@@ -12,6 +12,7 @@ from core_apps.common.models import TimeStampedModel
 User = get_user_model()
 
 
+
 def get_user_username(instance: "Profile") -> str:
     return instance.user.username
 
