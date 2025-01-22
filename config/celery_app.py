@@ -9,4 +9,5 @@ app = Celery("tenant_sphere")
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
