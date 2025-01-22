@@ -12,6 +12,7 @@ import pytz
 User = get_user_model()
 
 
+
 class PopularTagSerializer(serializers.ModelSerializer):
     post_count = serializers.IntegerField(read_only=True)
 

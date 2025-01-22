@@ -19,6 +19,7 @@ from .views import (
 )
 
 
+
 urlpatterns = [
     path("", PostListAPIView.as_view(), name="post-list"),
     path("tags/<str:tag_slug>/", PostsByTagListAPIView.as_view(), name="posts-by-tag"),

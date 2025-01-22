@@ -12,6 +12,7 @@ from core_apps.profiles.models import Profile
 User = get_user_model()
 
 
+
 class Post(TimeStampedModel):
     title = models.CharField(verbose_name=_("Title"), max_length=250)
     slug = AutoSlugField(populate_from="title", unique=True)

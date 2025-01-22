@@ -8,6 +8,7 @@ from core_apps.profiles.models import Profile
 User = get_user_model()
 
 
+
 class CanCreateEditPost(permissions.BasePermission):
     message = "You do not have permission to create of edit this post."
 
