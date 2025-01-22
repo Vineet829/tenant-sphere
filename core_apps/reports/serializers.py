@@ -5,6 +5,7 @@ from .models import Report
 User = get_user_model()
 
 
+
 class ReportSerializer(serializers.ModelSerializer):
     reported_user_username = serializers.CharField(write_only=True)
 

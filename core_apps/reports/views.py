@@ -5,6 +5,7 @@ from .serializers import ReportSerializer
 from ..common.renderers import GenericJSONRenderer
 
 
+
 class ReportCreateAPIView(generics.CreateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer

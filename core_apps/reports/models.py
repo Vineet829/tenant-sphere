@@ -8,6 +8,7 @@ from core_apps.common.models import TimeStampedModel
 User = get_user_model()
 
 
+
 class Report(TimeStampedModel):
     title = models.CharField(_("Title"), max_length=255)
     slug = AutoSlugField(populate_from="title", unique=True)

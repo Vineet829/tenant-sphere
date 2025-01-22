@@ -8,6 +8,7 @@ from .emails import send_deactivation_email, send_warning_email
 from .models import Report
 
 
+
 @receiver(post_save, sender=Report)
 def update_user_report_count_and_reputation(
     sender: Type[ModelBase], instance: Report, created: bool, **kwargs
