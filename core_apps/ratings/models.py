@@ -6,6 +6,7 @@ from core_apps.common.models import TimeStampedModel
 User = get_user_model()
 
 
+
 class Rating(TimeStampedModel):
     class RatingChoices(models.IntegerChoices):
         ONE = 1, _("Very Poor")

@@ -9,6 +9,7 @@ from .serializers import RatingSerializer
 User = get_user_model()
 
 
+
 class RatingCreateAPIView(generics.CreateAPIView):
     serializer_class = RatingSerializer
     renderer_classes = [GenericJSONRenderer]

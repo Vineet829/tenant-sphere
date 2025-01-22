@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from .models import Rating
 
 
+
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = [
