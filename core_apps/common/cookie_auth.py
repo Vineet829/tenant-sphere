@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import Token
 logger = logging.getLogger(__name__)
 
 
+
 class CookieAuthentication(JWTAuthentication):
     def authenticate(self, request: Request) -> Optional[Tuple[AuthUser, Token]]:
         header = self.get_header(request)
