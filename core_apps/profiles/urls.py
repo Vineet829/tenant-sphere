@@ -7,6 +7,7 @@ from .views import (
     NonTenantProfileListAPIView,
 )
 
+
 urlpatterns = [
     path("all/", ProfileListAPIView.as_view(), name="profile-list"),
     path(
