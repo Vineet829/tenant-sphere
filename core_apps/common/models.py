@@ -9,6 +9,7 @@ from django.db import IntegrityError
 User = get_user_model()
 
 
+
 class TimeStampedModel(models.Model):
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
