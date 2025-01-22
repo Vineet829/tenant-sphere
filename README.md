@@ -1,8 +1,5 @@
 # Tenant Sphere
 
-Welcome to the **Tenant Sphere**! This application is designed to improve communication and management between tenants and property management. It offers various features for tenants to manage their apartments, report issues, and interact with other tenants and technicians.
-
-## Challenges Faced
 
 In my current apartment complex, I’ve encountered several frustrating issues with maintenance and services. Here are some of the main problems:
 
@@ -12,18 +9,16 @@ In my current apartment complex, I’ve encountered several frustrating issues w
   
 - **Reporting Problem Neighbors**: It’s difficult to report noisy or troublesome neighbors, which can negatively impact the vibe of our community.
 
-## Solutions Offered by the App
+
 
 To tackle these challenges, I created an app that makes it easy for tenants to report issues and bad behavior. The app is designed to:
 
-### Simplify Communication
-- Allow users to easily report apartment problems and tenant misconduct through the app, ensuring quick responses and efficient issue resolution.
+- **Simplify Communication**: Users can easily report apartment problems and tenant misconduct through the app, ensuring quick responses and efficient issue resolution.
 
-### Hold Technicians Accountable
-- Assign specific tasks to technicians so we can monitor how they handle reported issues.
+- **Hold Technicians Accountable**: Specific tasks can be assigned to technicians to monitor how they handle reported issues.
 
-### Create a Safer Community
-- Make it simple to report noisy or troublesome behavior and send warnings to those involved, helping everyone feel safe and comfortable at home.
+- **Create a Safer Community**: It is simple to report noisy or troublesome behavior and send warnings to those involved, helping everyone feel safe and comfortable at home.
+
 
 
 
@@ -40,41 +35,29 @@ To tackle these challenges, I created an app that makes it easy for tenants to r
 
 ### Tech Stack Overview
 
-- **Docker:** 
-  - Utilized for creating consistent development and production environments, facilitating deployment with Docker Compose.
+- **Docker**: Used to create consistent development and production environments, facilitating deployment with Docker Compose.
 
-- **NGINX:** 
-  - Implemented as a reverse proxy for the Django API and React/Next.js frontend, enhancing security and managing traffic effectively.
+- **NGINX**: Acts as a reverse proxy for the Django API and React/Next.js frontend, enhancing security and managing traffic effectively.
 
-- **Django REST Framework:** 
-  - Employed to build RESTful APIs that support user authentication and various app features.
+- **Django REST Framework**: Builds RESTful APIs that support user authentication and various app features.
 
-- **Djoser:** 
-  - Integrated to provide views for user registration, login, and password management seamlessly.
+- **Djoser**: Provides views for user registration, login, and password management seamlessly.
 
-- **Celery & Redis:** 
-  - Leveraged for handling asynchronous tasks and background job processing, with monitoring capabilities via Flower.
+- **Celery & Redis**: Handles asynchronous tasks and background job processing, with monitoring capabilities via Flower.
 
-- **PostgreSQL:** 
-  - Chosen as the primary database for storing user data, posts, and issues efficiently.
+- **PostgreSQL**: Serves as the primary database for efficiently storing user data, posts, and issues.
 
-- **React & Next.js 14:** 
-  - Used to power the frontend, delivering a dynamic user experience with server-side rendering capabilities.
+- **React & Next.js 14**: Powers the frontend, delivering a dynamic user experience with server-side rendering capabilities.
 
-- **Redux & Redux Toolkit:** 
-  - Applied to manage application state across React components effectively.
+- **Redux & Redux Toolkit**: Manages application state across React components effectively.
 
-- **Tailwind CSS:** 
-  - Adopted for styling components using utility-first CSS, enabling rapid UI development.
+- **Tailwind CSS**: Styles components using utility-first CSS, enabling rapid UI development.
 
-- **Git:** 
-  - Utilized for version control, allowing for effective tracking of code changes and collaboration.
+- **Git**: Tracks code changes and facilitates collaboration through version control.
 
-- **Cloudinary:** 
-  - Employed to manage image uploads and storage seamlessly.
+- **Cloudinary**: Manages image uploads and storage seamlessly.
 
-- **DigitalOcean:** 
-  - Selected for hosting the application and managing SSL certificates.
+- **DigitalOcean**: Hosts the application and manages SSL certificates.
 
 
 ## Installation
