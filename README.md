@@ -157,11 +157,8 @@ npm start
 
 </p>
 
-
-
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text 1" width="400" />
-
+ <p align="center">
+<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text" width="300" height="500">
 </p>
 
 ### Tenant and Technician Management
