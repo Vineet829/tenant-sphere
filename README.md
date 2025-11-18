@@ -20,19 +20,6 @@ To tackle these challenges, I created an app that makes it easy for tenants to r
 - **Create a Safer Community**: It is simple to report noisy or troublesome behavior and send warnings to those involved, helping everyone feel safe and comfortable at home.
 
 
-
-
-## Table of Contents
-
-- [Tech Stack](#techstack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [License](#license)
-- [Contact](#contact)
-
-
-
 ### Tech Stack Overview
 
 - **Docker**: Used to create consistent development and production environments, facilitating deployment with Docker Compose.
@@ -58,86 +45,11 @@ To tackle these challenges, I created an app that makes it easy for tenants to r
 - **Cloudinary**: Manages image uploads and storage seamlessly.
 
 
-## Installation
-
-### Prerequisites
-
-- Node.js (v14.x or later)
-- npm (v6.x or later)
-- MongoDB (v4.x or later)
-- Docker (for containerization)
-
-### Steps
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/tenant-app.git
-   cd tenant-app
-
-
-## Backend Setup
-
-2. Install backend dependencies:
-```bash
-cd backend
-npm install
-```
-
-3. Set up the environment variables:
-Create a `.env` file in the root directory and add the following:
-
-```env
-SITE_NAME=""
-DJANGO_SECRET_KEY=""
-DJANGO_ADMIN_URL=""
-EMAIL_PORT=""
-EMAIL_HOST=""
-DEFAULT_FROM_EMAIL=""
-CELERY_FLOWER_USER=""
-CELERY_FLOWER_PASSWORD=""
-CELERY_BROKER_URL=""
-CELERY_RESULT_BACKEND=""
-POSTGRES_HOST=""
-POSTGRES_PORT=""
-POSTGRES_DB=""
-POSTGRES_USER=""
-POSTGRES_PASSWORD=""
-CLOUDINARY_CLOUD_NAME=""
-CLOUDINARY_API_KEY=""
-CLOUDINARY_API_SECRET=""
-COOKIE_SECURE=""
-SIGNING_KEY=""
-GOOGLE_CLIENT_ID=""
-GOOGLE_CLIENT_SECRET=""
-REDIRECT_URIS=""
-```
-
-4. Start the backend application:
-```bash
-npm start
-```
-
-## Frontend Setup
-
-5. Install frontend dependencies:
-```bash
-cd frontend
-npm install
-```
-
-6. Start the frontend application:
-```bash
-npm start
-```
-
-## Usage
-
 ### Authentication Features
 - **Register a New User:** Easily create a new account to start using the app.
 - **Login:** Securely log in with your registered credentials or use Google OAuth for quick access.
 - **Logout:** End your session securely to protect your account from unauthorized access.
 - **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
-
 
 
 <p align="center">
@@ -164,9 +76,6 @@ npm start
 ### Tenant and Technician Management
 - **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
 - **View Technicians:** Browse through a list of all technicians in the corresponding tab for quick reference and ratings based on performance.
-
-
-
 
 
 <p align="center">
