@@ -1,0 +1,73 @@
+spring:
+  application:
+    name: tenant-sphere
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:tenantsphere}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+
+  mail:
+    host: ${EMAIL_HOST:localhost}
+    port: ${EMAIL_PORT:1025}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+  jackson:
+    default-property-inclusion: always
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8000
+  servlet:
+    context-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+app:
+  jwt:
+    signing-key: ${SIGNING_KEY}
+    access-token-ttl: PT30M
+    refresh-token-ttl: P1D
+  cookie:
+    access-name: access
+    refresh-name: refresh
+    logged-in-name: logged_in
+    path: /
+    same-site: Lax
+    secure: ${COOKIE_SECURE:false}
+  site:
+    name: ${SITE_NAME:Tenant Sphere}
+    domain: ${DOMAIN:localhost:8080}
+    default-from-email: ${DEFAULT_FROM_EMAIL:support@tenantsphere.local}
+
+logging:
+  level:
+    com.tenantsphere: DEBUG
