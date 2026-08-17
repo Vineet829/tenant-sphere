@@ -33,6 +33,7 @@ spring:
             enable: false
 
   jackson:
+    property-naming-strategy: SNAKE_CASE
     default-property-inclusion: always
     serialization:
       write-dates-as-timestamps: false
