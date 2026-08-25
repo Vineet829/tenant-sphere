@@ -121,6 +121,6 @@ public class IssueWriteService {
     private Issue requireIssue(UUID issueId) {
         return issueRepository.findByExternalId(issueId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Issue not found"));
+                        HttpStatus.NOT_FOUND, "No Issue matches the given query."));
     }
 }

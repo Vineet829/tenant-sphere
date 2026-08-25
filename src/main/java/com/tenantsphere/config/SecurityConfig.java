@@ -3,6 +3,7 @@ package com.tenantsphere.config;
 import com.tenantsphere.auth.JwtCookieAuthenticationFilter;
 import com.tenantsphere.common.ApiAccessDeniedHandler;
 import com.tenantsphere.common.ApiAuthenticationEntryPoint;
+import jakarta.servlet.DispatcherType;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .dispatcherTypeMatchers(DispatcherType.ERROR)
+                .permitAll()
                 .requestMatchers(
                     "/actuator/health",
                     "/api/v1/auth/login/",

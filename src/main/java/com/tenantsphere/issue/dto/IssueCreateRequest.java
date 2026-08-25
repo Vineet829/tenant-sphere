@@ -1,9 +1,14 @@
 package com.tenantsphere.issue.dto;
 
 import com.tenantsphere.issue.Priority;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public record IssueCreateRequest(
-        @NotBlank(message = "This field may not be blank.") String title,
-        @NotBlank(message = "This field may not be blank.") String description,
+        @NotNull(message = "This field is required.")
+                @Pattern(regexp = ".*\\S.*", message = "This field may not be blank.")
+                String title,
+        @NotNull(message = "This field is required.")
+                @Pattern(regexp = ".*\\S.*", message = "This field may not be blank.")
+                String description,
         Priority priority) {}
