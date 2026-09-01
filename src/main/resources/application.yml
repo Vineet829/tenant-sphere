@@ -68,6 +68,8 @@ app:
     name: ${SITE_NAME:Tenant Sphere}
     domain: ${DOMAIN:localhost:8080}
     default-from-email: ${DEFAULT_FROM_EMAIL:support@tenantsphere.local}
+  verification:
+    activation-ttl: P3D
 
 logging:
   level:

@@ -1,8 +1,12 @@
 package com.tenantsphere.auth;
 
+import com.tenantsphere.auth.dto.ActivationRequest;
 import com.tenantsphere.auth.dto.CurrentUserResponse;
 import com.tenantsphere.auth.dto.LoginRequest;
 import com.tenantsphere.auth.dto.MessageResponse;
+import com.tenantsphere.auth.dto.RegisterRequest;
+import com.tenantsphere.auth.dto.RegisterResponse;
+import com.tenantsphere.auth.dto.ResendActivationRequest;
 import com.tenantsphere.config.AppProperties;
 import com.tenantsphere.profile.Profile;
 import com.tenantsphere.user.User;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,16 +34,19 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final CookieService cookieService;
+    private final RegistrationService registrationService;
     private final String refreshCookieName;
 
     public AuthController(
             AuthService authService,
             JwtService jwtService,
             CookieService cookieService,
+            RegistrationService registrationService,
             AppProperties properties) {
         this.authService = authService;
         this.jwtService = jwtService;
         this.cookieService = cookieService;
+        this.registrationService = registrationService;
         this.refreshCookieName = properties.cookie().refreshName();
     }
 
@@ -63,6 +71,33 @@ public class AuthController {
         User user = authService.requireActiveUser(userId);
         issueCookies(user.getId(), response);
         return new MessageResponse("Access tokens refreshed successfully");
+    }
+
+    @PostMapping("/users/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RegisterResponse register(@Valid @RequestBody RegisterRequest request) {
+        User user = registrationService.register(request);
+        return new RegisterResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail());
+    }
+
+    @PostMapping("/users/activation/")
+    public ResponseEntity<Void> activate(@Valid @RequestBody ActivationRequest request) {
+        if (!registrationService.activate(request.uid(), request.token())) {
+            throw new InvalidActivationTokenException();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/users/resend_activation/")
+    public ResponseEntity<Void> resendActivation(
+            @Valid @RequestBody ResendActivationRequest request) {
+        registrationService.resendActivation(request.email());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/logout/")
