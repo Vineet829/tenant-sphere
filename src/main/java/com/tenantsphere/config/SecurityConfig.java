@@ -58,7 +58,8 @@ public class SecurityConfig {
                     "/api/v1/auth/users/activation/",
                     "/api/v1/auth/users/resend_activation/",
                     "/api/v1/auth/users/reset_password/",
-                    "/api/v1/auth/users/reset_password_confirm/")
+                    "/api/v1/auth/users/reset_password_confirm/",
+                    "/api/v1/auth/o/*/")
                 .permitAll()
                 .requestMatchers(HttpMethod.GET,
                     "/api/v1/posts/",

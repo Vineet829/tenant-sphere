@@ -36,4 +36,9 @@ public class AuthExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("token", List.of(e.getMessage())));
     }
+
+    @ExceptionHandler(GoogleAuthenticationException.class)
+    public ResponseEntity<DetailResponse> handleGoogleAuth(GoogleAuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new DetailResponse(e.getMessage()));
+    }
 }

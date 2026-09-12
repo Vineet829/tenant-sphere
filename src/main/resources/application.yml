@@ -71,6 +71,11 @@ app:
   verification:
     activation-ttl: P3D
     password-reset-ttl: P1D
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+      client-secret: ${GOOGLE_CLIENT_SECRET:}
+      allowed-redirect-uris: ${REDIRECT_URIS:}
 
 logging:
   level:
