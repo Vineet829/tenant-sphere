@@ -42,6 +42,41 @@ public class VerificationMailer {
                         .formatted(user.getFirstName(), site.name(), link));
     }
 
+    @Async
+    public void sendPasswordReset(User user, String uid, String token) {
+        String link = "http://%s/password-reset/%s/%s".formatted(site.domain(), uid, token);
+        send(
+                user,
+                "Reset your %s password".formatted(site.name()),
+                """
+                Hello %s,
+
+                We received a request to reset your %s password. Open the link below \
+                to choose a new one.
+
+                %s
+
+                If you did not request this you can ignore this message.
+                """
+                        .formatted(user.getFirstName(), site.name(), link));
+    }
+
+    @Async
+    public void sendPasswordChanged(User user) {
+        send(
+                user,
+                "Your %s password was changed".formatted(site.name()),
+                """
+                Hello %s,
+
+                This is a confirmation that the password for your %s account was \
+                just changed.
+
+                If you did not make this change please contact support immediately.
+                """
+                        .formatted(user.getFirstName(), site.name()));
+    }
+
     private void send(User user, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(site.defaultFromEmail());

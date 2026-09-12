@@ -18,5 +18,5 @@ public record AppProperties(Jwt jwt, Cookie cookie, Site site, Verification veri
 
     public record Site(String name, String domain, String defaultFromEmail) {}
 
-    public record Verification(Duration activationTtl) {}
+    public record Verification(Duration activationTtl, Duration passwordResetTtl) {}
 }

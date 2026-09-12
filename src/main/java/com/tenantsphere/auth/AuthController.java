@@ -4,6 +4,8 @@ import com.tenantsphere.auth.dto.ActivationRequest;
 import com.tenantsphere.auth.dto.CurrentUserResponse;
 import com.tenantsphere.auth.dto.LoginRequest;
 import com.tenantsphere.auth.dto.MessageResponse;
+import com.tenantsphere.auth.dto.PasswordResetConfirmRequest;
+import com.tenantsphere.auth.dto.PasswordResetRequest;
 import com.tenantsphere.auth.dto.RegisterRequest;
 import com.tenantsphere.auth.dto.RegisterResponse;
 import com.tenantsphere.auth.dto.ResendActivationRequest;
@@ -35,6 +37,7 @@ public class AuthController {
     private final JwtService jwtService;
     private final CookieService cookieService;
     private final RegistrationService registrationService;
+    private final PasswordResetService passwordResetService;
     private final String refreshCookieName;
 
     public AuthController(
@@ -42,11 +45,13 @@ public class AuthController {
             JwtService jwtService,
             CookieService cookieService,
             RegistrationService registrationService,
+            PasswordResetService passwordResetService,
             AppProperties properties) {
         this.authService = authService;
         this.jwtService = jwtService;
         this.cookieService = cookieService;
         this.registrationService = registrationService;
+        this.passwordResetService = passwordResetService;
         this.refreshCookieName = properties.cookie().refreshName();
     }
 
@@ -97,6 +102,20 @@ public class AuthController {
     public ResponseEntity<Void> resendActivation(
             @Valid @RequestBody ResendActivationRequest request) {
         registrationService.resendActivation(request.email());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/users/reset_password/")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+        passwordResetService.requestReset(request.email());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/users/reset_password_confirm/")
+    public ResponseEntity<Void> resetPasswordConfirm(
+            @Valid @RequestBody PasswordResetConfirmRequest request) {
+        passwordResetService.confirmReset(
+                request.uid(), request.token(), request.newPassword(), request.reNewPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

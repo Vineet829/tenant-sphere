@@ -70,6 +70,7 @@ app:
     default-from-email: ${DEFAULT_FROM_EMAIL:support@tenantsphere.local}
   verification:
     activation-ttl: P3D
+    password-reset-ttl: P1D
 
 logging:
   level:

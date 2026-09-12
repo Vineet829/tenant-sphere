@@ -29,4 +29,11 @@ public class AuthExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("token", List.of(e.getMessage())));
     }
+
+    @ExceptionHandler(InvalidPasswordResetTokenException.class)
+    public ResponseEntity<Map<String, List<String>>> handlePasswordReset(
+            InvalidPasswordResetTokenException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("token", List.of(e.getMessage())));
+    }
 }
