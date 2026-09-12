@@ -28,4 +28,14 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             order by p.createdAt desc, p.updatedAt desc
             """)
     Page<Profile> findTenantProfiles(Pageable pageable);
+
+    @Query("""
+            select p from Profile p
+            join fetch p.user u
+            where u.staff = false
+              and u.superuser = false
+              and p.occupation <> com.tenantsphere.profile.Occupation.TENANT
+            order by p.createdAt desc, p.updatedAt desc
+            """)
+    Page<Profile> findNonTenantProfiles(Pageable pageable);
 }
