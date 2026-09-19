@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
+    private static final String DUMMY_HASH =
+            "$argon2id$v=19$m=16384,t=2,p=1$AAAAAAAAAAAAAAAA$AAAAAAAAAAAAAAAAAAAAAA";
+
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
@@ -28,8 +31,12 @@ public class AuthService {
 
     @Transactional
     public User authenticate(String email, String rawPassword) {
-        User user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(InvalidCredentialsException::new);
+        User user = userRepository.findByEmailIgnoreCase(email).orElse(null);
+
+        if (user == null) {
+            passwordEncoder.matches(rawPassword, DUMMY_HASH);
+            throw new InvalidCredentialsException();
+        }
 
         if (!user.isActive() || !passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new InvalidCredentialsException();

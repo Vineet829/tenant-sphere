@@ -73,7 +73,8 @@ public class GoogleIdentityClient implements GoogleIdentityProvider {
                 info.get("email").toString(),
                 asString(info.get("given_name")),
                 asString(info.get("family_name")),
-                asString(info.get("sub")));
+                asString(info.get("sub")),
+                Boolean.TRUE.equals(info.get("email_verified")));
     }
 
     private String asString(Object value) {

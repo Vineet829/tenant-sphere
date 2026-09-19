@@ -146,9 +146,18 @@ public class PostService {
             replyCounts.merge(reply.getPost().getPkid(), 1L, Long::sum);
         }
 
-        for (Profile profile : profileRepository.findAll()) {
-            if (profile.getAvatar() != null) {
-                avatars.put(profile.getUser().getPkid(), profile.getAvatar());
+        Set<Long> authorPkids = new HashSet<>();
+        for (Post post : posts) {
+            authorPkids.add(post.getAuthor().getPkid());
+        }
+        for (Reply reply : allReplies) {
+            authorPkids.add(reply.getAuthor().getPkid());
+        }
+        if (!authorPkids.isEmpty()) {
+            for (Profile profile : profileRepository.findAllByUserPkidIn(authorPkids)) {
+                if (profile.getAvatar() != null) {
+                    avatars.put(profile.getUser().getPkid(), profile.getAvatar());
+                }
             }
         }
 

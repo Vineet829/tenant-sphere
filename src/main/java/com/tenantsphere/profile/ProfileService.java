@@ -46,12 +46,22 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProfileResponse> listTenants(Pageable pageable) {
+    public Page<ProfileResponse> listTenants(Pageable pageable, String search) {
+        if (hasValue(search)) {
+            return profileRepository
+                    .searchTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable)
+                    .map(this::toResponse);
+        }
         return profileRepository.findTenantProfiles(pageable).map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
-    public Page<ProfileResponse> listNonTenants(Pageable pageable) {
+    public Page<ProfileResponse> listNonTenants(Pageable pageable, String search) {
+        if (hasValue(search)) {
+            return profileRepository
+                    .searchNonTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable)
+                    .map(this::toResponse);
+        }
         return profileRepository.findNonTenantProfiles(pageable).map(this::toResponse);
     }
 

@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/posts")
 public class PostReplyController {
+
+    private static final int PAGE_SIZE = 10;
 
     private final PostReplyService replyService;
 
@@ -42,10 +45,16 @@ public class PostReplyController {
 
     @GetMapping("/{postId}/replies/")
     @ObjectLabel("replies")
-    public PageResponse<ReplyResponse> list(@PathVariable UUID postId) {
-        List<ReplyResponse> replies = replyService.listNewestFirst(postId);
+    public PageResponse<ReplyResponse> list(
+            @PathVariable UUID postId,
+            @RequestParam(name = "page", defaultValue = "1") int page) {
+        List<ReplyResponse> all = replyService.listNewestFirst(postId);
+        int pageIndex = Math.max(page - 1, 0);
+        int start = Math.min(pageIndex * PAGE_SIZE, all.size());
+        int end = Math.min(start + PAGE_SIZE, all.size());
+        List<ReplyResponse> pageContent = all.subList(start, end);
         return PageResponse.from(
-                new PageImpl<>(replies, PageRequest.of(0, Math.max(replies.size(), 1)), replies.size()),
+                new PageImpl<>(pageContent, PageRequest.of(pageIndex, PAGE_SIZE), all.size()),
                 "http://localhost:8080/api/v1/posts/" + postId + "/replies/");
     }
 }

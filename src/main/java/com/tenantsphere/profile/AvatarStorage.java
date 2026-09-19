@@ -32,7 +32,7 @@ public class AvatarStorage {
             Files.createDirectories(avatarDir);
             Files.write(avatarDir.resolve(reference), content);
             profileRepository.findById(profilePkid).ifPresent(profile -> {
-                profile.setAvatar(reference);
+                profile.setAvatar("/media/avatars/" + reference);
                 profileRepository.save(profile);
             });
         } catch (IOException exception) {

@@ -46,11 +46,12 @@ public class ProfileController {
     @ObjectLabel("profiles")
     public PageResponse<ProfileResponse> listTenants(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "page_size", defaultValue = "9") int pageSize) {
+            @RequestParam(name = "page_size", defaultValue = "9") int pageSize,
+            @RequestParam(name = "search", required = false) String search) {
 
         int size = Math.min(Math.max(pageSize, 1), 100);
         Page<ProfileResponse> result =
-                profileService.listTenants(PageRequest.of(Math.max(page - 1, 0), size));
+                profileService.listTenants(PageRequest.of(Math.max(page - 1, 0), size), search);
         return PageResponse.from(result, LIST_URL);
     }
 
@@ -58,11 +59,12 @@ public class ProfileController {
     @ObjectLabel("non_tenant_profiles")
     public PageResponse<ProfileResponse> listNonTenants(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "page_size", defaultValue = "9") int pageSize) {
+            @RequestParam(name = "page_size", defaultValue = "9") int pageSize,
+            @RequestParam(name = "search", required = false) String search) {
 
         int size = Math.min(Math.max(pageSize, 1), 100);
         Page<ProfileResponse> result =
-                profileService.listNonTenants(PageRequest.of(Math.max(page - 1, 0), size));
+                profileService.listNonTenants(PageRequest.of(Math.max(page - 1, 0), size), search);
         return PageResponse.from(result, NON_TENANT_URL);
     }
 

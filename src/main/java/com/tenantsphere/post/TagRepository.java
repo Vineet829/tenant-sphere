@@ -10,6 +10,10 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     Optional<Tag> findByName(String name);
 
+    Optional<Tag> findByNameIgnoreCase(String name);
+
+    boolean existsBySlug(String slug);
+
     @Query("""
             select t.name as name, t.slug as slug, count(p) as postCount
             from Tag t join Post p on t member of p.tags

@@ -1,11 +1,14 @@
 package com.tenantsphere.issue;
 
 import com.tenantsphere.auth.AppUserDetails;
+import com.tenantsphere.common.ContentViewRecorder;
+import com.tenantsphere.common.ContentViewRepository;
 import com.tenantsphere.common.ObjectLabel;
 import com.tenantsphere.common.PageResponse;
 import com.tenantsphere.issue.dto.IssueCreateRequest;
 import com.tenantsphere.issue.dto.IssueResponse;
 import com.tenantsphere.issue.dto.IssueStatusUpdateRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -38,14 +41,20 @@ public class IssueController {
     private final IssueRepository issueRepository;
     private final IssueService issueService;
     private final IssueWriteService issueWriteService;
+    private final ContentViewRecorder contentViewRecorder;
+    private final ContentViewRepository contentViewRepository;
 
     public IssueController(
             IssueRepository issueRepository,
             IssueService issueService,
-            IssueWriteService issueWriteService) {
+            IssueWriteService issueWriteService,
+            ContentViewRecorder contentViewRecorder,
+            ContentViewRepository contentViewRepository) {
         this.issueRepository = issueRepository;
         this.issueService = issueService;
         this.issueWriteService = issueWriteService;
+        this.contentViewRecorder = contentViewRecorder;
+        this.contentViewRepository = contentViewRepository;
     }
 
     @GetMapping("/")
@@ -108,9 +117,15 @@ public class IssueController {
     @GetMapping("/{issueId}/")
     @ObjectLabel("issue")
     public IssueResponse detail(
-            @PathVariable UUID issueId, @AuthenticationPrincipal AppUserDetails principal) {
+            @PathVariable UUID issueId,
+            @AuthenticationPrincipal AppUserDetails principal,
+            HttpServletRequest request) {
         Issue issue = issueWriteService.requireVisible(issueId, principal.getUser());
-        return IssueResponse.of(issue, 0L);
+        contentViewRecorder.record(
+                IssueService.CONTENT_TYPE, issue.getPkid(), principal.getUser(), request);
+        long viewCount = contentViewRepository.countByContentTypeAndObjectPkid(
+                IssueService.CONTENT_TYPE, issue.getPkid());
+        return IssueResponse.of(issue, viewCount);
     }
 
     @DeleteMapping("/delete/{issueId}/")

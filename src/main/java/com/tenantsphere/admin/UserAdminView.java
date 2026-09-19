@@ -22,6 +22,8 @@ import jakarta.annotation.security.RolesAllowed;
 import java.util.List;
 import com.tenantsphere.profile.Gender;
 import com.tenantsphere.profile.Occupation;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Route(value = "admin/users", layout = AdminLayout.class)
 @PageTitle("Users | Tenant Sphere Admin")
@@ -85,12 +87,20 @@ public class UserAdminView extends AdminGridView<User> {
         userBinder.forField(firstName).bind(User::getFirstName, User::setFirstName);
         userBinder.forField(lastName).bind(User::getLastName, User::setLastName);
 
+        boolean currentUserIsSuperuser = isCurrentUserSuperuser();
+
         Checkbox active = new Checkbox("Active");
         Checkbox staff = new Checkbox("Staff status");
         Checkbox superuser = new Checkbox("Superuser status");
         userBinder.forField(active).bind(User::isActive, User::setActive);
         userBinder.forField(staff).bind(User::isStaff, User::setStaff);
         userBinder.forField(superuser).bind(User::isSuperuser, User::setSuperuser);
+
+        if (!currentUserIsSuperuser) {
+            superuser.setEnabled(false);
+            staff.setEnabled(false);
+            active.setEnabled(false);
+        }
 
         Profile profile = profileRepository.findByUserPkid(user.getPkid()).orElse(null);
         Binder<Profile> profileBinder = new Binder<>(Profile.class);
@@ -149,5 +159,13 @@ public class UserAdminView extends AdminGridView<User> {
             }
         });
         dialog.open();
+    }
+
+    private boolean isCurrentUserSuperuser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof com.tenantsphere.auth.AppUserDetails details)) {
+            return false;
+        }
+        return details.getUser().isSuperuser();
     }
 }

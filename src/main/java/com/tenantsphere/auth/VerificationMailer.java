@@ -25,7 +25,7 @@ public class VerificationMailer {
 
     @Async
     public void sendActivation(User user, String uid, String token) {
-        String link = "http://%s/activate/%s/%s".formatted(site.domain(), uid, token);
+        String link = "%s/activate/%s/%s".formatted(site.domain(), uid, token);
         send(
                 user,
                 "Activate your %s account".formatted(site.name()),
@@ -44,7 +44,7 @@ public class VerificationMailer {
 
     @Async
     public void sendPasswordReset(User user, String uid, String token) {
-        String link = "http://%s/password-reset/%s/%s".formatted(site.domain(), uid, token);
+        String link = "%s/password-reset/%s/%s".formatted(site.domain(), uid, token);
         send(
                 user,
                 "Reset your %s password".formatted(site.name()),

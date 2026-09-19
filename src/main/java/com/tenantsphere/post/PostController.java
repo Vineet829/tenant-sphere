@@ -198,21 +198,30 @@ public class PostController {
     private Set<Tag> resolveTags(List<String> names) {
         Set<Tag> tags = new LinkedHashSet<>();
         for (String name : names) {
-            tags.add(tagRepository.findByName(name).orElseGet(() -> {
+            tags.add(tagRepository.findByNameIgnoreCase(name).orElseGet(() -> {
                 Tag tag = new Tag();
                 tag.setName(name);
-                tag.setSlug(Slugs.of(name));
+                tag.setSlug(uniqueTagSlug(Slugs.of(name)));
                 return tagRepository.save(tag);
             }));
         }
         return tags;
     }
 
+    private String uniqueTagSlug(String base) {
+        String candidate = base;
+        int suffix = 2;
+        while (tagRepository.existsBySlug(candidate)) {
+            candidate = base + "-" + suffix++;
+        }
+        return candidate;
+    }
+
     @PatchMapping("/{slug}/update/")
     @ObjectLabel("post")
     public PostResponse update(
             @PathVariable String slug,
-            @RequestBody PostUpdateRequest request,
+            @Valid @RequestBody PostUpdateRequest request,
             @AuthenticationPrincipal AppUserDetails principal) {
 
         Post post = postRepository.findBySlug(slug)

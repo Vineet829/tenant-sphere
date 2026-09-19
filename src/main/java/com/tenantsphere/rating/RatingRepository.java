@@ -12,6 +12,8 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("select avg(r.rating) from Rating r where r.ratedUser.pkid = :userPkid")
     Optional<Double> averageForUser(@Param("userPkid") Long userPkid);
 
+    boolean existsByRatedUserPkidAndRatingUserPkid(Long ratedUserPkid, Long ratingUserPkid);
+
     @EntityGraph(attributePaths = {"ratedUser", "ratingUser"})
     List<Rating> findAllBy();
 }

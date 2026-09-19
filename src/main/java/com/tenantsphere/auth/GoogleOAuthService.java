@@ -47,8 +47,8 @@ public class GoogleOAuthService {
         if (redirectUri == null || redirectUri.isBlank()) {
             throw new GoogleAuthenticationException("redirect_uri is required.");
         }
-        if (!properties.allowedRedirectUris().isEmpty()
-                && !properties.allowedRedirectUris().contains(redirectUri)) {
+        if (properties.allowedRedirectUris().isEmpty()
+                || !properties.allowedRedirectUris().contains(redirectUri)) {
             throw new GoogleAuthenticationException("redirect_uri is not allowed.");
         }
 
@@ -74,6 +74,10 @@ public class GoogleOAuthService {
                 .orElseThrow(() -> new GoogleAuthenticationException("Invalid or expired state."));
 
         GoogleUserInfo info = identityProvider.exchange(code, redirectUri);
+        if (!info.emailVerified()) {
+            throw new GoogleAuthenticationException(
+                    "Google account email is not verified.");
+        }
         String email = info.email().trim().toLowerCase(Locale.ROOT);
 
         return userRepository.findByEmailIgnoreCase(email).orElseGet(() -> createUser(info, email));

@@ -64,6 +64,12 @@ public class RatingService {
             throw new AccessDeniedException("A technician cannot review another technician.");
         }
 
+        if (ratingRepository.existsByRatedUserPkidAndRatingUserPkid(
+                ratedUser.getPkid(), ratingUser.getPkid())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "You have already rated this user.");
+        }
+
         Rating rating = new Rating();
         rating.setRatedUser(ratedUser);
         rating.setRatingUser(ratingUser);

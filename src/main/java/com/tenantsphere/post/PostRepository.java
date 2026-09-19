@@ -57,7 +57,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @EntityGraph(attributePaths = {"author"})
     @Query("""
             select p from Post p
-            order by p.upvotes desc, p.createdAt desc
+            left join ContentView v on v.contentType = 'post' and v.objectPkid = p.pkid
+            group by p
+            order by p.upvotes desc, count(v) desc, p.createdAt desc
             """)
     List<Post> findTopPosts(Pageable pageable);
 }
