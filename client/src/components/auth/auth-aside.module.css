@@ -1,0 +1,84 @@
+.aside {
+  width: 100%;
+  min-width: 0;
+  max-width: 520px;
+  animation: arrive .65s ease-out both;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #bbd0c6;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: .11em;
+}
+
+.kickerLine { width: 28px; height: 1px; background: #8ea99b; flex-shrink: 0; }
+.communityDiagram { margin-top: 30px; padding: 30px 0 38px; border-bottom: 1px solid #35595b; }
+.communityHub { display: flex; flex-direction: column; align-items: center; gap: 14px; width: max-content; max-width: 100%; margin: 0 auto; padding: 20px 28px; border: 1px solid #627f70; border-radius: 16px; color: #e0ecd4; background: #244a45; font-size: .875rem; font-weight: 600; }
+.hubIcon { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border: 1px solid #bed3aa; border-radius: 50%; color: #15362e; background: #bfdaaa; box-shadow: 0 0 0 8px #bfdaaa0a; }
+.connections { display: block; width: 100%; height: 70px; overflow: visible; }
+.connections path { stroke: #436562; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.connections .connectionTrace { stroke: #a2bfa0; stroke-dasharray: 1; stroke-dashoffset: 1; animation: connect 1.5s .35s ease-out forwards; }
+.communityFeatures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.communityFeature { display: flex; align-items: center; flex-direction: column; gap: 14px; min-width: 0; color: #c5d6cc; text-align: center; font-size: .875rem; line-height: 1.5; animation: arrive .65s .35s backwards; }
+.communityFeature:nth-child(2) { animation-delay: .5s; }
+.communityFeature:nth-child(3) { animation-delay: .65s; }
+.communityFeature > span:last-child { max-width: 100%; padding-inline: 4px; overflow-wrap: anywhere; }
+.featureIcon { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border: 1px solid #567570; border-radius: 15px; background: #1a3c40; color: #c9dbc2; }
+.communityFeature:nth-child(2) .featureIcon { background: #34473e; color: #d8d3a1; border-color: #6d7860; }
+.communityFeature:nth-child(3) .featureIcon { background: #364443; color: #dfbfac; border-color: #6b736b; }
+.loginCopy { padding-top: 28px; }
+.loginCopy h2, .registerTitle { margin: 0; font-size: clamp(1.85rem, 2.5vw, 2.4rem); font-weight: 500; line-height: 1.3; letter-spacing: -.045em; }
+.loginCopy h2 > span, .registerTitle > span { color: #bfdaaa; }
+.loginCopy > p { max-width: 400px; margin: 18px 0 0; font-size: 1rem; line-height: 1.8; color: #aec5bf; }
+
+.registerTitle { margin-top: 26px; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1.24; }
+.steps { position: relative; list-style: none; padding: 0; margin: 38px 0 0; }
+.step { position: relative; display: grid; grid-template-columns: 42px 1fr 20px; column-gap: 20px; min-width: 0; padding-bottom: 30px; animation: arrive .6s .15s backwards; }
+.step:nth-child(2) { animation-delay: .3s; }
+.step:nth-child(3) { animation-delay: .45s; }
+.step:not(:last-child)::before { content: ""; position: absolute; width: 1px; left: 20px; top: 48px; bottom: 7px; background: #3e605d; }
+.stepNumber { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border: 1px solid #51716a; border-radius: 50%; color: #b7ccc1; font-size: .875rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.step:first-child .stepNumber { border-color: #bfdaaa; color: #15362e; background: #bfdaaa; }
+.stepCopy { padding-top: 8px; }
+.stepCopy h3 { margin: 0; font-size: 1rem; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; color: #e1ebdf; }
+.stepCopy p { max-width: 275px; margin: 7px 0 0; color: #aec5bf; font-size: 1rem; line-height: 1.65; }
+.stepIcon { margin-top: 11px; color: #9bb9a5; }
+.currentStep { display: inline-block; margin-top: 12px; color: #c6ddb3; font-size: .75rem; font-weight: 600; letter-spacing: .08em; line-height: 1.6; }
+.guideEnd { display: flex; gap: 9px; align-items: center; border-top: 1px solid #35595b; padding-top: 20px; color: #b9cec0; font-size: .875rem; line-height: 1.6; }
+.guideEnd > svg { color: #bfdaaa; flex-shrink: 0; }
+
+@keyframes arrive { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes connect { to { stroke-dashoffset: 0; } }
+
+@media (min-width: 901px) and (max-height: 850px) {
+  .communityDiagram { margin-top: 20px; padding-top: 18px; padding-bottom: 28px; }
+  .communityHub { padding-block: 16px; gap: 12px; }
+  .hubIcon { width: 52px; height: 52px; }
+  .connections { height: 56px; }
+  .loginCopy { padding-top: 23px; }
+  .registerTitle { margin-top: 20px; }
+  .steps { margin-top: 30px; }
+  .step { padding-bottom: 23px; }
+  .guideEnd { padding-top: 17px; }
+}
+
+@media (min-width: 901px) and (max-width: 1150px) {
+  .step { column-gap: 14px; grid-template-columns: 42px 1fr; }
+  .stepIcon { display: none; }
+  .registerTitle { font-size: 2.35rem; }
+}
+
+@media (max-width: 900px) {
+  .aside { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aside, .aside * { animation: none !important; }
+  .connections .connectionTrace { stroke-dashoffset: 0; }
+}
