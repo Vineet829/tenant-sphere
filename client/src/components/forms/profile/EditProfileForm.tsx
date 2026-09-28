@@ -12,7 +12,7 @@ import axios from "axios";
 import { AtSign, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as z from "zod";
@@ -27,6 +27,7 @@ export default function EditProfileForm() {
 	const [uploadAccepted, setUploadAccepted] = useState(false);
 	const [uploadError, setUploadError] = useState("");
 	const [uploading, setUploading] = useState(false);
+	const initialized = useRef(false);
 
 	const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
@@ -42,8 +43,9 @@ export default function EditProfileForm() {
 	} = useForm<TProfileSchema>();
 
 	useEffect(() => {
-		if (profile) {
+		if (profile && !initialized.current) {
 			reset({ ...profile });
+			initialized.current = true;
 		}
 	}, [profile, reset]);
 
@@ -59,9 +61,13 @@ export default function EditProfileForm() {
 
 		try {
 			await axios.patch("/api/v1/profiles/user/avatar/", formData);
+			await refetch();
 			setUploadAccepted(true);
-		} catch {
-			setUploadError("We could not upload your photo. Choose the file again to retry.");
+		} catch (error) {
+			const detail = axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
+			setUploadError(typeof detail === "string" ? detail
+				: axios.isAxiosError(error) && error.response?.status === 413 ? "Choose an image smaller than 1 MB."
+				: "We could not upload your photo. Choose the file again to retry.");
 			input.value = "";
 		} finally {
 			setUploading(false);
@@ -95,7 +101,7 @@ export default function EditProfileForm() {
 					<PersonAvatar name={profile?.full_name || profile?.username} seed={profile?.username} src={profile?.avatar} size="lg" />
 					<div className="es-upload-copy">
 						<input
-							accept="image/*"
+							accept="image/jpeg,image/png,image/gif,image/webp"
 							id="avatar"
 							name="avatar"
 							type="file"
@@ -113,10 +119,10 @@ export default function EditProfileForm() {
 							) : uploadAccepted ? (
 								<>
 									<Check aria-hidden="true" />
-									Photo received. It may take a moment to appear.
+									Photo updated.
 								</>
 							) : (
-								"An image file, such as a PNG or JPG."
+								"JPEG, PNG, GIF or WebP, up to 1 MB."
 							)}
 						</p>
 					</div>
