@@ -1,22 +1,31 @@
-import { AuthFormHeader } from "@/components/forms/auth";
+import FormShell, { FormContext } from "@/components/estate/FormShell";
 import EditProfileForm from "@/components/forms/profile/EditProfileForm";
+import { UsersRound } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Tenant Sphere | Profile Edit",
+	title: "Edit profile — Tenant Sphere",
 	description: "Signed in users can edit their profile information",
 };
 
-
 export default function EditProfilePage() {
 	return (
-		<div>
-			<AuthFormHeader title="Update Profile" />
-			<div className="mt-7 sm:mx-auto sm:w-full sm:max-w-[480px]">
-				<div className="bg-lightGrey dark:bg-deepBlueGrey rounded-xl px-6 py-12 shadow sm:rounded-lg sm:px-12 md:rounded-3xl">
-					<EditProfileForm />
-				</div>
-			</div>
-		</div>
+		<FormShell
+			eyebrow="Your space"
+			title={
+				<>
+					Edit your <em>profile</em>
+				</>
+			}
+			description="A name, a face and a few lines go a long way towards feeling at home."
+			back={{ href: "/profile", label: "Back to profile" }}
+			aside={
+				<FormContext icon={<UsersRound strokeWidth={1.75} />} label="Who sees this">
+					Your name, bio and apartment appear in the tenant directory.
+				</FormContext>
+			}
+		>
+			<EditProfileForm />
+		</FormShell>
 	);
 }

@@ -1,11 +1,15 @@
-import React from "react";
-import { CardDescription } from "../ui/card";
-import Tooltip from "../shared/Tooltip";
-import { BookMarkedIcon, ThumbsDownIcon, ThumbsUpIcon, Trash2Icon } from "lucide-react";
+import ConfirmButton from "@/components/estate/ConfirmButton";
+import { ArrowBigDown, ArrowBigUp, Bookmark, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 interface PostActionsProps {
+	slug: string | undefined;
 	upvotes: number | undefined;
 	downvotes: number | undefined;
+	isUpvoted?: boolean;
+	isBookmarked?: boolean;
+	/** Only the author can edit or delete a post. */
+	canManage?: boolean;
 	handleUpvote: () => void;
 	handleDownVote: () => void;
 	handleBookmarkPost: () => void;
@@ -16,10 +20,13 @@ interface PostActionsProps {
 	isDeleteLoading: boolean;
 }
 
-
 export default function PostActions({
+	slug,
 	upvotes,
 	downvotes,
+	isUpvoted = false,
+	isBookmarked = false,
+	canManage = false,
 	handleUpvote,
 	handleDownVote,
 	handleBookmarkPost,
@@ -30,50 +37,70 @@ export default function PostActions({
 	isDeleteLoading,
 }: PostActionsProps) {
 	return (
-		<CardDescription className="mt-2">
-			<div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
-				<Tooltip content="Upvote this post" position="top">
+		<footer className="es-actionbar">
+			<div className="es-actionbar-group">
+				<div className="es-votes" role="group" aria-label="Vote on this post">
 					<button
+						type="button"
+						className="es-action es-action--vote"
 						onClick={handleUpvote}
 						disabled={isUpvoteLoading}
-						className={`flex items-center ${isUpvoteLoading ? 'opacity-50' : ''}`}
+						aria-pressed={isUpvoted}
+						aria-label={`Upvote. ${upvotes ?? 0} so far`}
+						title="Upvote this post"
 					>
-						<ThumbsUpIcon className="tab-icon text-electricIndigo h-6 w-6" />
-						<span className="ml-1 text-lg">{upvotes}</span>
-						{isUpvoteLoading && <span className="ml-1 text-sm">Loading...</span>}
+						<ArrowBigUp aria-hidden="true" />
+						{upvotes ?? 0}
 					</button>
-				</Tooltip>
-				<Tooltip content="Downvote this post" position="top">
+					<span className="es-votes-rule" aria-hidden="true" />
 					<button
+						type="button"
+						className="es-action es-action--vote"
 						onClick={handleDownVote}
 						disabled={isDownvoteLoading}
-						className={`flex items-center ${isDownvoteLoading ? 'opacity-50' : ''}`}
+						aria-label={`Downvote. ${downvotes ?? 0} so far`}
+						title="Downvote this post"
 					>
-						<ThumbsDownIcon className="tab-icon text-electricIndigo h-6 w-6" />
-						<span className="ml-1 text-lg">{downvotes}</span>
-						{isDownvoteLoading && <span className="ml-1 text-sm">Loading...</span>}
+						<ArrowBigDown aria-hidden="true" />
+						{downvotes ?? 0}
 					</button>
-				</Tooltip>
-				<Tooltip content="Bookmark this post" position="top">
-					<button
-						onClick={handleBookmarkPost}
-						disabled={isBookmarkLoading}
-						className={`flex items-center ${isBookmarkLoading ? 'opacity-50' : ''}`}
-					>
-						<BookMarkedIcon className="tab-icon text-electricIndigo h-6 w-6" />
-						{isBookmarkLoading && <span className="ml-1 text-sm">Loading...</span>}
-					</button>
-				</Tooltip>
-				<Tooltip content="Delete this post" position="top">
-					<button
-						onClick={handleDeletePost}
-						disabled={isDeleteLoading}
-						className={`text-red-500 flex items-center ${isDeleteLoading ? 'opacity-50' : ''}`}
-					>
-						<Trash2Icon className="tab-icon text-electricIndigo h-6 w-6" />
-					</button>
-				</Tooltip>
+				</div>
+
+				<button
+					type="button"
+					className="es-action"
+					onClick={handleBookmarkPost}
+					disabled={isBookmarkLoading}
+					aria-pressed={isBookmarked}
+					title={isBookmarked ? "In your bookmarks" : "Bookmark this post"}
+				>
+					<Bookmark aria-hidden="true" />
+					{isBookmarked ? "Saved" : "Save"}
+				</button>
 			</div>
-		</CardDescription>
+
+			{canManage && (
+				<div className="es-actionbar-group">
+					<Link href={`/post/update-post/${slug}`} className="es-action">
+						<Pencil aria-hidden="true" />
+						Edit
+					</Link>
+					<ConfirmButton
+						className="es-action es-action--danger"
+						onConfirm={handleDeletePost}
+						disabled={isDeleteLoading}
+						confirmLabel={
+							<>
+								<Trash2 aria-hidden="true" />
+								Delete for good?
+							</>
+						}
+					>
+						<Trash2 aria-hidden="true" />
+						Delete
+					</ConfirmButton>
+				</div>
+			)}
+		</footer>
 	);
 }

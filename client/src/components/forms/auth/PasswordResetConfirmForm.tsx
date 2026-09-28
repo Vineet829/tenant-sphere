@@ -1,26 +1,19 @@
 "use client";
+import SubmitButton from "@/components/estate/SubmitButton";
+import { FormFieldComponent } from "@/components/forms/FormFieldComponent";
 import { useResetPasswordConfirmMutation } from "@/lib/redux/features/auth/authApiSlice";
-import {
-	passwordResetConfirmSchema,
-	TPasswordResetConfirmSchema,
-} from "@/lib/validationSchemas";
+import { passwordResetConfirmSchema, TPasswordResetConfirmSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as z from "zod";
-import { FormFieldComponent } from "@/components/forms/FormFieldComponent";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
-
 
 export default function PasswordResetConfirmForm() {
 	const router = useRouter();
 	const { uid, token } = useParams();
 
-	const [resetPasswordConfirm, { isLoading }] =
-		useResetPasswordConfirmMutation();
+	const [resetPasswordConfirm, { isLoading }] = useResetPasswordConfirmMutation();
 
 	const {
 		register,
@@ -37,9 +30,7 @@ export default function PasswordResetConfirmForm() {
 		},
 	});
 
-	const onSubmit = async (
-		values: z.infer<typeof passwordResetConfirmSchema>,
-	) => {
+	const onSubmit = async (values: z.infer<typeof passwordResetConfirmSchema>) => {
 		try {
 			await resetPasswordConfirm({
 				...values,
@@ -56,37 +47,30 @@ export default function PasswordResetConfirmForm() {
 	};
 
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
-			>
-				<FormFieldComponent
-					label="New Password"
-					name="new_password"
-					register={register}
-					errors={errors}
-					placeholder="New Password"
-					isPassword={true}
-				/>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="New password"
+				name="new_password"
+				register={register}
+				errors={errors}
+				placeholder="New password"
+				isPassword={true}
+			/>
 
-				<FormFieldComponent
-					label="Confirm Password"
-					name="re_new_password"
-					register={register}
-					errors={errors}
-					placeholder="Confirm New Password"
-					isPassword={true}
-				/>
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Confirm New Password`}
-				</Button>
-			</form>
-		</main>
+			<FormFieldComponent
+				label="Confirm password"
+				name="re_new_password"
+				register={register}
+				errors={errors}
+				placeholder="Type it once more"
+				isPassword={true}
+			/>
+			<div className="es-form-actions">
+				<p className="es-form-note">You will log in with it next.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+					Save new password
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

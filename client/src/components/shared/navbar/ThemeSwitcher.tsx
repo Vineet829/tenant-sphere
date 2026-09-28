@@ -1,57 +1,38 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { estateSans } from "@/components/estate/fonts";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { Check, Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 const themeOptions = [
-	{ value: "light", label: "Light" },
-	{ value: "dark", label: "Dark" },
-	{ value: "system", label: "System" },
+	{ value: "light", label: "Light", icon: Sun },
+	{ value: "dark", label: "Dark", icon: Moon },
+	{ value: "system", label: "System", icon: Monitor },
 ];
 
 export default function ThemeSwitcher() {
 	const { theme, setTheme } = useTheme();
 
-	
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger
-				asChild
-				className="cursor-pointer border-none bg-transparent shadow-none"
-			>
-				<Button size="icon">
-					<SunIcon
-						className={`size-[1.8rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 ${
-							theme === "light" ? "text-pumpkin" : "text-gray-400"
-						}`}
-						suppressHydrationWarning
-					/>
-					<MoonIcon
-						className={`absolute size-[1.8rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 ${
-							theme === "light" ? "text-blue-400" : "text-gray-400"
-						}`}
-						suppressHydrationWarning
-					/>
-					<span className="sr-only">Toggle theme</span>
-				</Button>
+			<DropdownMenuTrigger asChild>
+				<button type="button" className="es-icon-button es-theme-toggle" aria-label="Change theme">
+					<Sun className="es-theme-sun" aria-hidden="true" strokeWidth={1.75} />
+					<Moon className="es-theme-moon" aria-hidden="true" strokeWidth={1.75} />
+				</button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent
-				align="end"
-				className="bg-babyPowder dark:bg-richBlack cursor-pointer rounded-md p-2"
-			>
-				{themeOptions.map(({ value, label }) => (
-					<DropdownMenuItem
-						key={value}
-						onClick={() => setTheme(value)}
-						className={`hover:bg-richBlack dark:hover:bg-gray cursor-pointer ${theme === "light" && value === "light" ? "text-pumpkin" : theme === "dark" && value === "dark" ? "text-blue-400" : theme === "light" ? "text-richBlack hover:text-babyPowder" : "text-babyPowder"}`}
-					>
+			<DropdownMenuContent align="end" sideOffset={10} className={`estate-popover ${estateSans.variable}`}>
+				<p className="es-menu-label">Appearance</p>
+				{themeOptions.map(({ value, label, icon: Icon }) => (
+					<DropdownMenuItem key={value} onClick={() => setTheme(value)} data-active={theme === value}>
+						<Icon aria-hidden="true" strokeWidth={1.75} />
 						{label}
+						{theme === value && <Check aria-hidden="true" style={{ marginLeft: "auto" }} />}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>

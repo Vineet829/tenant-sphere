@@ -1,29 +1,23 @@
 "use client";
-import {
-	useGetUserProfileQuery,
-	useUpdateUserProfileMutation,
-} from "@/lib/redux/features/users/usersApiSlice";
+
+import PersonAvatar from "@/components/estate/PersonAvatar";
+import SubmitButton from "@/components/estate/SubmitButton";
+import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/lib/redux/features/users/usersApiSlice";
 import { profileSchema, TProfileSchema } from "@/lib/validationSchemas";
+import { extractErrorMessage } from "@/utils";
+import axios from "axios";
+import { AtSign, Check } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import * as z from "zod";
-import { extractErrorMessage } from "@/utils";
 import { toast } from "react-toastify";
+import * as z from "zod";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { Contact2Icon, Map, MapPinnedIcon, UserCheck2 } from "lucide-react";
 import GenderSelectField from "./GenderSelectField";
 import OccupationSelectField from "./OccupationSelectField";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import Spinner from "@/components/shared/Spinner";
-import { Button } from "@/components/ui/button";
-
-
 
 export default function EditProfileForm() {
-	
 	const { data } = useGetUserProfileQuery();
 
 	const profile = data?.profile;
@@ -63,11 +57,7 @@ export default function EditProfileForm() {
 					"Content-Type": "multipart/form-data",
 				},
 			};
-			const { data } = await axios.patch(
-				"/api/v1/profiles/user/avatar/",
-				formData,
-				config,
-			);
+			const { data } = await axios.patch("/api/v1/profiles/user/avatar/", formData, config);
 			setAvatar(data);
 			setUploading(false);
 		} catch (error) {
@@ -89,93 +79,99 @@ export default function EditProfileForm() {
 	};
 
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
-			>
-				<FormFieldComponent
-					label="Username"
-					name="username"
-					register={register}
-					errors={errors}
-					placeholder="Username"
-					startIcon={<UserCheck2 className="dark:text-babyPowder size-8" />}
-				/>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<div className="es-field">
+				<div className="es-field-head">
+					<label htmlFor="avatar" className="es-label">
+						Profile photo
+					</label>
+				</div>
+				<div className="es-upload">
+					<PersonAvatar name={profile?.full_name || profile?.username} seed={profile?.username} src={profile?.avatar} size="lg" />
+					<div className="es-upload-copy">
+						<input accept="image/*" id="avatar" name="avatar" type="file" onChange={uploadFileHandler} />
+						<p className="es-upload-status" aria-live="polite">
+							{uploading ? (
+								<>
+									<span className="es-spinner" aria-hidden="true" />
+									Uploading…
+								</>
+							) : avatar ? (
+								<>
+									<Check aria-hidden="true" />
+									Photo received
+								</>
+							) : (
+								"An image file, such as a PNG or JPG."
+							)}
+						</p>
+					</div>
+				</div>
+			</div>
 
+			<div className="es-form-row">
 				<FormFieldComponent
-					label="First Name"
+					label="First name"
 					name="first_name"
 					register={register}
 					errors={errors}
-					placeholder="First Name"
-					startIcon={<Contact2Icon className="dark:text-babyPowder size-8" />}
+					placeholder="First name"
 				/>
 				<FormFieldComponent
-					label="Last Name"
+					label="Last name"
 					name="last_name"
 					register={register}
 					errors={errors}
-					placeholder="Last Name"
-					startIcon={<Contact2Icon className="dark:text-babyPowder size-8" />}
+					placeholder="Last name"
 				/>
-				<GenderSelectField setValue={setValue} control={control} />
-				<OccupationSelectField setValue={setValue} control={control} />
-				<FormFieldComponent
-					label="Country of Origin"
-					name="country_of_origin"
-					register={register}
-					errors={errors}
-					placeholder="What's your country"
-					startIcon={<Map className="dark:text-babyPowder size-8" />}
-				/>
+			</div>
 
+			<FormFieldComponent
+				label="Username"
+				name="username"
+				register={register}
+				errors={errors}
+				placeholder="username"
+				startIcon={<AtSign aria-hidden="true" />}
+			/>
+
+			<GenderSelectField setValue={setValue} control={control} />
+			<OccupationSelectField setValue={setValue} control={control} />
+
+			<div className="es-form-row">
 				<FormFieldComponent
-					label="City of Origin"
+					label="City of origin"
 					name="city_of_origin"
 					register={register}
 					errors={errors}
 					placeholder="City"
-					startIcon={<MapPinnedIcon className="dark:text-babyPowder size-8" />}
 				/>
-
 				<FormFieldComponent
-					label="Bio"
-					name="bio"
+					label="Country of origin"
+					name="country_of_origin"
 					register={register}
 					errors={errors}
-					placeholder="Bio"
-					isTextArea
+					placeholder="Country"
 				/>
-				<Label className="h4-semibold dark:text-babyPowder" htmlFor="avatar">
-					Avatar
-				</Label>
-				<div className="flex w-full cursor-pointer items-center">
-					<div className="grow" style={{ maxWidth: "90%" }}>
-						<Input
-							accept="image/*"
-							className="file:bg-eerieBlack dark:border-platinum dark:text-platinum cursor-pointer file:mr-3 file:rounded-md file:text-lime-500"
-							id="avatar"
-							name="avatar"
-							type="file"
-							onChange={uploadFileHandler}
-						/>
-					</div>
-					{uploading && (
-						<div className="shrink-0" style={{ width: "10%" }}>
-							<Spinner size="sm" />
-						</div>
-					)}
-				</div>
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin mt-2 w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Update Profile`}
-				</Button>
-			</form>
-		</main>
+			</div>
+
+			<FormFieldComponent
+				label="Bio"
+				name="bio"
+				register={register}
+				errors={errors}
+				placeholder="A few lines about you, for your neighbours."
+				isTextArea
+			/>
+
+			<div className="es-form-actions">
+				<Link href="/profile" className="es-btn es-btn--ghost">
+					Cancel
+				</Link>
+				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+					Save changes
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

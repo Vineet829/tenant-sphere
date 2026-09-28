@@ -1,28 +1,31 @@
-import { AuthFormHeader } from "@/components/forms/auth";
+import FormShell, { FormContext } from "@/components/estate/FormShell";
 import CreateReportForm from "@/components/forms/report-tenant/CreateReportForm";
+import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Tenant Sphere | Report Tenant",
-	description:
-		"Tenants can report their fellow tenants in cases of misconduct or misbehavior",
+	title: "Report a tenant — Tenant Sphere",
+	description: "Tenants can report their fellow tenants in cases of misconduct or misbehavior",
 };
-
 
 export default function ReportTenantPage() {
 	return (
-		<div>
-			<AuthFormHeader
-				title="Report a Tenant"
-				staticText="All reports shall remain anonymous. We shall act accordingly, but shall not discolose details of who raised the concern."
-				linkText="Back to Profile"
-				linkHref="/profile"
-			/>
-			<div className="mt-7 sm:mx-auto sm:w-full sm:max-w-[480px]">
-				<div className="bg-lightGrey dark:bg-deepBlueGrey rounded-xl px-6 py-12 shadow sm:rounded-lg sm:px-12 md:rounded-3xl">
-					<CreateReportForm />
-				</div>
-			</div>
-		</div>
+		<FormShell
+			eyebrow="Get help"
+			title={
+				<>
+					Raise a <em>concern</em>
+				</>
+			}
+			description="When something a neighbour does becomes a problem, let the management know. Say what happened, plainly."
+			back={{ href: "/profile", label: "Back to profile" }}
+			aside={
+				<FormContext icon={<ShieldCheck strokeWidth={1.75} />} label="Anonymous">
+					We act on every report, and never disclose who raised it.
+				</FormContext>
+			}
+		>
+			<CreateReportForm />
+		</FormShell>
 	);
 }

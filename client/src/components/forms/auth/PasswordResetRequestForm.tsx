@@ -1,23 +1,17 @@
 "use client";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useResetPasswordRequestMutation } from "@/lib/redux/features/auth/authApiSlice";
-import { useForm } from "react-hook-form";
-import {
-	passwordResetRequestSchema,
-	TPasswordResetRequestSchema,
-} from "@/lib/validationSchemas";
-import { extractErrorMessage } from "@/utils";
-import { toast } from "react-toastify";
+import SubmitButton from "@/components/estate/SubmitButton";
 import { FormFieldComponent } from "@/components/forms/FormFieldComponent";
-import { MailIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
-
+import { useResetPasswordRequestMutation } from "@/lib/redux/features/auth/authApiSlice";
+import { passwordResetRequestSchema, TPasswordResetRequestSchema } from "@/lib/validationSchemas";
+import { extractErrorMessage } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import * as z from "zod";
 
 export default function PasswordResetRequestForm() {
-	const [resetPasswordRequest, { isLoading }] =
-		useResetPasswordRequestMutation();
+	const [resetPasswordRequest, { isLoading }] = useResetPasswordRequestMutation();
 
 	const {
 		register,
@@ -32,9 +26,7 @@ export default function PasswordResetRequestForm() {
 		},
 	});
 
-	const onSubmit = async (
-		values: z.infer<typeof passwordResetRequestSchema>,
-	) => {
+	const onSubmit = async (values: z.infer<typeof passwordResetRequestSchema>) => {
 		try {
 			await resetPasswordRequest(values).unwrap();
 			toast.success("Request sent, check your email for the reset link");
@@ -45,28 +37,23 @@ export default function PasswordResetRequestForm() {
 		}
 	};
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
-			>
-				<FormFieldComponent
-					label="Email Address"
-					name="email"
-					register={register}
-					errors={errors}
-					placeholder="Email Address"
-					startIcon={<MailIcon className="dark:text-babyPowder size-8" />}
-				/>
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Request Password Reset`}
-				</Button>
-			</form>
-		</main>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Email address"
+				name="email"
+				register={register}
+				errors={errors}
+				type="email"
+				placeholder="you@example.com"
+				startIcon={<Mail aria-hidden="true" />}
+				hint="Use the address you registered with."
+			/>
+			<div className="es-form-actions">
+				<p className="es-form-note">The link arrives by email.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Sending…">
+					Send reset link
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

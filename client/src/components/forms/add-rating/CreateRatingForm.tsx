@@ -1,21 +1,20 @@
 "use client";
 
+import EmptyState from "@/components/estate/EmptyState";
+import StarRatingInput from "@/components/estate/StarRatingInput";
+import SubmitButton from "@/components/estate/SubmitButton";
 import { useAddRatingMutation } from "@/lib/redux/features/rating/ratingApiSlice";
-import {
-	ratingCreateSchema,
-	TRatingCreateSchema,
-} from "@/lib/validationSchemas";
+import { ratingCreateSchema, TRatingCreateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSign, Wrench } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import FieldError from "@/components/estate/FieldError";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { UserCog } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
-
 
 export default function CreateRatingForm() {
 	const router = useRouter();
@@ -33,6 +32,7 @@ export default function CreateRatingForm() {
 	});
 
 	const [username, setUsername] = useState("");
+	const [checked, setChecked] = useState(false);
 
 	useEffect(() => {
 		const queryParams = new URLSearchParams(window.location.search);
@@ -41,6 +41,7 @@ export default function CreateRatingForm() {
 			setValue("rated_user_username", ratedUserUsername);
 			setUsername(ratedUserUsername);
 		}
+		setChecked(true);
 	}, [setValue]);
 
 	const onSubmit = async (data: TRatingCreateSchema) => {
@@ -54,58 +55,71 @@ export default function CreateRatingForm() {
 		}
 	};
 
-	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
+	const ratingError = errors.rating?.message;
+
+	// A rating always belongs to someone. Without a technician there is nothing to submit.
+	if (checked && !username) {
+		return (
+			<EmptyState
+				icon={Wrench}
+				description="Choose who did the work from the technicians directory, then rate them from their card."
+				action={
+					<Link href="/technicians" className="es-btn es-btn--primary">
+						Choose a technician
+					</Link>
+				}
 			>
-				<FormFieldComponent
-					label={`${username}'s username (This is auto filled in)`}
-					name="rated_user_username"
-					register={register}
-					errors={errors}
-					startIcon={<UserCog className="dark:text-babyPowder size-8" />}
-					disabled
-				/>
-				<label htmlFor="rating" className="h4-semibold dark:text-babyPowder">
-					{" "}
-					Rating{" "}
-				</label>
+				Who are you rating?
+			</EmptyState>
+		);
+	}
+
+	return (
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Technician"
+				name="rated_user_username"
+				register={register}
+				errors={errors}
+				startIcon={<AtSign aria-hidden="true" />}
+				disabled
+				hint="Filled in from the technician you chose."
+			/>
+
+			<div className="es-field" data-invalid={Boolean(ratingError)}>
+				<div className="es-field-head">
+					<span className="es-label" id="rating-label">
+						Rating
+					</span>
+				</div>
 				<Controller
 					name="rating"
 					control={control}
 					render={({ field }) => (
-						<input
-							{...field}
-							id="rating"
-							type="number"
-							placeholder="Choose a value of between 1 and 5"
-							onChange={(e) => field.onChange(parseInt(e.target.value))}
-							className="flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-						/>
+						<div role="radiogroup" aria-labelledby="rating-label">
+							<StarRatingInput name="rating" value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+						</div>
 					)}
 				/>
-				{errors.rating && (
-					<p className="text-sm text-red-500">{errors.rating.message}</p>
-				)}
-				<FormFieldComponent
-					label="Comment"
-					name="comment"
-					errors={errors}
-					register={register}
-					placeholder="Tell us why you have given the rating, it will help us improve service delivery"
-					isTextArea
-				/>
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Add Rating`}
-				</Button>
-			</form>
-		</main>
+				{ratingError && <FieldError>{ratingError}</FieldError>}
+			</div>
+
+			<FormFieldComponent
+				label="Comment"
+				name="comment"
+				errors={errors}
+				register={register}
+				placeholder="What went well, and what could have been better?"
+				isTextArea
+				hint="A few honest lines help the next neighbour choose."
+			/>
+
+			<div className="es-form-actions">
+				<p className="es-form-note">Ratings count towards the technician&apos;s average.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+					Add rating
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

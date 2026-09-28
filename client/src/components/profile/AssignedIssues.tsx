@@ -1,41 +1,35 @@
 "use client";
 
+import EmptyState from "@/components/estate/EmptyState";
+import ErrorState from "@/components/estate/ErrorState";
+import { CardsSkeleton } from "@/components/estate/Skeletons";
 import { useGetMyAssignedIssuesQuery } from "@/lib/redux/features/issues/issueApiSlice";
-import React from "react";
-import Spinner from "../shared/Spinner";
-import { TabsContent } from "../ui/tabs";
+import { ClipboardCheck } from "lucide-react";
 import IssueCard from "../cards/IssueCard";
+import TabHeading from "./TabHeading";
 
 export default function AssignedIssues() {
-	const { data: assignedIssues, isLoading } = useGetMyAssignedIssuesQuery("");
+	const { data, isLoading, isFetching, isError, refetch } = useGetMyAssignedIssuesQuery("");
+	const issues = data?.assigned_issues.results ?? [];
 
-	const myAssignedIssues = assignedIssues?.assigned_issues;
-
-	if (isLoading) {
-		return (
-			<div className="flex-center pt-32">
-				<Spinner size="xl" />
-			</div>
-		);
-	}
-
-	
 	return (
-		<TabsContent value="assigned-issues">
-			<h2 className="h2-semibold flex-center font-robotoSlab dark:text-pumpkin text-xl">
-				Total: ({myAssignedIssues?.count})
-			</h2>
-			<div className="mt-4 grid cursor-pointer grid-cols-1 gap-4 p-1.5 md:grid-cols-2 lg:grid-cols-3">
-				{myAssignedIssues && myAssignedIssues.results.length > 0 ? (
-					myAssignedIssues.results.map((issue) => (
-						<IssueCard key={issue.id} issue={issue} />
-					))
-				) : (
-					<p className="h2-semibold dark:text-lime-500">
-						No Issue(s) Assigned to you Yet!
-					</p>
-				)}
-			</div>
-		</TabsContent>
+		<>
+			<TabHeading title="Assigned to you" note="Open an issue to update its status." />
+			{isLoading ? (
+				<CardsSkeleton cards={3} />
+			) : isError ? (
+				<ErrorState what="your assigned issues" onRetry={refetch} retrying={isFetching} />
+			) : issues.length > 0 ? (
+				<div className="es-cardgrid es-stagger">
+					{issues.map((issue, index) => (
+						<IssueCard key={issue.id} issue={issue} index={index} />
+					))}
+				</div>
+			) : (
+				<EmptyState icon={ClipboardCheck} description="Issues that are assigned to you will be listed here.">
+					Nothing assigned to you
+				</EmptyState>
+			)}
+		</>
 	);
 }

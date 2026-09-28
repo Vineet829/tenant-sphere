@@ -1,28 +1,23 @@
 "use client";
 
-import {
-	useGetSinglePostQuery,
-	useUpdatePostMutation,
-} from "@/lib/redux/features/posts/postApiSlice";
+import SubmitButton from "@/components/estate/SubmitButton";
+import { useGetSinglePostQuery, useUpdatePostMutation } from "@/lib/redux/features/posts/postApiSlice";
 import { postUpdateSchema, TPostUpdateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as z from "zod";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { Text } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
 
 interface UpdateParamsProps {
 	params: {
 		slug: string;
 	};
 }
-
 
 export default function UpdatePostForm({ params }: UpdateParamsProps) {
 	const postSlug = params.slug;
@@ -59,36 +54,19 @@ export default function UpdatePostForm({ params }: UpdateParamsProps) {
 	};
 
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4 dark:text-black"
-			>
-				<FormFieldComponent
-					label="Title"
-					name="title"
-					register={register}
-					errors={errors}
-					startIcon={<Text className="dark:text-babyPowder size-8" />}
-				/>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent label="Title" name="title" register={register} errors={errors} />
 
-				<FormFieldComponent
-					label="Content"
-					name="body"
-					register={register}
-					errors={errors}
-					isTextArea
-				/>
+			<FormFieldComponent label="Body" name="body" register={register} errors={errors} isTextArea />
 
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Update Your Post`}
-				</Button>
-			</form>
-		</main>
+			<div className="es-form-actions">
+				<Link href={`/post/${postSlug}`} className="es-btn es-btn--ghost">
+					Cancel
+				</Link>
+				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+					Save changes
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

@@ -1,36 +1,34 @@
-import shockedFace from "@/../public/assets/icons/shocked face.svg";
-import Image from "next/image";
+import "@/components/estate/estate.css";
+import Wordmark from "@/components/estate/Wordmark";
+import { estateEditorial, estateSans } from "@/components/estate/fonts";
+import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata: Metadata = { title: "Page not found — Tenant Sphere" };
 
 export default function NotFound() {
 	return (
-		<>
-			<main className="flex h-screen flex-col items-center justify-center bg-black px-6 py-16 sm:py-24 lg:scroll-px-28">
-				<Image
-					src={shockedFace}
-					alt="shocked face 404"
-					height={200}
-					width={200}
-					priority
-				/>
-				<div className="mx-auto max-w-md text-center">
-					<h1 className="text-platinum text-4xl font-bold tracking-tight sm:text-5xl">
-						Page not found
-					</h1>
-					<p className="mt-6 text-xl leading-7 text-white sm:text-2xl">
-						Sorry, we could not find the page you are looking for.
-					</p>
-					<div className="mt-10 flex justify-center gap-x-6">
-						<Link
-							href="/welcome"
-							className="bg-electricIndigo rounded-3xl px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-lime-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:px-3.5 sm:py-2.5 sm:text-2xl"
-						>
-							Go back home
-						</Link>
-					</div>
-				</div>
+		<div className={`estate-shell es-notfound ${estateSans.variable} ${estateEditorial.variable}`}>
+			<header className="es-notfound-head">
+				<Wordmark />
+			</header>
+			<main className="es-statuspage">
+				<p className="es-notfound-code" aria-hidden="true">
+					404
+				</p>
+				<p className="es-eyebrow es-eyebrow--plain">Page not found</p>
+				<h1 className="es-statuspage-title">
+					This door does not <em>lead anywhere</em>.
+				</h1>
+				<p className="es-statuspage-text">
+					The page may have moved, or the address might be mistyped. Let us get you back home.
+				</p>
+				<Link href="/welcome" className="es-btn es-btn--primary">
+					<ArrowLeft aria-hidden="true" />
+					Back to the community
+				</Link>
 			</main>
-		</>
+		</div>
 	);
 }

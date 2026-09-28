@@ -1,129 +1,104 @@
 "use client";
+
+import EmptyState from "@/components/estate/EmptyState";
+import ErrorState from "@/components/estate/ErrorState";
+import PageHeader from "@/components/estate/PageHeader";
+import PersonCard, { type PersonFact } from "@/components/estate/PersonCard";
+import { PeopleSkeleton } from "@/components/estate/Skeletons";
+import { joined, label, monthYear } from "@/components/estate/format";
+import { useUserProfile } from "@/hooks/useUseProfile";
 import { useGetAllUsersQuery } from "@/lib/redux/features/users/usersApiSlice";
-import { useTheme } from "next-themes";
-
-import React from "react";
-import Spinner from "../shared/Spinner";
-import UsersSearch from "../shared/search/UsersSearch";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
-import TenantInfo from "./TenantInfo";
-import {
-	BrickWall,
-	Briefcase,
-	Building,
-	CalendarDays,
-	Map,
-	School,
-} from "lucide-react";
-import { formatDate } from "@/utils";
-import ProtectedRoute from "../shared/ProtectedRoutes";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { useAppSelector } from "@/lib/redux/hooks/typedHooks";
+import type { Profile } from "@/types";
+import { Building2, CalendarDays, DoorOpen, MapPin, SearchX, UsersRound } from "lucide-react";
 import PaginationSection from "../shared/PaginationSection";
+import ProtectedRoute from "../shared/ProtectedRoutes";
+import UsersSearch from "../shared/search/UsersSearch";
 
+const PAGE_SIZE = 9;
+
+function factsFor(tenant: Profile): PersonFact[] {
+	const home = tenant.apartment;
+	return [
+		{
+			icon: DoorOpen,
+			label: "Apartment",
+			value: home ? joined([home.unit_number, `Floor ${home.floor}`], " · ") : "Not added yet",
+		},
+		{ icon: Building2, label: "Building", value: home?.building || "Not added yet" },
+		{
+			icon: MapPin,
+			label: "From",
+			value: joined([tenant.city_of_origin, tenant.country_of_origin]) || "Not shared",
+		},
+		{ icon: CalendarDays, label: "Joined", value: monthYear(tenant.date_joined) || "Not available" },
+	];
+}
 
 function TenantCardContent() {
-	const { theme } = useTheme();
 	const searchTerm = useAppSelector((state) => state.user.searchTerm);
 	const page = useAppSelector((state) => state.user.page);
 
-	const { data, isLoading } = useGetAllUsersQuery({ searchTerm, page });
+	const { data, isLoading, isFetching, isError, refetch } = useGetAllUsersQuery({ searchTerm, page });
+	const ready = !isLoading && !isError;
+	const { profile: me } = useUserProfile();
 
+	const tenants = data?.profiles.results ?? [];
 	const totalCount = data?.profiles.count || 0;
-	const totalPages = Math.ceil(totalCount / 9);
-
-	if (isLoading) {
-		return (
-			<div className="flex-center pt-32">
-				<Spinner size="xl" />
-			</div>
-		);
-	}
+	const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
 	return (
-		<div>
-			<UsersSearch />
-			<h1 className="flex-center font-robotoSlab dark:text-pumpkin text-4xl sm:text-5xl">
-				All Tenants - ({data?.profiles.results.length})
-			</h1>
+		<div className="es-page es-page--wide">
+			<PageHeader
+				eyebrow="Directory"
+				title={
+					<>
+						Your <em>neighbours</em>
+					</>
+				}
+				count={ready ? totalCount : undefined}
+				description="The people who share your building. Put a name to the face you pass on the stairs."
+			/>
 
-			<div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-				{data && data.profiles.results.length > 0 ? (
-					data.profiles.results.map((tenant) => (
-						<Card key={tenant.id}>
-							<CardContent className="rounded-lg p-4">
-								<CardHeader className="flex-col-center text-center">
-									<Avatar className="border-pumpkin mx-auto size-28 overflow-hidden rounded-full border-4 object-cover">
-										<AvatarImage
-											alt="User profile avatar"
-											src={
-												tenant.avatar ||
-												(theme === "dark"
-													? "/assets/icons/user-profile-circle.svg"
-													: "/assets/icons/user-profile-light-circle.svg")
-											}
-										/>
-									</Avatar>
-									<CardTitle className="h3-semibold font-robotoSlab dark:text-platinum">
-										{tenant.full_name}
-									</CardTitle>
-								</CardHeader>
-								<CardTitle className="flex-center">
-									<p className="h4-semibold dark:text-lime-500">
-										@{tenant.username}
-									</p>
-								</CardTitle>
-								<CardDescription className="mt-4 space-y-2 border-b-0">
-									<div>
-										<TenantInfo
-											label="Country of Origin"
-											value={tenant.country_of_origin}
-											icon={Map}
-										/>
-										<TenantInfo
-											label="Occupation"
-											value={tenant.occupation}
-											icon={Briefcase}
-										/>
-										<TenantInfo
-											label="Date Joined"
-											value={formatDate(tenant.date_joined).toString()}
-											icon={CalendarDays}
-										/>
-									</div>
-									{tenant.apartment && (
-										<>
-											<TenantInfo
-												label="Building"
-												value={tenant.apartment.building}
-												icon={Building}
-											/>
-											<TenantInfo
-												label="Apartment Floor"
-												value={tenant.apartment.floor}
-												icon={School}
-											/>
-											<TenantInfo
-												label="Unit Number"
-												value={tenant.apartment.unit_number}
-												icon={BrickWall}
-											/>
-										</>
-									)}
-								</CardDescription>
-							</CardContent>
-						</Card>
-					))
-				) : (
-					<p>No tenants found</p>
-				)}
+			<div className="es-toolbar">
+				<UsersSearch placeholder="Search tenants by name or username" label="Search tenants" />
 			</div>
+
+			{isLoading ? (
+				<PeopleSkeleton cards={6} />
+			) : isError ? (
+				<ErrorState what="the tenants" onRetry={refetch} retrying={isFetching} />
+			) : tenants.length > 0 ? (
+				<div className="es-people es-stagger" aria-busy={isFetching}>
+					{tenants.map((tenant, index) => (
+						<PersonCard
+							key={tenant.id}
+							index={index}
+							name={tenant.full_name}
+							username={tenant.username}
+							avatar={tenant.avatar}
+							bio={tenant.bio}
+							badge={
+								tenant.username === me?.username
+									? "You"
+									: tenant.occupation && tenant.occupation !== "tenant"
+										? label(tenant.occupation)
+										: undefined
+							}
+							facts={factsFor(tenant)}
+						/>
+					))}
+				</div>
+			) : searchTerm ? (
+				<EmptyState icon={SearchX} description="Check the spelling, or try a first name, last name or username.">
+					No tenants match &ldquo;{searchTerm}&rdquo;
+				</EmptyState>
+			) : (
+				<EmptyState icon={UsersRound} description="Tenants appear here once they join the building.">
+					No tenants yet
+				</EmptyState>
+			)}
+
 			<PaginationSection totalPages={totalPages} entityType="user" />
 		</div>
 	);

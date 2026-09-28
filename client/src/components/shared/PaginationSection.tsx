@@ -1,60 +1,50 @@
+import { setCurrentPage as setPostCurrentPage } from "@/lib/redux/features/posts/postSlice";
 import { setCurrentPage as setUserCurrentPage } from "@/lib/redux/features/users/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks/typedHooks";
-import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-} from "../ui/pagination";
-
-import { setCurrentPage as setPostCurrentPage } from "@/lib/redux/features/posts/postSlice";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationSectionProps {
 	totalPages: number;
 	entityType: "user" | "post";
 }
 
-
-const PaginationSection = ({
-	totalPages,
-	entityType,
-}: PaginationSectionProps) => {
+const PaginationSection = ({ totalPages, entityType }: PaginationSectionProps) => {
 	const dispatch = useAppDispatch();
 
-	const currentPage = useAppSelector((state) =>
-		entityType === "user" ? state.user.page : state.post.page,
-	);
+	const currentPage = useAppSelector((state) => (entityType === "user" ? state.user.page : state.post.page));
 
-	const setCurrentPageAction =
-		entityType === "user" ? setUserCurrentPage : setPostCurrentPage;
+	const setCurrentPageAction = entityType === "user" ? setUserCurrentPage : setPostCurrentPage;
+
+	const goTo = (page: number) => {
+		dispatch(setCurrentPageAction(page));
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
 
 	const handlePreviousClick = () => {
-		if (currentPage > 1) dispatch(setCurrentPageAction(currentPage - 1));
+		if (currentPage > 1) goTo(currentPage - 1);
 	};
 
 	const handleNextClick = () => {
-		if (currentPage < totalPages)
-			dispatch(setCurrentPageAction(currentPage + 1));
+		if (currentPage < totalPages) goTo(currentPage + 1);
 	};
 
+	// A single page needs no controls, unless we are stranded beyond it.
+	if (totalPages <= 1 && currentPage <= 1) return null;
+
 	return (
-		<Pagination className="bg-platinum dark:bg-eerieBlack dark:text-platinum mt-4 rounded-full">
-			<PaginationContent>
-				<PaginationItem className="cursor-pointer">
-					<PaginationPrevious onClick={handlePreviousClick} />
-				</PaginationItem>
-				<PaginationItem>
-					<PaginationLink className="h3-semibold font-robotoSlab dark:text-veryBlack inline-flex items-center rounded-md border border-transparent bg-lime-500">
-						{currentPage}
-					</PaginationLink>
-				</PaginationItem>
-				<PaginationItem className="cursor-pointer">
-					<PaginationNext onClick={handleNextClick} />
-				</PaginationItem>
-			</PaginationContent>
-		</Pagination>
+		<nav className="es-pagination" aria-label="Pagination">
+			<button type="button" onClick={handlePreviousClick} disabled={currentPage <= 1}>
+				<ChevronLeft aria-hidden="true" />
+				Previous
+			</button>
+			<p className="es-page-indicator" aria-live="polite">
+				Page <strong>{currentPage}</strong> of {Math.max(totalPages, 1)}
+			</p>
+			<button type="button" onClick={handleNextClick} disabled={currentPage >= totalPages}>
+				Next
+				<ChevronRight aria-hidden="true" />
+			</button>
+		</nav>
 	);
 };
 

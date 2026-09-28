@@ -1,123 +1,91 @@
 "use client";
 
+import EmptyState from "@/components/estate/EmptyState";
+import ErrorState from "@/components/estate/ErrorState";
+import PageHeader from "@/components/estate/PageHeader";
+import PersonAvatar from "@/components/estate/PersonAvatar";
+import PostListItem from "@/components/estate/PostListItem";
+import { FeedSkeleton } from "@/components/estate/Skeletons";
+import { useUserProfile } from "@/hooks/useUseProfile";
 import { useGetAllPostsQuery } from "@/lib/redux/features/posts/postApiSlice";
 import { useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import { PostState } from "@/types";
-import {
-	formatDate,
-	getRepliesText,
-	getViewText,
-	sortByDateDescending,
-} from "@/utils";
-import Spinner from "../shared/Spinner";
+import { sortByDateDescending } from "@/utils";
+import { MessagesSquare, PenLine } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { EyeIcon, MessageSquareQuoteIcon } from "lucide-react";
 import PaginationSection from "../shared/PaginationSection";
 
+const PAGE_SIZE = 9;
 
 export default function PostCard() {
 	const page = useAppSelector((state: PostState) => state.post.page);
-	const { data, isLoading } = useGetAllPostsQuery({ page });
+	const { data, isLoading, isFetching, isError, refetch } = useGetAllPostsQuery({ page });
+	const ready = !isLoading && !isError;
+	const { profile } = useUserProfile();
 
 	const totalCount = data?.posts.count || 0;
-	const totalPages = Math.ceil(totalCount / 9);
-	const sortedPosts = sortByDateDescending(data?.posts.results ?? [], "created_at");
-
-	if (isLoading) {
-		return (
-			<div className="flex-center pt-32">
-				<Spinner size="xl" />
-			</div>
-		);
-	}
+	const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+	const posts = sortByDateDescending(data?.posts.results ?? [], "created_at");
 
 	return (
-		<>
-			<div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-				<h1 className="font-robotoSlab dark:text-pumpkin text-3xl sm:text-5xl">
-					All Posts - ({data?.posts.results.length})
-				</h1>
+		<div className="es-page es-page--feed">
+			<PageHeader
+				compact
+				eyebrow="Community"
+				title={
+					<>
+						What&apos;s happening <em>at home</em>
+					</>
+				}
+				count={ready ? totalCount : undefined}
+			/>
 
-				<Link href="/add-post" className="flex justify-end max-sm:w-full">
-					<Button className="h3-semibold electricIndigo-gradient text-babyPowder min-h-[46px] px-4 py-3">
-						Create a Post
-					</Button>
-				</Link>
-			</div>
+			<Link href="/add-post" className="es-composer" aria-label="Create a post">
+				<PersonAvatar name={profile?.full_name || profile?.username} seed={profile?.username} src={profile?.avatar} size="md" />
+				<span className="es-composer-field">Share something with your neighbours…</span>
+				<span className="es-btn es-btn--primary es-btn--sm">
+					<PenLine aria-hidden="true" />
+					Post
+				</span>
+			</Link>
 
-			<div className="mt-7 grid grid-cols-1 gap-6 sm:grid-cols-2">
-				{sortedPosts && sortedPosts.length > 0 ? (
-					sortedPosts.map((postItem) => (
-						<Card key={postItem.id} className="dark:border-gray rounded-lg border">
-							<CardHeader className="dark:text-platinum w-full pb-4">
-								<CardTitle className="font-robotSlab text-center text-xl sm:text-2xl">
-									{postItem.title.length > 25
-										? `${postItem.title.substring(0, 25)}....`
-										: postItem.title}
-								</CardTitle>
-								<CardDescription>
-									<div className="flex flex-col sm:flex-row sm:justify-between">
-										<div>
-											<span>Posted on</span>
-											<span className="dark:text-pumpkin ml-1">
-												{formatDate(postItem.created_at).toString()}
-											</span>
-										</div>
-									</div>
+			<section aria-labelledby="feed-title">
+				<div className="es-listhead">
+					<h2 id="feed-title">Posts</h2>
+					{ready && totalCount > posts.length && (
+						<span>
+							Showing {posts.length} of {totalCount}
+						</span>
+					)}
+				</div>
 
-									<div>
-										<span>Last Updated</span>
-										<span className="dark:text-pumpkin ml-1">
-											{formatDistanceToNow(parseISO(postItem.updated_at), {
-												addSuffix: true,
-											})}
-										</span>
-									</div>
-								</CardDescription>
-							</CardHeader>
-
-							<CardContent className="border-t-deepBlueGrey dark:border-gray border-y py-4 text-sm">
-								<p className="dark:text-platinum">
-									{postItem.body.length > 65
-										? `${postItem.body.substring(0, 65)}....`
-										: postItem.body}
-								</p>
-							</CardContent>
-
-							<div className="flex flex-col sm:flex-row items-center justify-between p-2">
-								<Link href={`/post/${postItem.slug}`} className="w-full sm:w-auto">
-									<Button size="sm" className="lime-gradient text-babyPowder w-full">
-										View Post
-									</Button>
-								</Link>
-
-								<div className="flex-row-center dark:text-platinum mt-2 sm:mt-0">
-									<EyeIcon className="post-icon text-electricIndigo mr-1" />
-									{getViewText(postItem.view_count)}
-								</div>
-
-								<div className="flex-row-center dark:text-platinum mt-2 sm:mt-0">
-									<MessageSquareQuoteIcon className="post-icon text-electricIndigo mr-1" />
-									<span>{getRepliesText(postItem.replies_count)}</span>
-								</div>
-							</div>
-						</Card>
-					))
+				{isLoading ? (
+					<FeedSkeleton rows={4} />
+				) : isError ? (
+					<ErrorState what="posts" onRetry={refetch} retrying={isFetching} />
+				) : posts.length > 0 ? (
+					<div className="es-postlist es-stagger" aria-busy={isFetching}>
+						{posts.map((post, index) => (
+							<PostListItem key={post.id} post={post} index={index} />
+						))}
+					</div>
 				) : (
-					<p className="h2-semibold dark:text-lime-500">No Posts Found!</p>
+					<EmptyState
+						icon={MessagesSquare}
+						description="Be the first to say hello, ask a question or share a notice with the building."
+						action={
+							<Link href="/add-post" className="es-btn es-btn--primary">
+								<PenLine aria-hidden="true" />
+								Create a post
+							</Link>
+						}
+					>
+						It&apos;s quiet in here
+					</EmptyState>
 				)}
-			</div>
+			</section>
 
 			<PaginationSection totalPages={totalPages} entityType="post" />
-		</>
+		</div>
 	);
 }

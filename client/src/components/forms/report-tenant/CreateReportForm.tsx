@@ -1,20 +1,15 @@
 "use client";
 
+import SubmitButton from "@/components/estate/SubmitButton";
 import { useReportTenantMutation } from "@/lib/redux/features/reports/reportApiSlice";
-import {
-	reportCreateSchema,
-	TReportCreateSchema,
-} from "@/lib/validationSchemas";
+import { reportCreateSchema, TReportCreateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSign } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { Contact2Icon, FlagIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
-
 
 export default function CreateReportForm() {
 	const router = useRouter();
@@ -33,9 +28,7 @@ export default function CreateReportForm() {
 	const onSubmit = async (values: TReportCreateSchema) => {
 		try {
 			await reportTenant(values).unwrap();
-			toast.success(
-				"Your report has been received. The management shall take action immediately",
-			);
+			toast.success("Your report has been received. The management shall take action immediately");
 			reset();
 			router.push("/profile");
 		} catch (error) {
@@ -44,47 +37,41 @@ export default function CreateReportForm() {
 		}
 	};
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4 dark:text-black"
-			>
-				<FormFieldComponent
-					label="Title"
-					name="title"
-					register={register}
-					errors={errors}
-					placeholder="Title"
-					startIcon={<FlagIcon className="dark:text-babyPowder size-8" />}
-				/>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Title"
+				name="title"
+				register={register}
+				errors={errors}
+				placeholder="Late-night noise"
+				hint="A short line that sums up the concern."
+			/>
 
-				<FormFieldComponent
-					label="Tenant's Username"
-					name="reported_user_username"
-					register={register}
-					errors={errors}
-					placeholder="Add Tenants Username"
-					startIcon={<Contact2Icon className="dark:text-babyPowder size-8" />}
-				/>
+			<FormFieldComponent
+				label="Tenant's username"
+				name="reported_user_username"
+				register={register}
+				errors={errors}
+				placeholder="username"
+				startIcon={<AtSign aria-hidden="true" />}
+				link={{ linkText: "Find it in Tenants", linkUrl: "/tenants" }}
+			/>
 
-				<FormFieldComponent
-					label="Description"
-					name="description"
-					register={register}
-					errors={errors}
-					placeholder="Detailed Description of the problem"
-					isTextArea
-				/>
+			<FormFieldComponent
+				label="Description"
+				name="description"
+				register={register}
+				errors={errors}
+				placeholder="What happened, where and when? Stick to what you saw or heard."
+				isTextArea
+			/>
 
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin mt-2 w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Send Report`}
-				</Button>
-			</form>
-		</main>
+			<div className="es-form-actions">
+				<p className="es-form-note">Your name is never shared with the tenant.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Sending…">
+					Send report
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

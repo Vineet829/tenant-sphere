@@ -1,61 +1,69 @@
-import { useTheme } from "next-themes";
-import React from "react";
-import { CardDescription, CardTitle } from "../ui/card";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import { ClockIcon, EyeIcon } from "lucide-react";
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { getViewText } from "@/utils";
+import MetaList from "@/components/estate/MetaList";
+import PersonAvatar from "@/components/estate/PersonAvatar";
+import { longDate, plural, tagSlug, timeAgo } from "@/components/estate/format";
+import { useDisplayName } from "@/components/estate/useDisplayName";
+import Link from "next/link";
 
 interface PostHeaderProps {
 	title: string | undefined;
-	avatar: string | undefined;
+	tags?: string[];
+	avatar: string | undefined | null;
 	author_username: string | undefined;
 	created_at: string | undefined;
+	updated_at?: string;
 	view_count: number | undefined;
 }
 
 export default function PostHeader({
+	title,
+	tags = [],
 	avatar,
 	author_username,
 	created_at,
+	updated_at,
 	view_count,
 }: PostHeaderProps) {
-	const { theme } = useTheme();
+	const created = created_at ? new Date(created_at.replace(" ", "T")).getTime() : NaN;
+	const updated = updated_at ? new Date(updated_at.replace(" ", "T")).getTime() : NaN;
+	// Saves within a minute of posting are part of writing it, not an edit.
+	const edited = updated - created > 60_000;
+	const editedAgo = edited ? timeAgo(updated_at) : "";
+	const displayName = useDisplayName();
 
 	return (
-		<>
-			
-			<CardTitle className="dark:text-platinum">
-				<p className="flex items-center space-x-2">
-					<Avatar>
-						<AvatarImage
-							src={
-								avatar ??
-								(theme === "dark"
-									? "/assets/icons/user-profile-circle.svg"
-									: "/assets/icons/user-profile-light-circle.svg")
-							}
-							alt="Author Avatar"
-							className="border-electricIndigo dark:border-pumpkin size-8 rounded-full border-2 sm:size-10"
-						/>
-					</Avatar>
-					<span className="text-2xl">@{author_username}</span>
-				</p>
-			</CardTitle>
+		<header className="es-article-head">
+			{tags.length > 0 && (
+				<div className="es-article-tags">
+					{tags.map((tag) => (
+						<Link key={tag} href={`/tags/${tagSlug(tag)}`} className="es-chip es-chip--tag">
+							{tag}
+						</Link>
+					))}
+				</div>
+			)}
 
-			<CardDescription className="mt-2">
-				<p className="flex items-center space-x-2">
-					<ClockIcon className="tab-icon text-electricIndigo hidden sm:block" />
-					<span className="text-xl-font-baby">
-						<span className="mr-1">Posted</span>
-						{created_at
-							? formatDistanceToNow(parseISO(created_at), { addSuffix: true })
-							: "Loading..."}
-					</span>
-					<EyeIcon className="tab-icon text-electricIndigo" />
-					<span className="text-xl-font-baby">{getViewText(view_count)}</span>
-				</p>
-			</CardDescription>
-		</>
+			<h1 className="es-article-title">{title}</h1>
+
+			<div className="es-byline">
+				<PersonAvatar name={displayName(author_username)} seed={author_username} src={avatar} size="md" />
+				<div className="es-byline-copy">
+					<span className="es-byline-name">@{author_username}</span>
+					<MetaList className="es-byline-meta">
+						<span>
+							Posted{" "}
+							<time dateTime={created_at} title={longDate(created_at)}>
+								{timeAgo(created_at)}
+							</time>
+						</span>
+						{edited && (
+							<span title={`Edited ${longDate(updated_at)}`}>
+								{editedAgo === timeAgo(created_at) ? "Edited" : `Edited ${editedAgo}`}
+							</span>
+						)}
+						<span>{plural(view_count, "view")}</span>
+					</MetaList>
+				</div>
+			</div>
+		</header>
 	);
 }

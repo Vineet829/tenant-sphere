@@ -1,7 +1,9 @@
 "use client";
 
-
+import Spinner from "@/components/shared/Spinner";
 import { useActivateUserMutation } from "@/lib/redux/features/auth/authApiSlice";
+import { CircleCheck, Info } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -15,8 +17,7 @@ interface ActivationProps {
 
 export default function ActivationPage({ params }: ActivationProps) {
 	const router = useRouter();
-	const [activateUser, { isLoading, isSuccess, isError, error }] =
-		useActivateUserMutation();
+	const [activateUser, { isSuccess, isError, error }] = useActivateUserMutation();
 
 	useEffect(() => {
 		const { uid, token } = params;
@@ -33,29 +34,37 @@ export default function ActivationPage({ params }: ActivationProps) {
 	}, [isSuccess, isError, error, router]);
 
 	return (
-		<div className="flex min-h-screen items-center justify-center">
-			<div className="text-center">
-				<h3 className="dark:text-platinum font-robotoSlab text-2xl font-bold text-gray-800 sm:text-4xl md:text-5xl">
-					{isLoading ? (
-						<div className="flex-center">
-							<span className="mr-2">⏰</span>
-							<span>Activating your account....Please wait</span>
-							<span className="ml-2">🥱</span>
-						</div>
-					) : isSuccess ? (
-						<div>
-							<span className="mr-2">✅</span>
-							<span>Account Activated successfully!</span>
-						</div>
-					) : (
-						isError && (
-							<div>
-								<span className="mr-2">❌</span>
-								<span>Your account has already been activated...</span>
-							</div>
-						)
-					)}
-				</h3>
+		<div className="es-page es-page--wide">
+			<div className="es-statuspage" aria-live="polite">
+				{isSuccess ? (
+					<>
+						<span className="es-empty-icon" data-tone="ok" aria-hidden="true">
+							<CircleCheck strokeWidth={1.5} />
+						</span>
+						<h1 className="es-statuspage-title">Your account is active</h1>
+						<p className="es-statuspage-text">Taking you to log in.</p>
+					</>
+				) : isError ? (
+					<>
+						<span className="es-empty-icon" aria-hidden="true">
+							<Info strokeWidth={1.5} />
+						</span>
+						<h1 className="es-statuspage-title">We could not activate this account</h1>
+						<p className="es-statuspage-text">
+							The link may have expired or been used already. If you activated your account before, you can log
+							in as usual.
+						</p>
+						<Link href="/login" className="es-btn es-btn--primary">
+							Go to log in
+						</Link>
+					</>
+				) : (
+					<>
+						<Spinner size="lg" label="Activating your account…" />
+						<h1 className="es-statuspage-title">Activating your account</h1>
+						<p className="es-statuspage-text">This only takes a moment.</p>
+					</>
+				)}
 			</div>
 		</div>
 	);

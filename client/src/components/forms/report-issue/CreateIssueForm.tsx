@@ -1,28 +1,28 @@
 "use client";
 
+import SegmentedField, { type SegmentOption } from "@/components/estate/SegmentedField";
+import SubmitButton from "@/components/estate/SubmitButton";
 import { useGetMyApartmentQuery } from "@/lib/redux/features/apartment/apartmentApiSlice";
 import { useReportIssueMutation } from "@/lib/redux/features/issues/issueApiSlice";
 import { issueCreateSchema, TIssueCreateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { FlagIcon } from "lucide-react";
-import Select from "react-select";
-import { priorityOptions, statusOptions } from "@/constants";
-import customStyles from "../selectStyles";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
 
-const ClientOnly = dynamic<{ children: React.ReactNode }>(
-	() => Promise.resolve(({ children }) => <>{children}</>),
-	{ ssr: false },
-);
+export const ISSUE_STATUS_OPTIONS: SegmentOption[] = [
+	{ value: "reported", label: "Reported", tone: "info" },
+	{ value: "in_progress", label: "In progress", tone: "warn" },
+	{ value: "resolved", label: "Resolved", tone: "ok" },
+];
 
+const PRIORITY_OPTIONS: SegmentOption[] = [
+	{ value: "low", label: "Low" },
+	{ value: "medium", label: "Medium", tone: "warn" },
+	{ value: "high", label: "High", tone: "danger" },
+];
 
 export default function CreateIssueForm() {
 	const { data } = useGetMyApartmentQuery();
@@ -44,9 +44,7 @@ export default function CreateIssueForm() {
 
 	const onSubmit = async (formValues: TIssueCreateSchema) => {
 		if (!apartment?.id) {
-			toast.error(
-				"Create your apartment first in your profile, before creating an issue",
-			);
+			toast.error("Create your apartment first in your profile, before creating an issue");
 			return;
 		}
 
@@ -57,9 +55,7 @@ export default function CreateIssueForm() {
 
 		try {
 			await reportIssue(valuesWithApartmentId).unwrap();
-			toast.success(
-				"Your Issue has been reported. A confirmation email has been sent to you.",
-			);
+			toast.success("Your Issue has been reported. A confirmation email has been sent to you.");
 			reset();
 			router.push("/profile");
 		} catch (error) {
@@ -69,100 +65,64 @@ export default function CreateIssueForm() {
 	};
 
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4 dark:text-black"
-			>
-				<FormFieldComponent
-					label="Title"
-					name="title"
-					register={register}
-					errors={errors}
-					placeholder="Issue Title"
-					startIcon={<FlagIcon className="dark:text-babyPowder size-8" />}
-				/>
-				<FormFieldComponent
-					label="Description"
-					name="description"
-					register={register}
-					errors={errors}
-					placeholder="Detailed Description of the issue"
-					isTextArea
-					startIcon={<FlagIcon className="dark:text-babyPowder size-8" />}
-				/>
-				<div>
-					<label htmlFor="Status" className="h4-semibold dark:text-babyPowder">
-						Status
-					</label>
-					<div className="mt-1 flex items-center space-x-3 text-sm">
-						<ClientOnly>
-							<Controller
-								name="status"
-								control={control}
-								render={({ field: { onChange, onBlur, value } }) => (
-									<Select
-										className="mt-1 w-full"
-										options={statusOptions}
-										value={statusOptions.find(
-											(option) => option.value === value,
-										)}
-										onChange={(val) => onChange(val?.value)}
-										onBlur={onBlur}
-										placeholder="Select Reported if you are reportign an issue"
-										instanceId="status-select"
-										styles={customStyles}
-									/>
-								)}
-							/>
-						</ClientOnly>
-					</div>
-					{errors.status && (
-						<p className="mt-2 text-sm text-red-500">{errors.status.message}</p>
-					)}
-				</div>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Title"
+				name="title"
+				register={register}
+				errors={errors}
+				placeholder="Kitchen tap keeps dripping"
+				hint="A short line that names the problem."
+			/>
+			<FormFieldComponent
+				label="Description"
+				name="description"
+				register={register}
+				errors={errors}
+				placeholder="What is happening, where, and since when? Mention the best time for a visit."
+				isTextArea
+			/>
 
-				<div>
-					<label htmlFor="Status" className="h4-semibold dark:text-babyPowder">
-						Priority
-					</label>
-					<div className="mt-1 flex items-center space-x-3 text-sm">
-						<ClientOnly>
-							<Controller
-								name="priority"
-								control={control}
-								render={({ field: { onChange, onBlur, value } }) => (
-									<Select
-										className="mt-1 w-full"
-										options={priorityOptions}
-										value={priorityOptions.find(
-											(option) => option.value === value,
-										)}
-										onChange={(val) => onChange(val?.value)}
-										onBlur={onBlur}
-										placeholder="What priority is your issue?"
-										instanceId="priority-select"
-										styles={customStyles}
-									/>
-								)}
-							/>
-						</ClientOnly>
-					</div>
-					{errors.priority && (
-						<p className="mt-2 text-sm text-red-500">
-							{errors.priority.message}
-						</p>
-					)}
-				</div>
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin mt-2 w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Report`}
-				</Button>
-			</form>
-		</main>
+			<Controller
+				name="status"
+				control={control}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<SegmentedField
+						legend="Status"
+						name="status"
+						options={ISSUE_STATUS_OPTIONS}
+						value={value}
+						onChange={onChange}
+						onBlur={onBlur}
+						hint="Choose Reported when you are raising a new issue."
+						error={errors.status?.message}
+					/>
+				)}
+			/>
+
+			<Controller
+				name="priority"
+				control={control}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<SegmentedField
+						legend="Priority"
+						name="priority"
+						options={PRIORITY_OPTIONS}
+						value={value}
+						onChange={onChange}
+						onBlur={onBlur}
+						hint="How soon does this need attention?"
+						error={errors.priority?.message}
+					/>
+				)}
+			/>
+
+			<div className="es-form-actions">
+				<p className="es-form-note">You will find it under My issues on your profile.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Sending…">
+					Report issue
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

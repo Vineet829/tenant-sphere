@@ -1,20 +1,17 @@
 "use client";
+
+import SubmitButton from "@/components/estate/SubmitButton";
 import { useCreateApartmentMutation } from "@/lib/redux/features/apartment/apartmentApiSlice";
-import {
-	apartmentCreateSchema,
-	TApartmentCreateSchema,
-} from "@/lib/validationSchemas";
+import { apartmentCreateSchema, TApartmentCreateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Building2, DoorOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import * as z from "zod";
+import FieldError from "@/components/estate/FieldError";
 import { FormFieldComponent } from "../FormFieldComponent";
-import { BuildingOfficeIcon, HomeIcon } from "@heroicons/react/24/outline";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
-import { zodResolver } from "@hookform/resolvers/zod";
-
 
 export default function ApartmentCreateForm() {
 	const [createApartment, { isLoading }] = useCreateApartmentMutation();
@@ -47,60 +44,63 @@ export default function ApartmentCreateForm() {
 			toast.error(errorMessage || "An error occurred");
 		}
 	};
-	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
-			>
-				<FormFieldComponent
-					label="Building"
-					name="building"
-					register={register}
-					errors={errors}
-					placeholder="Building Name"
-					startIcon={
-						<BuildingOfficeIcon className="dark:text-babyPowder size-8" />
-					}
-				/>
 
+	const floorError = errors.floor?.message;
+
+	return (
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Building"
+				name="building"
+				register={register}
+				errors={errors}
+				placeholder="Cedar Court"
+				startIcon={<Building2 aria-hidden="true" />}
+			/>
+
+			<div className="es-form-row">
 				<FormFieldComponent
-					label="Apartment Unit Number"
+					label="Unit number"
 					name="unit_number"
 					register={register}
 					errors={errors}
-					placeholder="Apartment Number"
-					startIcon={<HomeIcon className="dark:text-babyPowder size-8" />}
+					placeholder="C-204"
+					startIcon={<DoorOpen aria-hidden="true" />}
 				/>
-				<label htmlFor="floor" className="h4-semibold dark:text-babyPowder">
-					Apartment Floor
-				</label>
-				<Controller
-					name="floor"
-					control={control}
-					render={({ field }) => (
-						<input
-							{...field}
-							id="floor"
-							type="number"
-							onChange={(e) => field.onChange(parseInt(e.target.value))}
-							className="flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-						/>
-					)}
-				/>
-				{errors.floor && (
-					<p className="text-sm text-red-500">{errors.floor.message}</p>
-				)}
 
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Add Your Apartment`}
-				</Button>
-			</form>
-		</main>
+				<div className="es-field" data-invalid={Boolean(floorError)}>
+					<div className="es-field-head">
+						<label htmlFor="floor" className="es-label">
+							Floor
+						</label>
+					</div>
+					<Controller
+						name="floor"
+						control={control}
+						render={({ field }) => (
+							<input
+								{...field}
+								id="floor"
+								type="number"
+								inputMode="numeric"
+								min={0}
+								max={5}
+								className="es-input"
+								onChange={(e) => field.onChange(parseInt(e.target.value))}
+								aria-invalid={Boolean(floorError)}
+							/>
+						)}
+					/>
+					{floorError ? <FieldError>{floorError}</FieldError> : <p className="es-hint">A number from 0 to 5.</p>}
+				</div>
+			</div>
+
+			<div className="es-form-actions">
+				<p className="es-form-note">It appears on your profile straight away.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+					Add apartment
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }

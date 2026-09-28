@@ -1,6 +1,11 @@
-import { AuthFormHeader } from "@/components/forms/auth";
+import FormShell from "@/components/estate/FormShell";
 import UpdatePostForm from "@/components/forms/update-post/UpdatePostForm";
-import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Edit post — Tenant Sphere",
+	description: "Authors can update the title and the body of their post",
+};
 
 interface UpdateParamsProps {
 	params: {
@@ -8,21 +13,19 @@ interface UpdateParamsProps {
 	};
 }
 
-
 export default function UpdatePostPage({ params }: UpdateParamsProps) {
 	return (
-		<div>
-			<AuthFormHeader
-				title="Update Post"
-				staticText="Want to go back?"
-				linkText="Back to Posts"
-				linkHref="/welcome"
-			/>
-			<div className="mt-7 sm:mx-auto sm:w-full sm:max-w-[480px]">
-				<div className="bg-lightGrey dark:bg-deepBlueGrey rounded-xl px-6 py-12 shadow sm:rounded-lg sm:px-12 md:rounded-3xl">
-					<UpdatePostForm params={params} />
-				</div>
-			</div>
-		</div>
+		<FormShell
+			eyebrow="Community"
+			title={
+				<>
+					Edit your <em>post</em>
+				</>
+			}
+			description="Fix a detail or add what you missed. Replies and votes stay where they are."
+			back={{ href: `/post/${params.slug}`, label: "Back to the post" }}
+		>
+			<UpdatePostForm params={params} />
+		</FormShell>
 	);
 }

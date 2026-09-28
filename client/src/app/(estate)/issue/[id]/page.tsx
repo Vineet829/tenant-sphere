@@ -2,11 +2,10 @@ import IssueDetails from "@/components/issue/IssueDetails";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Tenant Sphere | Issue Details",
+	title: "Issue — Tenant Sphere",
 	description:
 		"Authenticated uses can get the details of the issue they have raised. They can also delete the issue",
 };
-
 
 interface ParamsProps {
 	params: {
@@ -15,9 +14,5 @@ interface ParamsProps {
 }
 
 export default function IssueDetailPage({ params }: ParamsProps) {
-	return (
-		<div>
-			<IssueDetails params={params} />
-		</div>
-	);
+	return <IssueDetails params={params} />;
 }

@@ -1,134 +1,183 @@
 "use client";
 
-import { useRouter } from 'next/navigation'; 
+import EmptyState from "@/components/estate/EmptyState";
+import ErrorState from "@/components/estate/ErrorState";
+import { isMissing } from "@/components/estate/apiError";
+import { DetailSkeleton } from "@/components/estate/Skeletons";
+import { plural } from "@/components/estate/format";
 import {
-    useBookmarkPostMutation,
-    useDownvotePostMutation,
-    useGetSinglePostQuery,
-    useUpvotePostMutation,
-    useDeletePostMutation,
+	useBookmarkPostMutation,
+	useDeletePostMutation,
+	useDownvotePostMutation,
+	useGetSinglePostQuery,
+	useUpvotePostMutation,
 } from "@/lib/redux/features/posts/postApiSlice";
+import { useGetUserProfileQuery } from "@/lib/redux/features/users/usersApiSlice";
+import { sortByDateDescending } from "@/utils";
+import { ArrowLeft, FileQuestion, MessagesSquare } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Card, CardContent, CardHeader } from "../ui/card";
-import { AuthFormHeader } from "../forms/auth";
-import PostHeader from "./PostHeader";
+import CreateReplyForm from "../forms/add-reply/CreateReplyForm";
+import ProtectedRoute from "../shared/ProtectedRoutes";
 import PostActions from "./PostActions";
 import PostBody from "./PostBody";
-import PostFooter from "./PostFooter";
-import ProtectedRoute from "../shared/ProtectedRoutes";
-import { getRepliesText, sortByDateDescending } from "@/utils";
-import { MessageCircleMoreIcon } from "lucide-react";
+import PostHeader from "./PostHeader";
 import RepliesList from "./RepliesList";
-import CreateReplyForm from "../forms/add-reply/CreateReplyForm";
 
 interface PostDetailsProps {
-    params: {
-        slug: string;
-    };
+	params: {
+		slug: string;
+	};
 }
 
+function BackLink() {
+	return (
+		<Link href="/welcome" className="es-backlink">
+			<ArrowLeft aria-hidden="true" />
+			Back to community
+		</Link>
+	);
+}
 
 function PostDetailsContent({ params }: PostDetailsProps) {
-    const slug = params.slug;
-  
-    const { data } = useGetSinglePostQuery(slug);
-    const post = data?.post;
+	const slug = params.slug;
 
-    const [upvotePost, { isLoading: isUpvoteLoading }] = useUpvotePostMutation();
-    const [downvotePost, { isLoading: isDownvoteLoading }] = useDownvotePostMutation();
-    const [bookmarkPost, { isLoading: isBookmarkLoading }] = useBookmarkPostMutation();
-    const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
-    const router = useRouter()
-    const sortedReplies = sortByDateDescending(post?.replies ?? [], "created_at");
+	const { data, isLoading, isFetching, isError, error, refetch } = useGetSinglePostQuery(slug);
+	const { data: currentUser } = useGetUserProfileQuery();
+	const post = data?.post;
 
-    const handleUpvote = () => {
-        post?.id && upvotePost(post.id);
-        toast.success("Post Upvoted 😋");
-    };
+	const [upvotePost, { isLoading: isUpvoteLoading }] = useUpvotePostMutation();
+	const [downvotePost, { isLoading: isDownvoteLoading }] = useDownvotePostMutation();
+	const [bookmarkPost, { isLoading: isBookmarkLoading }] = useBookmarkPostMutation();
+	const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
+	const router = useRouter();
+	const sortedReplies = sortByDateDescending(post?.replies ?? [], "created_at");
 
-    const handleDownVote = () => {
-        post?.id && downvotePost(post.id);
-        toast.success("Post Downvoted 🥺");
-    };
+	const isAuthor = Boolean(post && currentUser && post.author_username === currentUser.profile.username);
 
-    const handleBookmarkPost = () => {
-        post?.slug && bookmarkPost(post.slug);
-        toast.success("This post has been added to your Bookmarks");
+	const handleUpvote = () => {
+		post?.id && upvotePost(post.id);
+		toast.success("Post upvoted");
+	};
 
-    };
+	const handleDownVote = () => {
+		post?.id && downvotePost(post.id);
+		toast.success("Post downvoted");
+	};
 
-    const handleDeletePost = async () => {
-        try {
-            post?.id && await deletePost(post.id).unwrap(); 
-			
-            toast.success("Post deleted successfully");
-           router.back()
-        } catch (error) {
-            toast.error("Failed to delete the post");
-        }
-    };
+	const handleBookmarkPost = () => {
+		post?.slug && bookmarkPost(post.slug);
+		toast.success("Saved to your bookmarks");
+	};
 
-    return (
-        <Card className="dark:border-gray rounded-xl border border-dashed">
-            <AuthFormHeader
-                title={post?.title}
-                linkText="Go back to Home"
-                linkHref="/welcome"
-            />
-            <CardHeader className="flex-start border-b-eerieBlack dark:border-gray w-full flex-col border-b border-dashed">
-                <div className="flex w-full flex-col justify-between sm:flex-row sm:items-center sm:gap-2">
-                    <PostHeader
-                        title={post?.title}
-                        avatar={post?.avatar}
-                        author_username={post?.author_username}
-                        created_at={post?.created_at}
-                        view_count={post?.view_count}
-                    />
-                    <PostActions
-                        upvotes={post?.upvotes}
-                        downvotes={post?.downvotes}
-                        handleUpvote={handleUpvote}
-                        handleDownVote={handleDownVote}
-                        handleBookmarkPost={handleBookmarkPost}
-                        handleDeletePost={handleDeletePost} 
-                        isUpvoteLoading={isUpvoteLoading}
-                        isDownvoteLoading={isDownvoteLoading}
-                        isBookmarkLoading={isBookmarkLoading}
-                        isDeleteLoading={isDeleteLoading} 
-                    />
-                </div>
-            </CardHeader>
-            <PostBody body={post?.body} slug={post?.slug} />
-            <PostFooter tags={post?.tags} replies_count={post?.replies_count} />
+	const handleDeletePost = async () => {
+		try {
+			post?.id && (await deletePost(post.id).unwrap());
 
-            <div className="border-b-eerieBlack dark:border-gray dark:text-platinum ml-4 space-y-4 border-b border-dashed py-4">
-                <span className="font-robotoSlab dark:text-pumpkin flex flex-row items-center text-lg font-semibold">
-                    <MessageCircleMoreIcon className="tab-icon text-electricIndigo mr-2" />
-                    {getRepliesText(post?.replies_count)}
-                </span>
-                {sortedReplies && sortedReplies.length > 0 ? (
-                    sortedReplies.map((reply) => (
-                        <RepliesList key={reply.id} reply={reply} />
-                    ))
-                ) : (
-                    <p className="text-lg">This Post doesn&apos;t have any replies yet</p>
-                )}
-            </div>
+			toast.success("Post deleted");
+			router.back();
+		} catch (error) {
+			toast.error("We could not delete the post");
+		}
+	};
 
-            <CardContent className="border-b-eerieBlack dark:border-gray dark:text-platinum border-b border-dashed">
-                <h2 className="h2-semibold dark:text-pumpkin mt-3">
-                    Add your reply here
-                </h2>
-                <CreateReplyForm slug={post?.slug} />
-            </CardContent>
-        </Card>
-    );
+	if (isLoading) {
+		return (
+			<div className="es-page es-page--reading">
+				<BackLink />
+				<DetailSkeleton />
+			</div>
+		);
+	}
+
+	if (isError && !isMissing(error)) {
+		return (
+			<div className="es-page es-page--reading">
+				<BackLink />
+				<ErrorState what="this post" onRetry={refetch} retrying={isFetching} />
+			</div>
+		);
+	}
+
+	if (isError || !post) {
+		return (
+			<div className="es-page es-page--reading">
+				<BackLink />
+				<EmptyState
+					icon={FileQuestion}
+					description="It may have been deleted, or the link might be out of date."
+					action={
+						<Link href="/welcome" className="es-btn es-btn--primary">
+							Go to the community
+						</Link>
+					}
+				>
+					We could not find that post
+				</EmptyState>
+			</div>
+		);
+	}
+
+	return (
+		<div className="es-page es-page--reading">
+			<BackLink />
+
+			<article className="es-card es-article">
+				<PostHeader
+					title={post.title}
+					tags={post.tags}
+					avatar={post.avatar}
+					author_username={post.author_username}
+					created_at={post.created_at}
+					updated_at={post.updated_at}
+					view_count={post.view_count}
+				/>
+				<PostBody body={post.body} />
+				<PostActions
+					slug={post.slug}
+					upvotes={post.upvotes}
+					downvotes={post.downvotes}
+					isUpvoted={post.is_upvoted}
+					isBookmarked={post.is_bookmarked}
+					canManage={isAuthor}
+					handleUpvote={handleUpvote}
+					handleDownVote={handleDownVote}
+					handleBookmarkPost={handleBookmarkPost}
+					handleDeletePost={handleDeletePost}
+					isUpvoteLoading={isUpvoteLoading}
+					isDownvoteLoading={isDownvoteLoading}
+					isBookmarkLoading={isBookmarkLoading}
+					isDeleteLoading={isDeleteLoading}
+				/>
+			</article>
+
+			<section className="es-thread" id="replies" aria-labelledby="replies-title">
+				<h2 className="es-section-title" id="replies-title">
+					<MessagesSquare aria-hidden="true" strokeWidth={1.75} />
+					{plural(post.replies_count, "reply", "replies")}
+				</h2>
+
+				<CreateReplyForm slug={post.slug} />
+
+				{sortedReplies.length > 0 ? (
+					<ol className="es-replies">
+						{sortedReplies.map((reply) => (
+							<RepliesList key={reply.id} reply={reply} isAuthor={reply.author_username === post.author_username} />
+						))}
+					</ol>
+				) : (
+					<p className="es-thread-empty">No replies yet. Be the first to join in.</p>
+				)}
+			</section>
+		</div>
+	);
 }
 
 export default function PostDetails({ params }: PostDetailsProps) {
-    return (
-        <ProtectedRoute>
-            <PostDetailsContent params={params} />
-        </ProtectedRoute>
-    );
+	return (
+		<ProtectedRoute>
+			<PostDetailsContent params={params} />
+		</ProtectedRoute>
+	);
 }

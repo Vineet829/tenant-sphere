@@ -1,73 +1,53 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { leftNavLinks } from "@/constants";
+import PersonAvatar from "@/components/estate/PersonAvatar";
 import { useAuthNavigation } from "@/hooks";
-import Image from "next/image";
+import { useUserProfile } from "@/hooks/useUseProfile";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import NavLinks from "./NavLinks";
 
 export default function LeftNavbar() {
-	const pathname = usePathname();
-	const { handleLogout, filteredNavLinks, isAuthenticated } =
-		useAuthNavigation();
-	
-		return (
-		<section className="bg-baby_rich light-border custom-scrollbar shadow-platinum sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 max-sm:hidden lg:w-[297px] dark:shadow-none">
-			<div className="flex flex-1 flex-col gap-6">
-				{filteredNavLinks.map((linkItem) => {
-					const isActive =
-						(pathname.includes(linkItem.path) && linkItem.path.length > 1) ||
-						pathname === linkItem.path;
-					return (
-						<Link
-							href={linkItem.path}
-							key={linkItem.label}
-							className={`${
-								isActive
-									? "electricIndigo-gradient text-babyPowder rounded-lg"
-									: "text-baby_richBlack"
-							} flex items-center justify-start gap-4 bg-transparent p-4`}
-						>
-							<Image
-								src={linkItem.imgLocation}
-								alt={linkItem.label}
-								width={22}
-								height={22}
-								className={`${isActive ? "" : "color-invert"}`}
-							/>
-							<p
-								className={`${isActive ? "base-bold" : "base-medium"} max-lg:hidden`}
-							>
-								{linkItem.label}
-							</p>
-						</Link>
-					);
-				})}
-			</div>
+	const { handleLogout, isAuthenticated } = useAuthNavigation();
+	const { profile, isLoading } = useUserProfile();
 
-			{isAuthenticated ? (
-				<div className="flex flex-col gap-3">
-					<Button
-						onClick={handleLogout}
-						className="lime-gradient small-medium light-border-2 btn-tertiary text-baby_ballon min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none"
-					>
-						Log Out
-					</Button>
-				</div>
-			) : (
-				<div className="flex flex-col gap-3">
-					<Link href="/login">
-						<Button className="lime-gradient small-medium light-border-2 btn-tertiary text-baby_ballon min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
-							Login
-						</Button>
-					</Link>
-					<Link href="/register">
-						<Button className="electricIndigo-gradient small-medium light-border-2 btn-tertiary text-baby_ballon min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
+	return (
+		<aside className="es-sidebar">
+			<NavLinks />
+
+			<div className="es-nav-foot">
+				{isAuthenticated && isLoading ? (
+					<div className="es-usercard" role="status">
+						<span className="es-sr">Loading your account…</span>
+						<span className="es-avatar es-avatar--sm es-skeleton es-skeleton--circle" />
+						<span className="es-usercard-copy" style={{ gap: 7 }}>
+							<span className="es-skeleton" style={{ width: 96, height: 11 }} />
+							<span className="es-skeleton" style={{ width: 64, height: 9 }} />
+						</span>
+					</div>
+				) : isAuthenticated ? (
+					<div className="es-usercard">
+						<Link href="/profile" className="es-usercard-link" title="Your profile">
+							<PersonAvatar name={profile?.full_name || profile?.username} seed={profile?.username} src={profile?.avatar} size="sm" />
+							<span className="es-usercard-copy">
+								<span className="es-usercard-name">{profile?.full_name ?? "Your profile"}</span>
+								{profile?.username && <span className="es-usercard-handle">@{profile.username}</span>}
+							</span>
+						</Link>
+						<button type="button" className="es-icon-button" onClick={handleLogout} aria-label="Log out" title="Log out">
+							<LogOut aria-hidden="true" strokeWidth={1.75} />
+						</button>
+					</div>
+				) : (
+					<div className="es-nav-auth">
+						<Link href="/login" className="es-btn es-btn--outline">
+							Log in
+						</Link>
+						<Link href="/register" className="es-btn es-btn--primary">
 							Register
-						</Button>
-					</Link>
-				</div>
-			)}
-		</section>
+						</Link>
+					</div>
+				)}
+			</div>
+		</aside>
 	);
 }

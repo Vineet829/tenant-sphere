@@ -1,71 +1,57 @@
 "use client";
 
+import EmptyState from "@/components/estate/EmptyState";
+import ErrorState from "@/components/estate/ErrorState";
+import { CardsSkeleton } from "@/components/estate/Skeletons";
+import { longDate, timeAgo } from "@/components/estate/format";
 import { useGetMyReportsQuery } from "@/lib/redux/features/reports/reportApiSlice";
-import React from "react";
-import Spinner from "../shared/Spinner";
-import { TabsContent } from "../ui/tabs";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
-import { Badge } from "../ui/badge";
-import { formatDate } from "@/utils";
-
+import { CalendarDays, Flag, Plus } from "lucide-react";
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import TabHeading from "./TabHeading";
 
 export default function Reports() {
-	const { data, isLoading } = useGetMyReportsQuery();
-	const myReport = data?.reports;
+	const { data, isLoading, isFetching, isError, refetch } = useGetMyReportsQuery();
+	const reports = data?.reports.results ?? [];
 
-	if (isLoading) {
-		<div className="flex-center pt-32">
-			<Spinner size="xl" />
-		</div>;
-	}
 	return (
-		<TabsContent value="my-reports">
-			<h2 className="h2-semibold flex-center font-robotoSlab dark:text-pumpkin text-xl">
-				Total: ({myReport?.count})
-			</h2>
-			<div className="mt-4 grid cursor-pointer grid-cols-1 gap-4 p-1.5 md:grid-cols-2 lg:grid-cols-3">
-				{myReport && myReport.results.length > 0 ? (
-					myReport.results.map((report) => (
-						<Card
+		<>
+			<TabHeading
+				title="Reports you sent"
+				note="Reports stay anonymous. Only you can see this list."
+				action={
+					<Link href="/report-tenant" className="es-btn es-btn--outline es-btn--sm">
+						<Plus aria-hidden="true" />
+						Report a tenant
+					</Link>
+				}
+			/>
+			{isLoading ? (
+				<CardsSkeleton cards={3} />
+			) : isError ? (
+				<ErrorState what="your reports" onRetry={refetch} retrying={isFetching} />
+			) : reports.length > 0 ? (
+				<div className="es-cardgrid es-stagger">
+					{reports.map((report, index) => (
+						<article
 							key={report.id}
-							className="hover:border-pumpkin dark:border-gray hover:dark:border-platinum rounded-xl border border-dashed"
+							className="es-card es-report"
+							style={{ "--i": Math.min(index, 8) } as CSSProperties}
 						>
-							<CardHeader>
-								<CardTitle className="flex-center h3-semibold font-robotoSlab dark:text-lime-500">
-									{report.title}
-								</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<CardDescription className="dark:text-platinum">
-									<p className="h4-semibold">{report.description}</p>
-								</CardDescription>
-							</CardContent>
-
-							<CardFooter className="dark:text-babyPowder flex flex-row justify-between">
-								<p>
-									<span className="dark:text-pumpkin mr-0.5 font-bold">
-										Created On:{" "}
-									</span>
-									<Badge className="bg-eerieBlack text-babyPowder dark:bg-electricIndigo dark:text-babyPowder">
-										{formatDate(report.created_at).toString()}
-									</Badge>
-								</p>
-							</CardFooter>
-						</Card>
-					))
-				) : (
-					<p className="h2-semibold dark:text-lime-500">
-						You have not Reported any Tenant(s) Yet!
-					</p>
-				)}
-			</div>
-		</TabsContent>
+							<time className="es-report-date" dateTime={report.created_at} title={timeAgo(report.created_at)}>
+								<CalendarDays aria-hidden="true" strokeWidth={1.75} />
+								{longDate(report.created_at)}
+							</time>
+							<h3 className="es-card-title">{report.title}</h3>
+							<p>{report.description}</p>
+						</article>
+					))}
+				</div>
+			) : (
+				<EmptyState icon={Flag} description="If a neighbour's behaviour becomes a problem, you can raise it with the management.">
+					No reports sent
+				</EmptyState>
+			)}
+		</>
 	);
 }

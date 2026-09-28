@@ -1,45 +1,35 @@
+import PersonAvatar from "@/components/estate/PersonAvatar";
+import { longDate, timeAgo } from "@/components/estate/format";
+import { useDisplayName } from "@/components/estate/useDisplayName";
 import { Reply } from "@/types";
-import { useTheme } from "next-themes";
-import React from "react";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import { formatDistanceToNow, parseISO } from "date-fns";
 
 interface ReplyProps {
 	reply: Reply;
+	/** The reply was written by the person who wrote the post. */
+	isAuthor?: boolean;
 }
 
+export default function RepliesList({ reply, isAuthor = false }: ReplyProps) {
+	const displayName = useDisplayName();
 
-export default function RepliesList({ reply }: ReplyProps) {
-	const { theme } = useTheme();
 	return (
-		<div className="flex items-center space-x-3">
-			<Avatar>
-				<AvatarImage
-					src={
-						reply.avatar ??
-						(theme === "dark"
-							? "/assets/icons/user-profile-circle.svg"
-							: "/assets/icons/user-profile-light-circle.svg")
-					}
-					alt="Author Avatar"
-					className="border-electricIndigo dark:border-pumpkin rounded-full border-2"
-					width={35}
-					height={35}
-				/>
-			</Avatar>
-			<div>
-				<p className="flex items-center space-x-2">
-					<span className="dark:text-platinum font-semibold">
-						@{reply.author_username}
-					</span>
-					<span className="text-electricIndigo text-lg dark:text-lime-500">
-						{formatDistanceToNow(parseISO(reply.created_at), {
-							addSuffix: true,
-						})}
-					</span>
+		<li className="es-reply">
+			<PersonAvatar
+				name={displayName(reply.author_username)}
+				seed={reply.author_username}
+				src={reply.avatar}
+				size="sm"
+			/>
+			<div className="es-reply-body">
+				<p className="es-reply-head">
+					<span className="es-reply-name">@{reply.author_username}</span>
+					{isAuthor && <span className="es-chip es-chip--accent es-reply-badge">Author</span>}
+					<time className="es-reply-time" dateTime={reply.created_at} title={longDate(reply.created_at)}>
+						{timeAgo(reply.created_at)}
+					</time>
 				</p>
-				<p className="dark:text-platinum text-lg">{reply.body}</p>
+				<p className="es-reply-text">{reply.body}</p>
 			</div>
-		</div>
+		</li>
 	);
 }

@@ -1,28 +1,31 @@
+import FormShell, { FormContext } from "@/components/estate/FormShell";
 import ApartmentCreateForm from "@/components/forms/apartment/ApartmentCreateForm";
-import { AuthFormHeader } from "@/components/forms/auth";
+import { Wrench } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Tenant Sphere | Create Apartment",
+	title: "Add your apartment — Tenant Sphere",
 	description: "Authenticated users can add their apartment details",
 };
 
-
-
 export default function AddApartmentPage() {
 	return (
-		<div>
-			<AuthFormHeader
-				title="Add Your Apartment"
-				staticText="Want to go back?"
-				linkText="Back to Profile"
-				linkHref="/profile"
-			/>
-			<div className="mt-7 sm:mx-auto sm:w-full sm:max-w-[480px]">
-				<div className="bg-lightGrey dark:bg-deepBlueGrey rounded-xl px-6 py-12 shadow sm:rounded-lg sm:px-12 md:rounded-3xl">
-					<ApartmentCreateForm />
-				</div>
-			</div>
-		</div>
+		<FormShell
+			eyebrow="Your space"
+			title={
+				<>
+					Add your <em>apartment</em>
+				</>
+			}
+			description="Put your home on your profile, so your neighbours and the technicians know where to find you."
+			back={{ href: "/profile", label: "Back to profile" }}
+			aside={
+				<FormContext icon={<Wrench strokeWidth={1.75} />} label="Good to know">
+					You need an apartment on your profile to report an issue.
+				</FormContext>
+			}
+		>
+			<ApartmentCreateForm />
+		</FormShell>
 	);
 }

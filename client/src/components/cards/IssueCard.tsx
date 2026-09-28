@@ -1,15 +1,8 @@
+import { IssueProgressMini } from "@/components/estate/IssueProgress";
+import { PriorityPill, StatusPill } from "@/components/estate/Pills";
+import { ArrowRight, DoorOpen } from "lucide-react";
 import Link from "next/link";
-import React from "react";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Hotel } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import type { CSSProperties } from "react";
 
 interface Issue {
 	id: string;
@@ -22,59 +15,37 @@ interface Issue {
 
 interface IssueCardProps {
 	issue: Issue;
+	index?: number;
 }
 
-export default function IssueCard({ issue }: IssueCardProps) {
+export default function IssueCard({ issue, index = 0 }: IssueCardProps) {
 	return (
-		
-		<Link href={`/issue/${issue.id}`} key={issue.id}>
-			<Card
-				key={issue.id}
-				className="hover:border-pumpkin dark:border-gray hover:dark:border-platinum rounded-xl border border-dashed"
-			>
-				<CardHeader>
-					<CardTitle className="flex-center h3-semibold font-robotoSlab dark:text-lime-500">
-						{issue.title.length > 20
-							? `${issue.title.substring(0, 20)}....`
-							: issue.title}
-					</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<CardDescription className="dark:text-platinum">
-						<p className="h4-semibold">
-							{issue.description.length > 35
-								? `${issue.description.substring(0, 35)}....`
-								: issue.description}
-						</p>
-					</CardDescription>
-				</CardContent>
+		<Link
+			href={`/issue/${issue.id}`}
+			className="es-card es-card--interactive es-issue"
+			style={{ "--i": Math.min(index, 8) } as CSSProperties}
+			aria-label={`${issue.title}. Open issue`}
+		>
+			<div className="es-issue-top">
+				<StatusPill status={issue.status} />
+				<PriorityPill priority={issue.priority} />
+			</div>
 
-				<CardContent>
-					<CardDescription className="dark:text-platinum">
-						<p className="flex items-center space-x-2">
-							<Hotel className="tab-icon" />
-							<span className="tab-font">Apartment Number: </span>
-							<span className="text-lg">{issue.apartment_unit}</span>
-						</p>
-					</CardDescription>
-				</CardContent>
+			<h3 className="es-card-title">{issue.title}</h3>
+			<p className="es-issue-text">{issue.description}</p>
 
-				<CardFooter className="dark:text-babyPowder flex flex-row justify-between">
-					<p>
-						<span className="mr-0.5 font-bold">Status: </span>
-						<Badge className="bg-eerieBlack text-babyPowder dark:bg-electricIndigo dark:text-babyPowder">
-							{issue.status}
-						</Badge>
-					</p>
+			<IssueProgressMini status={issue.status} />
 
-					<p>
-						<span className="mr-0.5 font-bold">Priority: </span>
-						<Badge className="bg-eerieBlack text-babyPowder dark:text-veryBlack dark:bg-lime-500">
-							{issue.priority}
-						</Badge>
-					</p>
-				</CardFooter>
-			</Card>
+			<div className="es-issue-foot">
+				<span>
+					<DoorOpen aria-hidden="true" strokeWidth={1.75} />
+					Apartment {issue.apartment_unit}
+				</span>
+				<span className="es-issue-open">
+					Open
+					<ArrowRight aria-hidden="true" />
+				</span>
+			</div>
 		</Link>
 	);
 }

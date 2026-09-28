@@ -1,107 +1,95 @@
 "use client";
 
+import { CardsSkeleton } from "@/components/estate/Skeletons";
+import { joined, label, longDate } from "@/components/estate/format";
 import { useGetUserProfileQuery } from "@/lib/redux/features/users/usersApiSlice";
-import Spinner from "@/components/shared/Spinner";
-import { TabsContent } from "@/components/ui/tabs";
-import { ProfileItem } from "./ProfileItem";
 import {
-	BadgeCheck,
 	Briefcase,
+	Building2,
 	CalendarDays,
 	Contact,
+	DoorOpen,
 	Home,
-	Hotel,
-	Map,
-	MapPinnedIcon,
-	Star,
+	Layers,
+	MapPin,
+	Quote,
+	UserRound,
 	UserRoundCheck,
 } from "lucide-react";
-import { capitalizeFirstLetter, formatDate } from "@/utils";
+import Link from "next/link";
 import ProtectedRoute from "../shared/ProtectedRoutes";
-
+import { ProfileItem } from "./ProfileItem";
 
 function AboutContent() {
-	const { data, isLoading } = useGetUserProfileQuery();
+	const { data, isLoading, isError } = useGetUserProfileQuery();
 	const profile = data?.profile;
 
-	if (isLoading) {
-		return (
-			<div className="flex-center pt-32">
-				<Spinner size="xl" />
-			</div>
-		);
-	}
+	if (isLoading) return <CardsSkeleton cards={2} />;
+	// The header above already explains the failure and offers a retry.
+	if (isError || !profile) return null;
+
+	const home = profile?.apartment;
 
 	return (
-		<TabsContent value="about">
-			<div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
-				{/* column 1 */}
-				<div className="space-y-3">
-					<ProfileItem
-						icon={<Contact className="tab-icon" />}
-						label="Name"
-						value={profile?.full_name || ""}
-					/>
-					<ProfileItem
-						icon={<UserRoundCheck className="tab-icon" />}
-						label="Gender"
-						value={capitalizeFirstLetter(profile?.gender || "")}
-					/>
-					<ProfileItem
-						icon={<CalendarDays className="tab-icon" />}
-						label="Joined"
-						value={formatDate(profile?.date_joined).toString() || ""}
-					/>
-					<ProfileItem
-						icon={<BadgeCheck className="tab-icon" />}
-						label="Reputation"
-						value={`${profile?.reputation} out of 100` || ""}
-					/>
-					<ProfileItem
-						icon={<Map className="tab-icon" />}
-						label="Country"
-						value={profile?.country_of_origin || ""}
-					/>
-					<ProfileItem
-						icon={<MapPinnedIcon className="tab-icon" />}
-						label="City"
-						value={profile?.city_of_origin || ""}
-					/>
-				</div>
-				{/* column 2 */}
-				<div className="space-y-3">
-					<ProfileItem
-						icon={<Briefcase className="tab-icon" />}
-						label="Occupation"
-						value={capitalizeFirstLetter(profile?.occupation || "")}
-					/>
-					<ProfileItem
-						icon={<Home className="tab-icon" />}
-						label="Apartment"
-						value={profile?.apartment?.unit_number || "None"}
-					/>
-					<ProfileItem
-						icon={<Hotel className="tab-icon" />}
-						label="Building"
-						value={`${profile?.apartment?.building || "None"}, Floor: ${profile?.apartment?.floor || "None"} `}
-					/>
-					<ProfileItem
-						icon={<Star className="tab-icon" />}
-						label="Average Rating"
-						value={profile?.average_rating?.toString() || ""}
-					/>
+		<div className="es-about">
+			<section className="es-card es-panel es-about-bio" aria-labelledby="about-bio">
+				<h2 className="es-section-title" id="about-bio">
+					<Quote aria-hidden="true" strokeWidth={1.75} />
+					In your own words
+				</h2>
+				{profile?.bio ? (
+					<blockquote className="es-quote">{profile.bio}</blockquote>
+				) : (
+					<p className="es-quote" data-empty="true">
+						You have not added a bio yet.{" "}
+						<Link href="/profile/edit" className="es-field-link">
+							Add a few lines
+						</Link>{" "}
+						so your neighbours know who you are.
+					</p>
+				)}
+			</section>
 
-					<div className="prose max-w-none">
-						<p>
-							<span className="tab-font">Bio:</span>
-							<span className="dark:text-babyPowder">
-								{profile?.bio || "You have not added any bio info yet!"}
-							</span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</TabsContent>
+			<section className="es-card es-panel" aria-labelledby="about-personal">
+				<h2 className="es-section-title" id="about-personal">
+					<UserRound aria-hidden="true" strokeWidth={1.75} />
+					Personal
+				</h2>
+				<dl className="es-deflist">
+					<ProfileItem icon={<Contact />} label="Name" value={profile?.full_name} />
+					<ProfileItem icon={<UserRoundCheck />} label="Gender" value={label(profile?.gender)} />
+					<ProfileItem icon={<Briefcase />} label="Occupation" value={label(profile?.occupation)} />
+					<ProfileItem
+						icon={<MapPin />}
+						label="From"
+						value={joined([profile?.city_of_origin, profile?.country_of_origin])}
+					/>
+					<ProfileItem icon={<CalendarDays />} label="Joined" value={longDate(profile?.date_joined)} />
+				</dl>
+			</section>
+
+			<section className="es-card es-panel" aria-labelledby="about-home">
+				<h2 className="es-section-title" id="about-home">
+					<Home aria-hidden="true" strokeWidth={1.75} />
+					Home
+				</h2>
+				{home ? (
+					<dl className="es-deflist">
+						<ProfileItem icon={<DoorOpen />} label="Apartment" value={home.unit_number} />
+						<ProfileItem icon={<Building2 />} label="Building" value={home.building} />
+						<ProfileItem icon={<Layers />} label="Floor" value={`${home.floor}`} />
+					</dl>
+				) : (
+					<p className="es-panel-empty">
+						No apartment on your profile yet.{" "}
+						<Link href="/apartment" className="es-field-link">
+							Add your apartment
+						</Link>{" "}
+						to report issues for it.
+					</p>
+				)}
+			</section>
+		</div>
 	);
 }
 

@@ -1,20 +1,18 @@
 "use client";
 
-import { useCreatePostMutation } from "@/lib/redux/features/posts/postApiSlice";
-import React from "react";
-import { postSchema, TPostSchema } from "@/lib/validationSchemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
-import { extractErrorMessage } from "@/utils";
-import { toast } from "react-toastify";
-import { FormFieldComponent } from "../FormFieldComponent";
-import { FileText, XIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/shared/Spinner";
+import SubmitButton from "@/components/estate/SubmitButton";
 import ProtectedRoute from "@/components/shared/ProtectedRoutes";
-
+import { useCreatePostMutation } from "@/lib/redux/features/posts/postApiSlice";
+import { postSchema, TPostSchema } from "@/lib/validationSchemas";
+import { extractErrorMessage } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import FieldError from "@/components/estate/FieldError";
+import { FormFieldComponent } from "../FormFieldComponent";
 
 function CreatePostFormContent() {
 	const [createPost, { isLoading }] = useCreatePostMutation();
@@ -36,10 +34,7 @@ function CreatePostFormContent() {
 		},
 	});
 
-	const handleInputKeyDown = (
-		e: React.KeyboardEvent<HTMLInputElement>,
-		field: any,
-	) => {
+	const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
 		if (e.key === "Enter" && field.name === "tags") {
 			e.preventDefault();
 
@@ -55,9 +50,7 @@ function CreatePostFormContent() {
 	};
 
 	const handleRemoveTag = (tagToRemove: string, field: any) => {
-		const updatedTags = field.value.filter(
-			(tag: string) => tag !== tagToRemove,
-		);
+		const updatedTags = field.value.filter((tag: string) => tag !== tagToRemove);
 		setValue("tags", updatedTags, { shouldValidate: true });
 	};
 
@@ -72,78 +65,77 @@ function CreatePostFormContent() {
 		}
 	};
 
+	const tagsError = errors.tags?.message;
+
 	return (
-		<main>
-			<form
-				noValidate
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex w-full max-w-md flex-col gap-4"
-			>
-				<FormFieldComponent
-					label="Title"
-					name="title"
-					register={register}
-					errors={errors}
-					placeholder="Post Title"
-					startIcon={<FileText className="dark:text-babyPowder size-8" />}
-				/>
-				<FormFieldComponent
-					label="Body"
-					name="body"
-					register={register}
-					errors={errors}
-					placeholder="Ask a question or share what you have in mind..."
-					isTextArea
-				/>
-				<label htmlFor="tags" className="h4-semibold dark:text-babyPowder">
-					Tags (press Enter to add a tag)
-				</label>
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
+			<FormFieldComponent
+				label="Title"
+				name="title"
+				register={register}
+				errors={errors}
+				placeholder="Anyone know a good plumber nearby?"
+			/>
+			<FormFieldComponent
+				label="Body"
+				name="body"
+				register={register}
+				errors={errors}
+				placeholder="Ask a question or share what you have in mind…"
+				isTextArea
+			/>
+
+			<div className="es-field" data-invalid={Boolean(tagsError)}>
+				<div className="es-field-head">
+					<label htmlFor="tags" className="es-label">
+						Tags
+					</label>
+				</div>
 				<Controller
 					name="tags"
 					control={control}
 					render={({ field }) => (
-						<>
-							<div>
-								{field.value.map((tag: string, index: number) => (
-									<Badge
-										key={index}
-										className="border-veryBlack dark:border-pumpkin mb-2 mr-2 inline-flex items-center border dark:text-lime-500"
+						<div className="es-tagbox">
+							{field.value.map((tag: string) => (
+								<span key={tag} className="es-chip es-chip--tag es-chip--accent">
+									{tag}
+									<button
+										type="button"
+										className="es-chip-remove"
+										onClick={() => handleRemoveTag(tag, field)}
+										aria-label={`Remove the tag ${tag}`}
 									>
-										{tag}
-										<button
-											type="button"
-											onClick={() => handleRemoveTag(tag, field)}
-											className="ml-1.5 cursor-pointer text-red-600 dark:text-red-600"
-										>
-											<XIcon className="size-5" />
-										</button>
-									</Badge>
-								))}
-							</div>
+										<X aria-hidden="true" />
+									</button>
+								</span>
+							))}
 							<input
 								type="text"
 								id="tags"
-								placeholder="Add your tags..."
+								placeholder={field.value.length > 0 ? "Add another…" : "Type a tag and press Enter"}
 								onKeyDown={(e) => handleInputKeyDown(e, field)}
-								className="flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+								autoComplete="off"
+								aria-describedby="tags-hint"
 							/>
-						</>
+						</div>
 					)}
 				/>
-
-				{errors.tags && errors.tags.message && (
-					<p className="text-sm text-red-500">{errors.tags.message}</p>
+				{tagsError ? (
+					<FieldError>{tagsError}</FieldError>
+				) : (
+					<p className="es-hint" id="tags-hint">
+						Press Enter after each tag. Tags help neighbours find your post.
+					</p>
 				)}
+			</div>
 
-				<Button
-					type="submit"
-					className="h4-semibold bg-eerieBlack dark:bg-pumpkin w-full text-white"
-					disabled={isLoading}
-				>
-					{isLoading ? <Spinner size="sm" /> : `Create Your Post`}
-				</Button>
-			</form>
-		</main>
+			<div className="es-form-actions">
+				<p className="es-form-note">Everyone in the building can read and reply.</p>
+				<SubmitButton isLoading={isLoading} busyLabel="Publishing…">
+					Publish post
+				</SubmitButton>
+			</div>
+		</form>
 	);
 }
 

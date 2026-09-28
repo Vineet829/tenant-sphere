@@ -1,22 +1,25 @@
-import { AuthFormHeader } from "@/components/forms/auth";
+import FormShell from "@/components/estate/FormShell";
 import PasswordResetConfirmForm from "@/components/forms/auth/PasswordResetConfirmForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Tenant Sphere | Password Reset Request",
+	title: "Choose a new password — Tenant Sphere",
 	description: "Password request reset page",
 };
 
-
 export default function ForgotPassword() {
 	return (
-		<div>
-			<AuthFormHeader title="Create your New Password" />
-			<div className="mt-7 sm:mx-auto sm:w-full sm:max-w-[480px]">
-				<div className="bg-lightGrey dark:bg-deepBlueGrey px-6 py-12 shadow sm:rounded-lg sm:px-12 md:rounded-3xl">
-					<PasswordResetConfirmForm />
-				</div>
-			</div>
-		</div>
+		<FormShell
+			eyebrow="Account"
+			title={
+				<>
+					Choose a new <em>password</em>
+				</>
+			}
+			description="Pick something you have not used before, at least eight characters long."
+			back={{ href: "/login", label: "Back to log in" }}
+		>
+			<PasswordResetConfirmForm />
+		</FormShell>
 	);
 }
