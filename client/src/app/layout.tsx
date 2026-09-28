@@ -19,7 +19,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+		<html lang="en" className="dark [color-scheme:dark]">
 			<body className={`${openSans.variable} ${robotoSlab.variable}`}>
 				<Toast />
 				<ReduxProvider>

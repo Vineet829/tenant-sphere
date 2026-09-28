@@ -4,7 +4,7 @@ import { useGetProfilePostsQuery, useGetProfileReviewsQuery } from "@/lib/redux/
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowUpDown, ChevronLeft, ChevronRight, Loader2, MessageSquare, RefreshCw, Star } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { plural, shortDate, voteScore } from "./format";
 import PersonAvatar from "./PersonAvatar";
 import RatingStars from "./RatingStars";
@@ -164,7 +164,7 @@ function TechnicianReviews({ slug }: { slug: string }) {
 							<div key={stars}>
 								<dt>{stars}<Star aria-hidden="true" /><span className="sr-only"> stars</span></dt>
 								<dd>
-									<span className="es-profile-rating-track" aria-hidden="true"><span style={{ width: `${(starCount / count) * 100}%` }} /></span>
+									<span className="es-profile-rating-track" aria-hidden="true"><span className="w-[var(--rating-fill)]" style={{ "--rating-fill": `${(starCount / count) * 100}%` } as CSSProperties} /></span>
 									<span>{starCount}<span className="sr-only"> reviews</span></span>
 								</dd>
 							</div>

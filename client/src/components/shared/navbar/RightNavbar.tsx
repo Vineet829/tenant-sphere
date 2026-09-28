@@ -4,6 +4,7 @@ import { voteScore } from "@/components/estate/format";
 import { useGetPopularTagsQuery, useGetTopPostsQuery } from "@/lib/redux/features/posts/postApiSlice";
 import { ArrowUpDown, Hash, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 export default function RightNavbar() {
 	const { data, isLoading: postsLoading, isError: postsFailed } = useGetTopPostsQuery();
@@ -23,10 +24,10 @@ export default function RightNavbar() {
 						<span className="es-sr">Loading top posts…</span>
 						{[72, 58, 84, 64].map((width) => (
 							<div key={width} className="es-rail-loading-row">
-								<span className="es-skeleton" style={{ width: 22, height: 22 }} />
+								<span className="es-skeleton size-[22px]" />
 								<span className="es-rail-loading-copy">
-									<span className="es-skeleton" style={{ width: `${width}%`, height: 12 }} />
-									<span className="es-skeleton" style={{ width: "38%", height: 10 }} />
+									<span className="es-skeleton h-[12px] w-[var(--bone-width)]" style={{ "--bone-width": `${width}%` } as CSSProperties} />
+									<span className="es-skeleton h-[10px] w-[38%]" />
 								</span>
 							</div>
 						))}
@@ -65,7 +66,7 @@ export default function RightNavbar() {
 					<div className="es-taglist" role="status">
 						<span className="es-sr">Loading popular tags…</span>
 						{[96, 132, 118, 104].map((width) => (
-							<span key={width} className="es-skeleton es-skeleton--pill" style={{ width, height: 27 }} />
+							<span key={width} className="es-skeleton es-skeleton--pill h-[27px] w-[var(--bone-width)]" style={{ "--bone-width": `${width}px` } as CSSProperties} />
 						))}
 					</div>
 				) : tags && tags.length > 0 ? (

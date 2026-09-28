@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import type { CSSProperties } from "react";
 
 const FIVE = [0, 1, 2, 3, 4];
 
@@ -23,7 +24,7 @@ export default function RatingStars({ value, showValue = true }: { value?: numbe
 		<span className="es-stars" role="img" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>
 			<span className="es-stars-track" aria-hidden="true">
 				<Row />
-				<span className="es-stars-fill" style={{ width: `${(rating / 5) * 100}%` }}>
+				<span className="es-stars-fill w-[var(--rating-fill)]" style={{ "--rating-fill": `${(rating / 5) * 100}%` } as CSSProperties}>
 					<Row />
 				</span>
 			</span>

@@ -1,13 +1,10 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
+import { estateVariables, tenantTheme } from "./tailwind.theme";
 
 const config = {
 	darkMode: ["class"],
-	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
-	],
+	content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
 	prefix: "",
 	theme: {
 		container: {
@@ -18,7 +15,9 @@ const config = {
 			},
 		},
 		extend: {
+			...tenantTheme,
 			colors: {
+				...tenantTheme.colors,
 				googleBlue: "#4285F4",
 				asparagus: "#60992D",
 				deepBlueGrey: "#263238",
@@ -37,6 +36,7 @@ const config = {
 			},
 
 			keyframes: {
+				...tenantTheme.keyframes,
 				"accordion-down": {
 					from: { height: "0" },
 					to: { height: "var(--radix-accordion-content-height)" },
@@ -47,16 +47,26 @@ const config = {
 				},
 			},
 			animation: {
+				...tenantTheme.animation,
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 			},
 			fontFamily: {
+				...tenantTheme.fontFamily,
 				openSans: ["var(--font-openSans)"],
 				robotoSlab: ["var(--font-robotoSlab)"],
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		plugin(({ addBase }) => {
+			addBase({
+				".estate-shell, .estate-popover, .estate-mobile-panel, body:has(.estate-shell) .Toastify__toast-container":
+					estateVariables,
+			});
+		}),
+	],
 } satisfies Config;
 
 export default config;

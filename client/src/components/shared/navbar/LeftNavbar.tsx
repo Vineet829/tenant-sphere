@@ -19,9 +19,9 @@ export default function LeftNavbar() {
 					<div className="es-usercard" role="status">
 						<span className="es-sr">Loading your account…</span>
 						<span className="es-avatar es-avatar--sm es-skeleton es-skeleton--circle" />
-						<span className="es-usercard-copy" style={{ gap: 7 }}>
-							<span className="es-skeleton" style={{ width: 96, height: 11 }} />
-							<span className="es-skeleton" style={{ width: 64, height: 9 }} />
+						<span className="es-usercard-copy !gap-[7px]">
+							<span className="es-skeleton h-[11px] w-[96px]" />
+							<span className="es-skeleton h-[9px] w-[64px]" />
 						</span>
 					</div>
 				) : isAuthenticated ? (

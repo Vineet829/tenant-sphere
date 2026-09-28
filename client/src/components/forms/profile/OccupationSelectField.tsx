@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 import { Control, Controller, UseFormSetValue } from "react-hook-form";
 import Select from "react-select";
-import customStyles from "../selectStyles";
+import selectClassNames from "../selectClassNames";
 
 const ClientOnly = dynamic<{ children: React.ReactNode }>(
 	() => Promise.resolve(({ children }) => <>{children}</>),
@@ -56,7 +56,8 @@ export default function OccupationSelectField({ setValue, control }: OccupationS
 								value={occupationOptions.find((option) => option.value === field.value)}
 								onChange={(option) => field.onChange(option?.value)}
 								instanceId="occupation-select"
-								styles={customStyles}
+								unstyled
+								classNames={selectClassNames}
 							/>
 						)}
 					/>

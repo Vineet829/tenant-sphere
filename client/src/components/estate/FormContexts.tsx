@@ -22,8 +22,8 @@ export function ApartmentContext() {
 		return (
 			<div className="es-context" role="status">
 				<span className="es-sr">Loading your apartment…</span>
-				<span className="es-skeleton" style={{ width: 38, height: 38, borderRadius: 11 }} />
-				<span className="es-skeleton" style={{ width: 180, height: 14 }} />
+				<span className="es-skeleton size-[38px] !rounded-[11px]" />
+				<span className="es-skeleton h-[14px] w-[180px]" />
 			</div>
 		);
 	}

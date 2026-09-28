@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 
 function Bone({ w, h = 12, className = "" }: { w: string | number; h?: number; className?: string }) {
-	const style: CSSProperties = { width: typeof w === "number" ? `${w}px` : w, height: h };
-	return <span className={`es-skeleton ${className}`.trim()} style={style} />;
+	const style = { "--bone-width": typeof w === "number" ? `${w}px` : w, "--bone-height": `${h}px` } as CSSProperties;
+	return <span className={`es-skeleton h-[var(--bone-height)] w-[var(--bone-width)] ${className}`.trim()} style={style} />;
 }
 
 function Status() {
@@ -41,7 +41,7 @@ export function PeopleSkeleton({ cards = 6 }: { cards?: number }) {
 				<div key={index} className="es-loading-block">
 					<div className="es-loading-row">
 						<Bone w={52} h={52} className="es-skeleton--circle" />
-						<div style={{ display: "grid", gap: 8, flex: 1 }}>
+						<div className="grid flex-1 gap-[8px]">
 							<Bone w="62%" h={14} />
 							<Bone w="40%" />
 						</div>

@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import { useGetUserProfileQuery } from "@/lib/redux/features/users/usersApiSlice";
 import { BadgeCheck, Briefcase, Building2, CalendarDays, DoorOpen, MapPin, Pencil, Plus, Star } from "lucide-react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 function HeaderSkeleton() {
 	return (
@@ -17,8 +18,8 @@ function HeaderSkeleton() {
 			<div className="es-profile-body">
 				<span className="es-avatar es-avatar--xl es-skeleton es-skeleton--circle" />
 				<div className="es-profile-id">
-					<span className="es-skeleton" style={{ width: "min(320px, 70%)", height: 40 }} />
-					<span className="es-skeleton" style={{ width: "min(420px, 90%)", height: 14, marginTop: 14 }} />
+					<span className="es-skeleton h-[40px] w-[min(320px,70%)]" />
+					<span className="es-skeleton mt-[14px] h-[14px] w-[min(420px,90%)]" />
 				</div>
 			</div>
 		</section>
@@ -90,7 +91,7 @@ function HeaderContent() {
 						<span className="es-stat-value">{reputation}</span>
 						<span>out of 100</span>
 						<span className="es-meter" aria-hidden="true">
-							<span style={{ width: `${reputation}%` }} />
+							<span className="w-[var(--meter-fill)]" style={{ "--meter-fill": `${reputation}%` } as CSSProperties} />
 						</span>
 					</dd>
 				</div>

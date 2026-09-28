@@ -1,0 +1,50 @@
+/* react-select retains its accessible layout; these Tailwind components override
+   its structural defaults without depending on Emotion's insertion order. */
+.es-select .es-select-control {
+	@apply min-h-[var(--select-control-height,48px)] cursor-pointer rounded-[var(--select-border-radius,8px)] border border-solid border-[color:var(--select-border-color)] bg-[color:var(--select-background-color)] pl-[5px] text-[0.9375rem] text-[color:var(--select-text-color)] [box-shadow:none] [transition:border-color_0.16s,box-shadow_0.16s];
+}
+.es-select .es-select-control:hover {
+	@apply border-[color:var(--select-border-hover-color)];
+}
+.es-select .es-select-control--focused,
+.es-select .es-select-control--focused:hover {
+	@apply border-estate-accent [box-shadow:0_0_0_3px_var(--select-focus-ring,transparent)];
+}
+.es-select .es-select-value {
+	@apply px-[10px] py-[2px];
+}
+.es-select .es-select-indicator {
+	@apply py-[8px] pl-[8px] pr-[14px] text-[color:var(--select-placeholder-color)] [transform:none] [transition:transform_0.2s,color_0.16s];
+}
+.es-select .es-select-indicator:hover {
+	@apply text-[color:var(--select-text-color)];
+}
+.es-select .es-select-indicator--open {
+	@apply [transform:rotate(180deg)];
+}
+.es-select .es-select-option {
+	@apply cursor-pointer rounded-[6px] bg-transparent px-[12px] py-[10px] text-[0.9375rem] font-medium text-[color:var(--select-option-text-color)];
+}
+.es-select .es-select-option--focused,
+.es-select .es-select-option:active {
+	@apply bg-[color:var(--select-option-hover-background-color)];
+}
+.es-select .es-select-option--selected,
+.es-select .es-select-option--selected:active {
+	@apply bg-[color:var(--select-option-selected-background-color)] font-[650] text-[color:var(--select-option-selected-text-color,var(--select-option-text-color))];
+}
+.es-select .es-select-input {
+	@apply m-[2px] py-[2px] text-[color:var(--select-text-color)];
+}
+.es-select .es-select-hint {
+	@apply mx-[2px] text-[color:var(--select-placeholder-color,var(--select-text-color))] opacity-100;
+}
+.es-select .es-select-selected {
+	@apply mx-[2px] font-medium text-[color:var(--select-value-text-color)];
+}
+.es-select .es-select-menu {
+	@apply z-30 mb-[8px] mt-[6px] overflow-hidden rounded-[12px] border border-solid border-estate-line-strong bg-[color:var(--select-menu-background-color)] [box-shadow:var(--es-shadow-3)];
+}
+.es-select .es-select-options {
+	@apply p-[6px];
+}
