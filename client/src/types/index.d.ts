@@ -383,6 +383,38 @@ export interface ProfilesResponse {
 		results: Profile[];
 	};
 }
+
+export interface ProfileActivityPage<T> {
+	count: number;
+	next: string | null;
+	previous: string | null;
+	results: T[];
+}
+
+export type ProfilePost = Pick<Post, "id" | "title" | "slug" | "body" | "created_at" | "upvotes" | "downvotes" | "replies_count">;
+
+export interface ProfileReview {
+	id: string;
+	rating: number;
+	comment: string;
+	created_at: string;
+	author_name: string;
+	author_username: string;
+	avatar: string | null;
+}
+
+export interface ProfilePostsResponse {
+	profile_posts: ProfileActivityPage<ProfilePost>;
+}
+
+export interface ProfileReviewsResponse {
+	profile_reviews: {
+		average_rating: number;
+		distribution: Array<{ stars: number; count: number }>;
+		reviews: ProfileActivityPage<ProfileReview>;
+	};
+}
+
 export interface RatingResponse {
 	rating: {
 		id: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { setSearchTerm } from "@/lib/redux/features/users/userSlice";
+import { setCurrentPage, setSearchTerm } from "@/lib/redux/features/users/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import { Search } from "lucide-react";
 import React from "react";
@@ -18,6 +18,7 @@ const UsersSearch = ({
 	const searchTerm = useAppSelector((state) => state.user.searchTerm);
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch(setCurrentPage(1));
 		dispatch(setSearchTerm(event.target.value));
 	};
 

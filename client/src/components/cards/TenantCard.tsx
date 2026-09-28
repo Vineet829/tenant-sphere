@@ -76,6 +76,7 @@ function TenantCardContent() {
 							index={index}
 							name={tenant.full_name}
 							username={tenant.username}
+							slug={tenant.slug}
 							avatar={tenant.avatar}
 							bio={tenant.bio}
 							badge={
@@ -86,6 +87,7 @@ function TenantCardContent() {
 										: undefined
 							}
 							facts={factsFor(tenant)}
+							summaryFacts={factsFor(tenant).slice(0, 2)}
 						/>
 					))}
 				</div>

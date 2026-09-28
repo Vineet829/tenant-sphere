@@ -47,6 +47,7 @@ export default function GenderSelectField({ setValue, control }: GenderSelectFie
 					value={field.value}
 					onChange={field.onChange}
 					onBlur={field.onBlur}
+					inputRef={field.ref}
 					plain
 				/>
 			)}

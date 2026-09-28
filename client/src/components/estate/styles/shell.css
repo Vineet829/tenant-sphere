@@ -1,6 +1,6 @@
 /* Shell — top bar, navigation, community rail and the page frame. */
 .estate-shell {
-	min-height: 100svh;
+	min-height: var(--app-viewport-height);
 	background: var(--es-canvas-glow), var(--es-canvas);
 	background-attachment: fixed;
 }
@@ -205,7 +205,7 @@
 
 .estate-shell .es-main {
 	min-width: 0;
-	min-height: calc(100svh - var(--es-topbar-h));
+	min-height: calc(var(--app-viewport-height) - var(--es-topbar-h));
 	padding: 40px clamp(20px, 3vw, 48px) 80px;
 }
 
@@ -235,7 +235,7 @@
 	top: var(--es-topbar-h);
 	display: flex;
 	flex-direction: column;
-	height: calc(100svh - var(--es-topbar-h));
+	height: calc(var(--app-viewport-height) - var(--es-topbar-h));
 	padding: 22px 14px 16px;
 	overflow-y: auto;
 	border-right: 1px solid var(--es-line);
@@ -414,7 +414,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 28px;
-	height: calc(100svh - var(--es-topbar-h));
+	height: calc(var(--app-viewport-height) - var(--es-topbar-h));
 	padding: 40px 26px 22px 28px;
 	overflow-y: auto;
 	border-left: 1px solid var(--es-line);
@@ -668,7 +668,7 @@ div.estate-popover {
 div.estate-mobile-panel {
 	display: flex;
 	flex-direction: column;
-	width: min(320px, 88vw);
+	width: min(320px, calc(var(--app-viewport-width) * 0.88));
 	padding: 22px 16px 18px;
 	overflow-y: auto;
 	border: 0;
@@ -691,7 +691,7 @@ div.estate-mobile-panel {
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 1279px) {
+@media (max-width: 1534.8px) {
 	.estate-shell .es-workspace,
 	.estate-shell .es-workspace:has(.es-page--wide) {
 		grid-template-columns: var(--es-sidebar-w) minmax(0, 1fr);
@@ -702,7 +702,7 @@ div.estate-mobile-panel {
 	}
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1227.6px) {
 	.estate-shell {
 		--es-sidebar-w: 76px;
 	}
@@ -741,7 +741,7 @@ div.estate-mobile-panel {
 	}
 }
 
-@media (max-width: 639px) {
+@media (max-width: 766.8px) {
 	.estate-shell {
 		--es-topbar-h: 58px;
 	}

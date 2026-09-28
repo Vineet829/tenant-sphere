@@ -36,20 +36,23 @@ export default function PostActions({
 	isDownvoteLoading,
 	isDeleteLoading,
 }: PostActionsProps) {
+	const isVoting = isUpvoteLoading || isDownvoteLoading;
+
 	return (
 		<footer className="es-actionbar">
 			<div className="es-actionbar-group">
-				<div className="es-votes" role="group" aria-label="Vote on this post">
+				<div className="es-votes" role="group" aria-label="Vote on this post" aria-busy={isVoting}>
 					<button
 						type="button"
 						className="es-action es-action--vote"
 						onClick={handleUpvote}
-						disabled={isUpvoteLoading}
+						disabled={isVoting}
+						aria-busy={isUpvoteLoading}
 						aria-pressed={isUpvoted}
 						aria-label={`Upvote. ${upvotes ?? 0} so far`}
 						title="Upvote this post"
 					>
-						<ArrowBigUp aria-hidden="true" />
+						{isUpvoteLoading ? <span className="es-spinner" aria-hidden="true" /> : <ArrowBigUp aria-hidden="true" />}
 						{upvotes ?? 0}
 					</button>
 					<span className="es-votes-rule" aria-hidden="true" />
@@ -57,11 +60,12 @@ export default function PostActions({
 						type="button"
 						className="es-action es-action--vote"
 						onClick={handleDownVote}
-						disabled={isDownvoteLoading}
+						disabled={isVoting}
+						aria-busy={isDownvoteLoading}
 						aria-label={`Downvote. ${downvotes ?? 0} so far`}
 						title="Downvote this post"
 					>
-						<ArrowBigDown aria-hidden="true" />
+						{isDownvoteLoading ? <span className="es-spinner" aria-hidden="true" /> : <ArrowBigDown aria-hidden="true" />}
 						{downvotes ?? 0}
 					</button>
 				</div>
@@ -70,12 +74,13 @@ export default function PostActions({
 					type="button"
 					className="es-action"
 					onClick={handleBookmarkPost}
-					disabled={isBookmarkLoading}
+					disabled={isBookmarkLoading || isBookmarked}
+					aria-busy={isBookmarkLoading}
 					aria-pressed={isBookmarked}
 					title={isBookmarked ? "In your bookmarks" : "Bookmark this post"}
 				>
-					<Bookmark aria-hidden="true" />
-					{isBookmarked ? "Saved" : "Save"}
+					{isBookmarkLoading ? <span className="es-spinner" aria-hidden="true" /> : <Bookmark aria-hidden="true" />}
+					{isBookmarkLoading ? "Saving…" : isBookmarked ? "Saved" : "Save"}
 				</button>
 			</div>
 

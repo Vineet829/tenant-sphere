@@ -4,14 +4,12 @@ import EmptyState from "@/components/estate/EmptyState";
 import ErrorState from "@/components/estate/ErrorState";
 import PageHeader from "@/components/estate/PageHeader";
 import PersonCard, { type PersonFact } from "@/components/estate/PersonCard";
-import RatingStars from "@/components/estate/RatingStars";
 import { PeopleSkeleton } from "@/components/estate/Skeletons";
 import { joined, label, monthYear } from "@/components/estate/format";
 import { useGetAllTechniciansQuery } from "@/lib/redux/features/users/usersApiSlice";
 import { useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import type { Profile, UserState } from "@/types";
-import { CalendarDays, MapPin, SearchX, Star, Wrench } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, MapPin, SearchX, Wrench } from "lucide-react";
 import PaginationSection from "../shared/PaginationSection";
 import UsersSearch from "../shared/search/UsersSearch";
 
@@ -67,23 +65,14 @@ export default function TechnicianCard() {
 							index={index}
 							name={technician.full_name}
 							username={technician.username}
+							slug={technician.slug}
 							avatar={technician.avatar}
 							bio={technician.bio}
 							badge={label(technician.occupation)}
 							facts={factsFor(technician)}
-							footer={
-								<>
-									<RatingStars value={technician.average_rating} />
-									<Link
-										href={`/add-rating?username=${technician.username}`}
-										className="es-btn es-btn--outline es-btn--sm"
-										aria-label={`Rate ${technician.full_name}`}
-									>
-										<Star aria-hidden="true" />
-										Rate
-									</Link>
-								</>
-							}
+							summaryFacts={factsFor(technician).slice(0, 1)}
+							profileType="technician"
+							rating={technician.average_rating}
 						/>
 					))}
 				</div>

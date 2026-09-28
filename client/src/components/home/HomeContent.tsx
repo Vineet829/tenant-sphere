@@ -74,7 +74,7 @@ export default function HomeContent() {
 
 						<div className={styles.visual}>
 							<div className={styles.photoFrame}>
-								<Image src={community} alt="Apartment balconies beside a leafy shared courtyard" fill priority placeholder="blur" sizes="(max-width: 760px) 92vw, (max-width: 1100px) 48vw, 600px" className={styles.photo} />
+								<Image src={community} alt="Apartment balconies beside a leafy shared courtyard" fill priority placeholder="blur" sizes="(max-width: 912px) 92vw, (max-width: 1320px) 48vw, 720px" className={styles.photo} />
 								<div className={styles.photoShade} />
 								<div className={styles.photoCaption}><span>ROOM TO BELONG</span><span>Life happens here.</span></div>
 							</div>

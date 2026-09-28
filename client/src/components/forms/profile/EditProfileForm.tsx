@@ -1,6 +1,9 @@
 "use client";
 
+import ErrorState from "@/components/estate/ErrorState";
+import FieldError from "@/components/estate/FieldError";
 import PersonAvatar from "@/components/estate/PersonAvatar";
+import { DetailSkeleton } from "@/components/estate/Skeletons";
 import SubmitButton from "@/components/estate/SubmitButton";
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/lib/redux/features/users/usersApiSlice";
 import { profileSchema, TProfileSchema } from "@/lib/validationSchemas";
@@ -18,10 +21,11 @@ import GenderSelectField from "./GenderSelectField";
 import OccupationSelectField from "./OccupationSelectField";
 
 export default function EditProfileForm() {
-	const { data } = useGetUserProfileQuery();
+	const { data, isLoading: isProfileLoading, isFetching, isError, refetch } = useGetUserProfileQuery();
 
 	const profile = data?.profile;
-	const [avatar, setAvatar] = useState("");
+	const [uploadAccepted, setUploadAccepted] = useState(false);
+	const [uploadError, setUploadError] = useState("");
 	const [uploading, setUploading] = useState(false);
 
 	const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
@@ -44,30 +48,28 @@ export default function EditProfileForm() {
 	}, [profile, reset]);
 
 	const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files) return;
-
-		const file = e.target.files[0];
+		const input = e.currentTarget;
+		const file = input.files?.[0];
+		if (!file || uploading || isLoading) return;
 		const formData = new FormData();
 		formData.append("avatar", file);
+		setUploadAccepted(false);
+		setUploadError("");
 		setUploading(true);
 
 		try {
-			const config = {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			};
-			const { data } = await axios.patch("/api/v1/profiles/user/avatar/", formData, config);
-			setAvatar(data);
-			setUploading(false);
-		} catch (error) {
-			console.error("Error uploading file:", error);
+			await axios.patch("/api/v1/profiles/user/avatar/", formData);
+			setUploadAccepted(true);
+		} catch {
+			setUploadError("We could not upload your photo. Choose the file again to retry.");
+			input.value = "";
 		} finally {
 			setUploading(false);
 		}
 	};
 
 	const onSubmit = async (values: z.infer<typeof profileSchema>) => {
+		if (uploading || isLoading) return;
 		try {
 			await updateUserProfile(values).unwrap();
 			toast.success("Update Successful");
@@ -78,9 +80,12 @@ export default function EditProfileForm() {
 		}
 	};
 
+	if (isProfileLoading) return <DetailSkeleton />;
+	if (isError || !profile) return <ErrorState what="your profile" onRetry={refetch} retrying={isFetching} />;
+
 	return (
 		<form noValidate onSubmit={handleSubmit(onSubmit)} className="es-form">
-			<div className="es-field">
+			<div className="es-field" data-invalid={Boolean(uploadError)}>
 				<div className="es-field-head">
 					<label htmlFor="avatar" className="es-label">
 						Profile photo
@@ -89,17 +94,26 @@ export default function EditProfileForm() {
 				<div className="es-upload">
 					<PersonAvatar name={profile?.full_name || profile?.username} seed={profile?.username} src={profile?.avatar} size="lg" />
 					<div className="es-upload-copy">
-						<input accept="image/*" id="avatar" name="avatar" type="file" onChange={uploadFileHandler} />
-						<p className="es-upload-status" aria-live="polite">
+						<input
+							accept="image/*"
+							id="avatar"
+							name="avatar"
+							type="file"
+							onChange={uploadFileHandler}
+							disabled={uploading || isLoading}
+							aria-invalid={Boolean(uploadError)}
+							aria-describedby={uploadError ? "avatar-error" : "avatar-status"}
+						/>
+						<p className="es-upload-status" id="avatar-status" aria-live="polite">
 							{uploading ? (
 								<>
 									<span className="es-spinner" aria-hidden="true" />
 									Uploading…
 								</>
-							) : avatar ? (
+							) : uploadAccepted ? (
 								<>
 									<Check aria-hidden="true" />
-									Photo received
+									Photo received. It may take a moment to appear.
 								</>
 							) : (
 								"An image file, such as a PNG or JPG."
@@ -107,6 +121,7 @@ export default function EditProfileForm() {
 						</p>
 					</div>
 				</div>
+				{uploadError && <FieldError id="avatar-error">{uploadError}</FieldError>}
 			</div>
 
 			<div className="es-form-row">
@@ -168,7 +183,7 @@ export default function EditProfileForm() {
 				<Link href="/profile" className="es-btn es-btn--ghost">
 					Cancel
 				</Link>
-				<SubmitButton isLoading={isLoading} busyLabel="Saving…">
+				<SubmitButton isLoading={isLoading} disabled={uploading} busyLabel="Saving…">
 					Save changes
 				</SubmitButton>
 			</div>

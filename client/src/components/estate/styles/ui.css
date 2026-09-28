@@ -1259,7 +1259,7 @@ a.es-chip:hover {
 /* ── Toasts, on interior pages only ──────────────────────── */
 body:has(.estate-shell) .Toastify__toast-container {
 	--toastify-font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-	width: min(380px, calc(100vw - 32px));
+	width: min(380px, calc(var(--app-viewport-width) - 32px));
 }
 
 body:has(.estate-shell) .Toastify__toast-container--top-right {

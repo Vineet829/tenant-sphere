@@ -86,7 +86,7 @@ export default function CreateIssueForm() {
 			<Controller
 				name="status"
 				control={control}
-				render={({ field: { onChange, onBlur, value } }) => (
+				render={({ field: { onChange, onBlur, value, ref } }) => (
 					<SegmentedField
 						legend="Status"
 						name="status"
@@ -94,6 +94,7 @@ export default function CreateIssueForm() {
 						value={value}
 						onChange={onChange}
 						onBlur={onBlur}
+						inputRef={ref}
 						hint="Choose Reported when you are raising a new issue."
 						error={errors.status?.message}
 					/>
@@ -103,7 +104,7 @@ export default function CreateIssueForm() {
 			<Controller
 				name="priority"
 				control={control}
-				render={({ field: { onChange, onBlur, value } }) => (
+				render={({ field: { onChange, onBlur, value, ref } }) => (
 					<SegmentedField
 						legend="Priority"
 						name="priority"
@@ -111,6 +112,7 @@ export default function CreateIssueForm() {
 						value={value}
 						onChange={onChange}
 						onBlur={onBlur}
+						inputRef={ref}
 						hint="How soon does this need attention?"
 						error={errors.priority?.message}
 					/>

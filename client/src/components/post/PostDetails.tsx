@@ -56,19 +56,34 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 
 	const isAuthor = Boolean(post && currentUser && post.author_username === currentUser.profile.username);
 
-	const handleUpvote = () => {
-		post?.id && upvotePost(post.id);
-		toast.success("Post upvoted");
+	const handleUpvote = async () => {
+		if (!post || isUpvoteLoading || isDownvoteLoading) return;
+		try {
+			await upvotePost(post.id).unwrap();
+			toast.success("Post upvoted");
+		} catch {
+			toast.error("We could not save your vote. Please try again.");
+		}
 	};
 
-	const handleDownVote = () => {
-		post?.id && downvotePost(post.id);
-		toast.success("Post downvoted");
+	const handleDownVote = async () => {
+		if (!post || isUpvoteLoading || isDownvoteLoading) return;
+		try {
+			await downvotePost(post.id).unwrap();
+			toast.success("Vote updated");
+		} catch {
+			toast.error("We could not save your vote. Please try again.");
+		}
 	};
 
-	const handleBookmarkPost = () => {
-		post?.slug && bookmarkPost(post.slug);
-		toast.success("Saved to your bookmarks");
+	const handleBookmarkPost = async () => {
+		if (!post || post.is_bookmarked || isBookmarkLoading) return;
+		try {
+			await bookmarkPost(post.slug).unwrap();
+			toast.success("Saved to your bookmarks");
+		} catch {
+			toast.error("We could not save this post. Please try again.");
+		}
 	};
 
 	const handleDeletePost = async () => {

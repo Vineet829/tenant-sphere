@@ -56,6 +56,7 @@ export function FormFieldComponent<TFieldValues extends FieldValues>({
 					{...register(name, { required })}
 					placeholder={placeholder}
 					className={className}
+					disabled={disabled}
 					aria-invalid={Boolean(errorMessage)}
 					aria-describedby={describedBy}
 				/>
@@ -66,6 +67,8 @@ export function FormFieldComponent<TFieldValues extends FieldValues>({
 					id={name}
 					{...register(name, { required })}
 					placeholder={placeholder}
+					className={className}
+					disabled={disabled}
 					aria-invalid={Boolean(errorMessage)}
 					aria-describedby={describedBy}
 				/>

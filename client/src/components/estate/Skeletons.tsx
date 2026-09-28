@@ -35,7 +35,7 @@ export function FeedSkeleton({ rows = 4 }: { rows?: number }) {
 
 export function PeopleSkeleton({ cards = 6 }: { cards?: number }) {
 	return (
-		<div className="es-loading-grid" role="status">
+		<div className="es-loading-grid es-people-loading" role="status">
 			<Status />
 			{Array.from({ length: cards }, (_, index) => (
 				<div key={index} className="es-loading-block">
@@ -46,12 +46,15 @@ export function PeopleSkeleton({ cards = 6 }: { cards?: number }) {
 							<Bone w="40%" />
 						</div>
 					</div>
-					<Bone w="94%" />
-					<Bone w="70%" />
-					<div className="es-loading-row">
-						<Bone w="44%" h={30} />
-						<Bone w="44%" h={30} />
+					<div className="es-people-loading-facts">
+						{[0, 1].map((fact) => (
+							<div key={fact}>
+								<Bone w="48%" h={10} />
+								<Bone w="82%" h={14} />
+							</div>
+						))}
 					</div>
+					<Bone w={112} h={16} />
 				</div>
 			))}
 		</div>

@@ -96,12 +96,19 @@ export default function CreateRatingForm() {
 					name="rating"
 					control={control}
 					render={({ field }) => (
-						<div role="radiogroup" aria-labelledby="rating-label">
-							<StarRatingInput name="rating" value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
+						<div role="radiogroup" aria-labelledby="rating-label" aria-invalid={Boolean(ratingError)} aria-describedby={ratingError ? "rating-error" : undefined}>
+							<StarRatingInput
+								name="rating"
+								value={field.value}
+								onChange={field.onChange}
+								onBlur={field.onBlur}
+								inputRef={field.ref}
+								describedBy={ratingError ? "rating-error" : undefined}
+							/>
 						</div>
 					)}
 				/>
-				{ratingError && <FieldError>{ratingError}</FieldError>}
+				{ratingError && <FieldError id="rating-error">{ratingError}</FieldError>}
 			</div>
 
 			<FormFieldComponent

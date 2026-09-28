@@ -53,7 +53,7 @@ export default function UpdateIssueForm({ params }: UpdateParamsProps) {
 			<Controller
 				name="status"
 				control={control}
-				render={({ field: { onChange, onBlur, value } }) => (
+				render={({ field: { onChange, onBlur, value, ref } }) => (
 					<SegmentedField
 						legend="New status"
 						name="status"
@@ -61,6 +61,7 @@ export default function UpdateIssueForm({ params }: UpdateParamsProps) {
 						value={value}
 						onChange={onChange}
 						onBlur={onBlur}
+						inputRef={ref}
 						hint="Pick where the work stands right now."
 						error={errors.status?.message}
 					/>

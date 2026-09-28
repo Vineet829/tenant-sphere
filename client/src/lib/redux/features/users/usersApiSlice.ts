@@ -3,6 +3,8 @@ import {
 	NonTenantResponse,
 	ProfileData,
 	ProfileResponse,
+	ProfilePostsResponse,
+	ProfileReviewsResponse,
 	ProfilesResponse,
 	QueryParams,
 } from "@/types";
@@ -43,6 +45,14 @@ export const usersApiSlice = baseApiSlice.injectEndpoints({
 			query: () => "/profiles/user/my-profile/",
 			providesTags: ["User"],
 		}),
+		getProfilePosts: builder.query<ProfilePostsResponse, { slug: string; page: number }>({
+			query: ({ slug, page }) => `/profiles/${encodeURIComponent(slug)}/posts/?page=${page}`,
+			providesTags: ["User", "Post"],
+		}),
+		getProfileReviews: builder.query<ProfileReviewsResponse, { slug: string; page: number }>({
+			query: ({ slug, page }) => `/profiles/${encodeURIComponent(slug)}/reviews/?page=${page}`,
+			providesTags: ["User"],
+		}),
 		updateUserProfile: builder.mutation<ProfileData, ProfileData>({
 			query: (formData) => ({
 				url: "/profiles/user/update/",
@@ -59,4 +69,6 @@ export const {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
 	useGetAllTechniciansQuery,
+	useGetProfilePostsQuery,
+	useGetProfileReviewsQuery,
 } = usersApiSlice;

@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Shared scale for every route and portal. Viewport tokens keep fixed surfaces
+   within the screen; screen media-query breakpoints include the same 1.2 factor. */
+html {
+    --app-zoom: 1.2;
+    --app-viewport-width: calc(100vw / var(--app-zoom));
+    --app-viewport-height: calc(100svh / var(--app-zoom));
+    --app-dynamic-height: calc(100dvh / var(--app-zoom));
+    zoom: var(--app-zoom);
+}
+
 body{
     font-family: var(--font-openSans);
     background-color: hsl(var(--background));

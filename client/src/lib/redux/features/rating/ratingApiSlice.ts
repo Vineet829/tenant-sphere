@@ -9,7 +9,7 @@ export const ratingApiSlice = baseApiSlice.injectEndpoints({
 				method: "POST",
 				body: ratingData,
 			}),
-			invalidatesTags: ["Post"],
+			invalidatesTags: ["Post", "User"],
 		}),
 	}),
 });
