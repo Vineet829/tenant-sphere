@@ -1271,14 +1271,14 @@ body:has(.estate-shell) .Toastify__toast {
 	min-height: 0;
 	margin-bottom: 10px;
 	padding: 14px 14px 14px 16px;
-	border: 1px solid #3d6061;
+	border: 1px solid var(--es-line-strong);
 	border-radius: 12px;
-	background: #17393d;
-	color: #f0f3e7;
+	background: var(--es-surface);
+	color: var(--es-text);
 	font-size: 0.875rem;
 	font-weight: 550;
 	line-height: 1.5;
-	box-shadow: 0 24px 60px -20px rgb(0 18 21 / 0.75), 0 4px 12px rgb(0 0 0 / 0.2);
+	box-shadow: var(--es-shadow-3);
 }
 
 body:has(.estate-shell) .Toastify__toast-body {
@@ -1288,18 +1288,18 @@ body:has(.estate-shell) .Toastify__toast-body {
 }
 
 body:has(.estate-shell) .Toastify__toast--success {
-	--toastify-icon-color-success: #bfdaaa;
-	--toastify-color-progress-success: #bfdaaa;
+	--toastify-icon-color-success: var(--es-accent);
+	--toastify-color-progress-success: var(--es-accent);
 }
 
 body:has(.estate-shell) .Toastify__toast--error {
-	--toastify-icon-color-error: #f4aa98;
-	--toastify-color-progress-error: #f4aa98;
+	--toastify-icon-color-error: var(--es-danger);
+	--toastify-color-progress-error: var(--es-danger);
 }
 
 body:has(.estate-shell) .Toastify__close-button {
 	align-self: center;
-	color: #b3c8c1;
+	color: var(--es-text-2);
 	opacity: 0.7;
 }
 

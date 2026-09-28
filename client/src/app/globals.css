@@ -12,29 +12,25 @@ html {
     zoom: var(--app-zoom);
 }
 
+/* Floating UI positions portalled menus in viewport pixels. Cancel the app
+   zoom on the positioning wrapper, then restore it on the visible content so
+   the account menu stays beside its trigger at the same size as the app. */
+body > [data-radix-popper-content-wrapper] {
+    zoom: calc(1 / var(--app-zoom));
+}
+
+body > [data-radix-popper-content-wrapper] > * {
+    zoom: var(--app-zoom);
+}
+
 body{
     font-family: var(--font-openSans);
     background-color: hsl(var(--background));
 
 }
 
-/* Light theme react select styling */
-
+/* Dark appearance for shared select controls. */
 :root {
-  --select-background-color: #FBFEF9;
-  --select-border-color: black;
-  --select-text-color: black;
-  --select-border-hover-color: #a0aec0;
-  --select-option-selected-background-color: #4a5568;
-  --select-option-background-color: white;
-  --select-option-text-color: black;
-  --select-option-hover-background-color: #cbd5e0;
-  --select-value-text-color: black;
-  --select-menu-background-color: #FBFEF9;
-}
-
-/* Dark theme react select styling */
-.dark {
   --select-background-color: #2b2a33;
   --select-border-color: #ffffff;
   --select-text-color: white;
@@ -60,10 +56,6 @@ body{
 
 @layer base {
     :root{
-        --background: 96, 71.4%, 98.6%
-
-    }
-    .dark{
         --background: 0, 0%, 0%
     }
 }

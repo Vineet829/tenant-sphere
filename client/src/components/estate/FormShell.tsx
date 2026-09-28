@@ -9,11 +9,13 @@ type FormShellProps = {
 	back?: { href: string; label: string };
 	/** Supporting content under the description: context, steps, reassurance. */
 	aside?: ReactNode;
+	/** Enlarge the form panel independently of its supporting column. */
+	panelSize?: "default" | "large";
 	children: ReactNode;
 };
 
 /** Two columns: what the form is for on the left, the form itself on the right. */
-export default function FormShell({ eyebrow, title, description, back, aside, children }: FormShellProps) {
+export default function FormShell({ eyebrow, title, description, back, aside, panelSize = "default", children }: FormShellProps) {
 	return (
 		<div className="es-page es-page--wide">
 			{back && (
@@ -29,7 +31,7 @@ export default function FormShell({ eyebrow, title, description, back, aside, ch
 					{description && <p className="es-formaside-text">{description}</p>}
 					{aside}
 				</header>
-				<section className="es-card es-formpanel">{children}</section>
+				<section className="es-card es-formpanel" data-size={panelSize}>{children}</section>
 			</div>
 		</div>
 	);

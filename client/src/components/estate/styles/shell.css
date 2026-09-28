@@ -56,7 +56,8 @@
 	height: var(--es-topbar-h);
 	padding: 0 clamp(16px, 2vw, 30px);
 	border-bottom: 1px solid var(--es-line);
-	background: color-mix(in srgb, var(--es-canvas) 78%, transparent);
+	background: var(--es-topbar);
+	box-shadow: var(--es-topbar-shadow);
 	backdrop-filter: saturate(1.5) blur(16px);
 	-webkit-backdrop-filter: saturate(1.5) blur(16px);
 }
@@ -115,37 +116,6 @@
 .estate-shell .es-icon-button svg {
 	width: 18px;
 	height: 18px;
-}
-
-.estate-shell .es-theme-toggle {
-	position: relative;
-}
-
-.estate-shell .es-theme-toggle svg {
-	position: absolute;
-	transition:
-		transform 0.35s var(--es-ease),
-		opacity 0.25s;
-}
-
-.estate-shell .es-theme-toggle .es-theme-sun {
-	opacity: 1;
-	transform: rotate(0) scale(1);
-}
-
-.estate-shell .es-theme-toggle .es-theme-moon {
-	opacity: 0;
-	transform: rotate(70deg) scale(0.4);
-}
-
-.dark .estate-shell .es-theme-toggle .es-theme-sun {
-	opacity: 0;
-	transform: rotate(-70deg) scale(0.4);
-}
-
-.dark .estate-shell .es-theme-toggle .es-theme-moon {
-	opacity: 1;
-	transform: rotate(0) scale(1);
 }
 
 .estate-shell .es-account-trigger {
@@ -241,6 +211,7 @@
 	padding: 22px 44px 16px 14px;
 	overflow-y: auto;
 	border-right: 1px solid var(--es-line);
+	background: var(--es-navigation);
 	scrollbar-width: thin;
 	scrollbar-color: var(--es-line-strong) transparent;
 	zoom: var(--es-sidebar-zoom);
@@ -337,9 +308,10 @@
 }
 
 .es-nav-link[aria-current="page"] {
-	background: var(--es-accent-soft);
+	background: var(--es-nav-active);
 	color: var(--es-accent-text);
 	font-weight: 650;
+	box-shadow: var(--es-nav-active-shadow);
 }
 
 .es-nav-link[aria-current="page"] svg {
@@ -421,6 +393,7 @@
 	padding: 40px 26px 22px 28px;
 	overflow-y: auto;
 	border-left: 1px solid var(--es-line);
+	background: var(--es-navigation);
 	scrollbar-width: thin;
 	scrollbar-color: var(--es-line-strong) transparent;
 }

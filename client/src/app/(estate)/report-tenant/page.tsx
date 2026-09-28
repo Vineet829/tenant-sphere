@@ -12,6 +12,7 @@ export default function ReportTenantPage() {
 	return (
 		<FormShell
 			eyebrow="Get help"
+			panelSize="large"
 			title={
 				<>
 					Raise a <em>concern</em>

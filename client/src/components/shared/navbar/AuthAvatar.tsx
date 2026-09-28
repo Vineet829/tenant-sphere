@@ -26,8 +26,9 @@ export default function AuthAvatar() {
 		return null;
 	}
 
+	// Keep the page scrollbar in place so the fixed header does not shift.
 	return (
-		<DropdownMenu>
+		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
 				<button type="button" className="es-account-trigger" aria-label="Account menu">
 					<PersonAvatar name={profile.full_name || profile.username} seed={profile.username} src={profile.avatar} size="sm" />

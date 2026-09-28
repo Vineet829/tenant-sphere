@@ -18,6 +18,7 @@ export default function ReportIssuePage() {
 	return (
 		<FormShell
 			eyebrow="Get help"
+			panelSize="large"
 			title={
 				<>
 					Something <em>not right?</em>

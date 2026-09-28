@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@/components/theme-provider";
 import { openSans, robotoSlab } from "@/lib/fonts";
 import type { Metadata } from "next";
 import React from "react";
@@ -20,19 +19,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="en" className="dark" style={{ colorScheme: "dark" }}>
 			<body className={`${openSans.variable} ${robotoSlab.variable}`}>
 				<Toast />
 				<ReduxProvider>
 					<PersistAuth />
-					<ThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
-					>
-						{children}
-					</ThemeProvider>
+					{children}
 				</ReduxProvider>
 			</body>
 		</html>

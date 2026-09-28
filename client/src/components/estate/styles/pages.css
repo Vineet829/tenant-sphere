@@ -1206,12 +1206,9 @@ a.es-stat:hover svg {
 	height: 112px;
 	overflow: hidden;
 	border-bottom: 1px solid var(--es-line);
-	background:
-		radial-gradient(ellipse at 88% -40%, var(--es-accent-line), transparent 62%),
-		radial-gradient(circle at 1px 1px, var(--es-line-strong) 1px, transparent 1.5px) 0 0 / 22px 22px,
-		linear-gradient(120deg, var(--es-surface-3), var(--es-surface-2));
-	-webkit-mask-image: linear-gradient(180deg, #000 40%, rgb(0 0 0 / 0.72));
-	mask-image: linear-gradient(180deg, #000 40%, rgb(0 0 0 / 0.72));
+	background: var(--es-cover-background);
+	-webkit-mask-image: var(--es-cover-mask);
+	mask-image: var(--es-cover-mask);
 }
 
 .es-profile-cover::before,
@@ -1222,7 +1219,7 @@ a.es-stat:hover svg {
 	right: 6%;
 	width: 300px;
 	height: 300px;
-	border: 1px solid var(--es-accent-line);
+	border: 1px solid var(--es-cover-line);
 	border-radius: 50%;
 	opacity: 0.6;
 	transform: translateY(-50%);
@@ -1926,6 +1923,10 @@ a.es-stat:hover svg {
 	box-shadow: var(--es-shadow-2);
 }
 
+.es-formpanel[data-size="large"] {
+	zoom: 1.1;
+}
+
 .estate-shell .es-form {
 	display: flex;
 	flex-direction: column;
@@ -2538,6 +2539,11 @@ a.es-stat:hover svg {
 }
 
 @container es-content (max-width: 640px) {
+	/* Keep the enlarged report forms within the available mobile width. */
+	.es-formpanel[data-size="large"] {
+		zoom: 1;
+	}
+
 	.es-about {
 		grid-template-columns: minmax(0, 1fr);
 	}
