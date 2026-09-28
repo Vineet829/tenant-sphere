@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowBigUp, Bookmark, Eye, MessageCircle } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, Bookmark, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import MetaList from "./MetaList";
 import PersonAvatar from "./PersonAvatar";
-import { longDate, plural, tagSlug, timeAgo } from "./format";
+import { longDate, plural, tagSlug, timeAgo, voteScore } from "./format";
 import { useDisplayName } from "./useDisplayName";
 
 export type PostSummary = {
@@ -20,7 +20,9 @@ export type PostSummary = {
 	updated_at?: string;
 	view_count?: number;
 	upvotes?: number;
+	downvotes?: number;
 	is_upvoted?: boolean;
+	is_downvoted?: boolean;
 	replies_count?: number;
 	replies?: unknown[];
 	is_bookmarked?: boolean;
@@ -42,6 +44,8 @@ export default function PostListItem({ post, index = 0, showAuthor = true, showS
 	const tags = post.tags ?? [];
 	const hasAuthor = showAuthor && Boolean(post.author_username);
 	const displayName = useDisplayName();
+	const score = voteScore(post);
+	const ScoreIcon = post.is_downvoted || (!post.is_upvoted && score < 0) ? ArrowBigDown : ArrowBigUp;
 
 	return (
 		<article
@@ -84,12 +88,12 @@ export default function PostListItem({ post, index = 0, showAuthor = true, showS
 					{typeof post.upvotes === "number" && (
 						<span
 							className="es-stat es-stat--static"
-							data-active={Boolean(post.is_upvoted)}
-							title={post.is_upvoted ? `${plural(post.upvotes, "upvote")}, including yours` : plural(post.upvotes, "upvote")}
+							data-active={Boolean(post.is_upvoted || post.is_downvoted)}
+							title={`${plural(post.upvotes, "upvote")}, ${plural(post.downvotes, "downvote")}`}
 						>
-							<ArrowBigUp aria-hidden="true" />
-							{post.upvotes}
-							<span className="es-sr">{post.is_upvoted ? " upvotes, including yours" : " upvotes"}</span>
+							<ScoreIcon aria-hidden="true" />
+							<span className="es-sr">Vote score: </span>{score}
+							<span className="es-sr">{post.is_upvoted ? ". You upvoted" : post.is_downvoted ? ". You downvoted" : ""}</span>
 						</span>
 					)}
 					<Link href={`${href}#replies`} className="es-stat" aria-label={`${plural(replies, "reply", "replies")} on ${post.title}`}>

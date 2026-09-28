@@ -1,7 +1,8 @@
 "use client";
 
+import { voteScore } from "@/components/estate/format";
 import { useGetPopularTagsQuery, useGetTopPostsQuery } from "@/lib/redux/features/posts/postApiSlice";
-import { ArrowBigUp, Hash, TrendingUp } from "lucide-react";
+import { ArrowUpDown, Hash, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export default function RightNavbar() {
@@ -41,10 +42,9 @@ export default function RightNavbar() {
 									<span className="es-toplist-title">{post.title}</span>
 									<span className="es-toplist-meta">
 										<span>@{post.author_username}</span>
-										<span title={`${post.upvotes} upvotes`}>
-											<ArrowBigUp aria-hidden="true" strokeWidth={1.75} />
-											{post.upvotes}
-											<span className="es-sr"> upvotes</span>
+										<span title={`${post.upvotes} upvotes, ${post.downvotes} downvotes`}>
+											<ArrowUpDown aria-hidden="true" strokeWidth={1.75} />
+											<span className="es-sr">Vote score: </span>{voteScore(post)}
 										</span>
 									</span>
 								</Link>

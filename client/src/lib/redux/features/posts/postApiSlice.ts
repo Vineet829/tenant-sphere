@@ -14,11 +14,14 @@ import {
 	TopPostsResponse,
 	UpdatePostData,
 	UpvoteDownvoteResponse,
+	PostVoteResponse,
+	SetPostVoteData,
 } from "@/types";
 import { baseApiSlice } from "../api/baseApiSlice";
+import { usersApiSlice } from "../users/usersApiSlice";
 
 
-export const postApiSlice = baseApiSlice.injectEndpoints({
+const postQueriesApi = baseApiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		createPost: builder.mutation<PostResponse, PostData>({
 			query: (postData) => ({
@@ -122,6 +125,57 @@ export const postApiSlice = baseApiSlice.injectEndpoints({
 	}),
 });
 
+type VotablePost = { id: string; upvotes: number; downvotes: number; is_upvoted?: boolean; is_downvoted?: boolean };
+
+function applyConfirmedVote(posts: VotablePost[], result: PostVoteResponse) {
+	for (const post of posts) {
+		if (post.id !== result.id) continue;
+		post.upvotes = result.upvotes;
+		post.downvotes = result.downvotes;
+		if ("is_upvoted" in post) post.is_upvoted = result.is_upvoted;
+		if ("is_downvoted" in post) post.is_downvoted = result.is_downvoted;
+	}
+}
+
+export const postApiSlice = postQueriesApi.injectEndpoints({
+	endpoints: (builder) => ({
+		setPostVote: builder.mutation<PostVoteResponse, SetPostVoteData>({
+			query: ({ postId, vote }) => ({ url: `/posts/${postId}/vote/`, method: "PUT", body: { vote } }),
+			invalidatesTags: (result) => result ? ["Post"] : [],
+			async onQueryStarted(_, { dispatch, getState, queryFulfilled }) {
+				try {
+					const { data } = await queryFulfilled;
+					const state = getState() as Parameters<typeof postQueriesApi.util.selectCachedArgsForQuery>[0];
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getSinglePost")) {
+						dispatch(postQueriesApi.util.updateQueryData("getSinglePost", args, (draft) => applyConfirmedVote([draft.post], data)));
+					}
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getAllPosts")) {
+						dispatch(postQueriesApi.util.updateQueryData("getAllPosts", args, (draft) => applyConfirmedVote(draft.posts.results, data)));
+					}
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getMyPosts")) {
+						dispatch(postQueriesApi.util.updateQueryData("getMyPosts", args, (draft) => applyConfirmedVote(draft.my_posts.results, data)));
+					}
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getAllMyBookmarks")) {
+						dispatch(postQueriesApi.util.updateQueryData("getAllMyBookmarks", args, (draft) => applyConfirmedVote(draft.bookmarked_posts.results, data)));
+					}
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getPostsByTag")) {
+						dispatch(postQueriesApi.util.updateQueryData("getPostsByTag", args, (draft) => applyConfirmedVote(draft.posts_by_tag.results, data)));
+					}
+					for (const args of postQueriesApi.util.selectCachedArgsForQuery(state, "getTopPosts")) {
+						dispatch(postQueriesApi.util.updateQueryData("getTopPosts", args, (draft) => applyConfirmedVote(draft.top_posts.results, data)));
+					}
+					const profileState = getState() as Parameters<typeof usersApiSlice.util.selectCachedArgsForQuery>[0];
+					for (const args of usersApiSlice.util.selectCachedArgsForQuery(profileState, "getProfilePosts")) {
+						dispatch(usersApiSlice.util.updateQueryData("getProfilePosts", args, (draft) => applyConfirmedVote(draft.profile_posts.results, data)));
+					}
+				} catch {
+					// Preserve the confirmed state on failure; the caller offers a safe retry.
+				}
+			},
+		}),
+	}),
+});
+
 export const {
 	useCreatePostMutation,
 	useGetAllPostsQuery,
@@ -133,6 +187,7 @@ export const {
 	useGetSinglePostQuery,
 	useUpvotePostMutation,
 	useDownvotePostMutation,
+	useSetPostVoteMutation,
 	useUpdatePostMutation,
 	useBookmarkPostMutation,
 	useUnBookmarkPostMutation,

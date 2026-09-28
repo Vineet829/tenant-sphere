@@ -2,10 +2,10 @@
 
 import { useGetProfilePostsQuery, useGetProfileReviewsQuery } from "@/lib/redux/features/users/usersApiSlice";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowUp, ChevronLeft, ChevronRight, Loader2, MessageSquare, RefreshCw, Star } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Loader2, MessageSquare, RefreshCw, Star } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { plural, shortDate } from "./format";
+import { plural, shortDate, voteScore } from "./format";
 import PersonAvatar from "./PersonAvatar";
 import RatingStars from "./RatingStars";
 
@@ -124,7 +124,7 @@ function TenantPosts({ slug }: { slug: string }) {
 							</h4>
 							<p>{post.body}</p>
 							<div className="es-profile-post-meta">
-								<span><ArrowUp aria-hidden="true" />{plural(post.upvotes, "upvote")}</span>
+								<span title={`${plural(post.upvotes, "upvote")}, ${plural(post.downvotes, "downvote")}`}><ArrowUpDown aria-hidden="true" />Score: {voteScore(post)}</span>
 								<span><MessageSquare aria-hidden="true" />{plural(post.replies_count, "reply", "replies")}</span>
 							</div>
 						</article>

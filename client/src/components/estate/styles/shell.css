@@ -232,15 +232,18 @@
 /* ── Sidebar ─────────────────────────────────────────────── */
 .estate-shell .es-sidebar {
 	position: sticky;
-	top: var(--es-topbar-h);
+	/* Keep local zoom aligned with the top bar and available viewport height. */
+	top: calc(var(--es-topbar-h) / var(--es-sidebar-zoom));
 	display: flex;
 	flex-direction: column;
-	height: calc(var(--app-viewport-height) - var(--es-topbar-h));
-	padding: 22px 14px 16px;
+	width: calc(var(--es-sidebar-w) / var(--es-sidebar-zoom));
+	height: calc((var(--app-viewport-height) - var(--es-topbar-h)) / var(--es-sidebar-zoom));
+	padding: 22px 44px 16px 14px;
 	overflow-y: auto;
 	border-right: 1px solid var(--es-line);
 	scrollbar-width: thin;
 	scrollbar-color: var(--es-line-strong) transparent;
+	zoom: var(--es-sidebar-zoom);
 }
 
 .es-nav-cta {
@@ -704,7 +707,7 @@ div.estate-mobile-panel {
 
 @media (max-width: 1227.6px) {
 	.estate-shell {
-		--es-sidebar-w: 76px;
+		--es-sidebar-w: calc(76px * var(--es-sidebar-zoom));
 	}
 
 	.estate-shell .es-sidebar {

@@ -36,6 +36,7 @@ interface Post {
 	upvotes: number;
 	downvotes: number;
 	is_upvoted: boolean;
+	is_downvoted: boolean;
 	replies_count: number;
 	avatar: string;
 	replies: Reply[];
@@ -71,6 +72,12 @@ export interface BookmarkResponse {
 
 export interface UpvoteDownvoteResponse {
 	message: string;
+}
+
+export type PostVoteResponse = Pick<Post, "id" | "slug" | "upvotes" | "downvotes" | "is_upvoted" | "is_downvoted"> & { message: string };
+export interface SetPostVoteData {
+	postId: string;
+	vote: -1 | 0 | 1;
 }
 export interface ReplyData {
 	body: string;
@@ -130,6 +137,7 @@ interface TopPost {
 	slug: string;
 	author_username: string;
 	upvotes: number;
+	downvotes: number;
 	view_count: number;
 	replies_count: number;
 	avatar: string;

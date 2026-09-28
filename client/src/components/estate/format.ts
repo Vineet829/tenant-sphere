@@ -37,6 +37,11 @@ export function plural(count: number | undefined, one: string, many = `${one}s`)
 	return `${total} ${total === 1 ? one : many}`;
 }
 
+/** Net score stays signed: a downvote on a zero-score post produces -1. */
+export function voteScore({ upvotes = 0, downvotes = 0 }: { upvotes?: number; downvotes?: number }) {
+	return upvotes - downvotes;
+}
+
 /** Mirrors the slug the API stores for a tag name. */
 export function tagSlug(name: string) {
 	return name

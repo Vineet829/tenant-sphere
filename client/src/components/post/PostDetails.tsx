@@ -8,15 +8,15 @@ import { plural } from "@/components/estate/format";
 import {
 	useBookmarkPostMutation,
 	useDeletePostMutation,
-	useDownvotePostMutation,
 	useGetSinglePostQuery,
-	useUpvotePostMutation,
+	useSetPostVoteMutation,
 } from "@/lib/redux/features/posts/postApiSlice";
 import { useGetUserProfileQuery } from "@/lib/redux/features/users/usersApiSlice";
 import { sortByDateDescending } from "@/utils";
 import { ArrowLeft, FileQuestion, MessagesSquare } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import { toast } from "react-toastify";
 import CreateReplyForm from "../forms/add-reply/CreateReplyForm";
 import ProtectedRoute from "../shared/ProtectedRoutes";
@@ -43,12 +43,12 @@ function BackLink() {
 function PostDetailsContent({ params }: PostDetailsProps) {
 	const slug = params.slug;
 
-	const { data, isLoading, isFetching, isError, error, refetch } = useGetSinglePostQuery(slug);
+	const { currentData: data, isLoading, isFetching, isError, error, refetch } = useGetSinglePostQuery(slug);
 	const { data: currentUser } = useGetUserProfileQuery();
 	const post = data?.post;
 
-	const [upvotePost, { isLoading: isUpvoteLoading }] = useUpvotePostMutation();
-	const [downvotePost, { isLoading: isDownvoteLoading }] = useDownvotePostMutation();
+	const [setPostVote, { isLoading: isVoteLoading }] = useSetPostVoteMutation();
+	const pendingVote = useRef<1 | -1 | null>(null);
 	const [bookmarkPost, { isLoading: isBookmarkLoading }] = useBookmarkPostMutation();
 	const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
 	const router = useRouter();
@@ -56,25 +56,22 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 
 	const isAuthor = Boolean(post && currentUser && post.author_username === currentUser.profile.username);
 
-	const handleUpvote = async () => {
-		if (!post || isUpvoteLoading || isDownvoteLoading) return;
+	const handleVote = async (direction: 1 | -1) => {
+		if (!post || pendingVote.current !== null || isVoteLoading) return;
+		pendingVote.current = direction;
+		const selected = direction === 1 ? post.is_upvoted : post.is_downvoted;
 		try {
-			await upvotePost(post.id).unwrap();
-			toast.success("Post upvoted");
+			const result = await setPostVote({ postId: post.id, vote: selected ? 0 : direction }).unwrap();
+			toast.success(result.message);
 		} catch {
 			toast.error("We could not save your vote. Please try again.");
+		} finally {
+			pendingVote.current = null;
 		}
 	};
 
-	const handleDownVote = async () => {
-		if (!post || isUpvoteLoading || isDownvoteLoading) return;
-		try {
-			await downvotePost(post.id).unwrap();
-			toast.success("Vote updated");
-		} catch {
-			toast.error("We could not save your vote. Please try again.");
-		}
-	};
+	const handleUpvote = () => handleVote(1);
+	const handleDownVote = () => handleVote(-1);
 
 	const handleBookmarkPost = async () => {
 		if (!post || post.is_bookmarked || isBookmarkLoading) return;
@@ -97,7 +94,7 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 		}
 	};
 
-	if (isLoading) {
+	if (isLoading || (!post && isFetching)) {
 		return (
 			<div className="es-page es-page--reading">
 				<BackLink />
@@ -106,7 +103,7 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 		);
 	}
 
-	if (isError && !isMissing(error)) {
+	if (isError && !post && !isMissing(error)) {
 		return (
 			<div className="es-page es-page--reading">
 				<BackLink />
@@ -115,7 +112,7 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 		);
 	}
 
-	if (isError || !post) {
+	if (!post || isMissing(error)) {
 		return (
 			<div className="es-page es-page--reading">
 				<BackLink />
@@ -154,14 +151,15 @@ function PostDetailsContent({ params }: PostDetailsProps) {
 					upvotes={post.upvotes}
 					downvotes={post.downvotes}
 					isUpvoted={post.is_upvoted}
+					isDownvoted={post.is_downvoted}
 					isBookmarked={post.is_bookmarked}
 					canManage={isAuthor}
 					handleUpvote={handleUpvote}
 					handleDownVote={handleDownVote}
 					handleBookmarkPost={handleBookmarkPost}
 					handleDeletePost={handleDeletePost}
-					isUpvoteLoading={isUpvoteLoading}
-					isDownvoteLoading={isDownvoteLoading}
+					isUpvoteLoading={isVoteLoading && pendingVote.current === 1}
+					isDownvoteLoading={isVoteLoading && pendingVote.current === -1}
 					isBookmarkLoading={isBookmarkLoading}
 					isDeleteLoading={isDeleteLoading}
 				/>

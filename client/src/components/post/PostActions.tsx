@@ -1,4 +1,5 @@
 import ConfirmButton from "@/components/estate/ConfirmButton";
+import { voteScore } from "@/components/estate/format";
 import { ArrowBigDown, ArrowBigUp, Bookmark, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 
@@ -7,6 +8,7 @@ interface PostActionsProps {
 	upvotes: number | undefined;
 	downvotes: number | undefined;
 	isUpvoted?: boolean;
+	isDownvoted?: boolean;
 	isBookmarked?: boolean;
 	/** Only the author can edit or delete a post. */
 	canManage?: boolean;
@@ -25,6 +27,7 @@ export default function PostActions({
 	upvotes,
 	downvotes,
 	isUpvoted = false,
+	isDownvoted = false,
 	isBookmarked = false,
 	canManage = false,
 	handleUpvote,
@@ -37,6 +40,7 @@ export default function PostActions({
 	isDeleteLoading,
 }: PostActionsProps) {
 	const isVoting = isUpvoteLoading || isDownvoteLoading;
+	const score = voteScore({ upvotes, downvotes });
 
 	return (
 		<footer className="es-actionbar">
@@ -49,24 +53,31 @@ export default function PostActions({
 						disabled={isVoting}
 						aria-busy={isUpvoteLoading}
 						aria-pressed={isUpvoted}
-						aria-label={`Upvote. ${upvotes ?? 0} so far`}
-						title="Upvote this post"
+						aria-label={isUpvoted ? "Remove upvote" : "Upvote"}
+						title={isUpvoted ? "Remove upvote" : "Upvote this post"}
 					>
 						{isUpvoteLoading ? <span className="es-spinner" aria-hidden="true" /> : <ArrowBigUp aria-hidden="true" />}
-						{upvotes ?? 0}
 					</button>
-					<span className="es-votes-rule" aria-hidden="true" />
+					<span
+						className="es-vote-score"
+						role="status"
+						aria-live="polite"
+						aria-atomic="true"
+						title={`${upvotes ?? 0} upvotes, ${downvotes ?? 0} downvotes`}
+					>
+						<span className="es-sr">Vote score: </span>{score}
+					</span>
 					<button
 						type="button"
 						className="es-action es-action--vote"
 						onClick={handleDownVote}
 						disabled={isVoting}
 						aria-busy={isDownvoteLoading}
-						aria-label={`Downvote. ${downvotes ?? 0} so far`}
-						title="Downvote this post"
+						aria-pressed={isDownvoted}
+						aria-label={isDownvoted ? "Remove downvote" : "Downvote"}
+						title={isDownvoted ? "Remove downvote" : "Downvote this post"}
 					>
 						{isDownvoteLoading ? <span className="es-spinner" aria-hidden="true" /> : <ArrowBigDown aria-hidden="true" />}
-						{downvotes ?? 0}
 					</button>
 				</div>
 

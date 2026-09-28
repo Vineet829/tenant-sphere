@@ -2648,14 +2648,20 @@ a.es-stat:hover svg {
 }
 
 .estate-shell .es-votes .es-action {
+	min-width: 44px;
+	min-height: 44px;
 	border-color: transparent;
 	background: transparent;
 }
 
-.estate-shell .es-votes-rule {
-	width: 1px;
-	height: 18px;
-	background: var(--es-line-strong);
+.estate-shell .es-vote-score {
+	min-width: 3ch;
+	padding-inline: 4px;
+	color: var(--es-text);
+	font-size: 0.875rem;
+	font-weight: 650;
+	font-variant-numeric: tabular-nums;
+	text-align: center;
 }
 
 .estate-shell .es-action[aria-pressed="true"] {

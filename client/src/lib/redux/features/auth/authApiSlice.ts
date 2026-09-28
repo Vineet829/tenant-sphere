@@ -28,6 +28,7 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
 				method: "POST",
 				body: credentials,
 			}),
+			invalidatesTags: (result) => result ? ["User", "Post", "Apartment", "Issue", "Report"] : [],
 		}),
 		activateUser: builder.mutation<void, ActivateUserData>({
 			query: (credentials) => ({
@@ -74,6 +75,7 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
 					"Content-Type": "application/x-www-form-urlencoded",
 				},
 			}),
+			invalidatesTags: (result) => result ? ["User", "Post", "Apartment", "Issue", "Report"] : [],
 		}),
 	}),
 });
