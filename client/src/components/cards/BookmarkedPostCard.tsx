@@ -9,9 +9,16 @@ import { useGetAllMyBookmarksQuery } from "@/lib/redux/features/posts/postApiSli
 import { sortByDateDescending } from "@/utils";
 import { Bookmark } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import PageControls from "../shared/PageControls";
 
 export default function BookmarkedPostCard() {
-	const { data, isLoading, isFetching, isError, refetch } = useGetAllMyBookmarksQuery();
+	const [page, setPage] = useState(1);
+	const { currentData: data, isLoading, isFetching, isError, refetch } = useGetAllMyBookmarksQuery(page);
+	const totalPages = data?.bookmarked_posts.total_pages ?? page;
+	useEffect(() => {
+		if (data && page > Math.max(totalPages, 1)) setPage(Math.max(totalPages, 1));
+	}, [data, page, totalPages]);
 	const bookmarks = sortByDateDescending(data?.bookmarked_posts.results ?? [], "created_at");
 
 	return (
@@ -23,11 +30,11 @@ export default function BookmarkedPostCard() {
 						Saved <em>for later</em>
 					</>
 				}
-				count={isLoading || isError ? undefined : bookmarks.length}
+				count={!data || isError ? undefined : data.bookmarked_posts.count}
 				description="Posts you bookmarked, so the good ones never get lost in the feed."
 			/>
 
-			{isLoading ? (
+			{isLoading || (!data && isFetching) ? (
 				<FeedSkeleton rows={3} />
 			) : isError ? (
 				<ErrorState what="your bookmarks" onRetry={refetch} retrying={isFetching} />
@@ -50,6 +57,7 @@ export default function BookmarkedPostCard() {
 					Nothing saved yet
 				</EmptyState>
 			)}
+			<PageControls page={page} totalPages={totalPages} onChange={setPage} pending={isFetching} />
 		</div>
 	);
 }

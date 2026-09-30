@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import FormShell, { FormSteps } from "@/components/estate/FormShell";
 import CreatePostForm from "@/components/forms/add-post/CreatePostForm";
 import type { Metadata } from "next";
@@ -13,7 +14,7 @@ const STEPS = [
 	{ title: "Tag it", text: "One or two tags are enough." },
 ];
 
-export default function AddPostPage() {
+function AddPostPage() {
 	return (
 		<FormShell
 			eyebrow="Community"
@@ -29,4 +30,8 @@ export default function AddPostPage() {
 			<CreatePostForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><AddPostPage /></ProtectedRoute>;
 }

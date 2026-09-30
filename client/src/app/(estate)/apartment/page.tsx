@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import FormShell, { FormContext } from "@/components/estate/FormShell";
 import ApartmentCreateForm from "@/components/forms/apartment/ApartmentCreateForm";
 import { Wrench } from "lucide-react";
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 	description: "Authenticated users can add their apartment details",
 };
 
-export default function AddApartmentPage() {
+function AddApartmentPage() {
 	return (
 		<FormShell
 			eyebrow="Your space"
@@ -28,4 +29,8 @@ export default function AddApartmentPage() {
 			<ApartmentCreateForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><AddApartmentPage /></ProtectedRoute>;
 }

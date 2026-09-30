@@ -22,6 +22,10 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
 				body: userData,
 			}),
 		}),
+		loginGuest: builder.mutation<LoginResponse, void>({
+			query: () => ({ url: "/auth/guest/", method: "POST" }),
+			invalidatesTags: (result) => result ? ["User", "Post", "Apartment", "Issue", "Report"] : [],
+		}),
 		loginUser: builder.mutation<LoginResponse, LoginUserData>({
 			query: (credentials) => ({
 				url: "/auth/login/",
@@ -65,6 +69,7 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
 		}),
 		getUser: builder.query<UserResponse, void>({
 			query: () => "/auth/users/me/",
+			providesTags: ["User"],
 		}),
 		socialAuthentication: builder.mutation<SocialAuthResponse, SocialAuthArgs>({
 			query: ({ provider, state, code }) => ({
@@ -84,6 +89,7 @@ export const {
 	useSocialAuthenticationMutation,
 	useActivateUserMutation,
 	useLoginUserMutation,
+	useLoginGuestMutation,
 	useLogoutUserMutation,
 	useGetUserQuery,
 	useRegisterUserMutation,

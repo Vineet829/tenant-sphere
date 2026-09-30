@@ -45,6 +45,8 @@ interface Post {
 export interface PostsResponse {
 	posts: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Post[];
@@ -54,6 +56,8 @@ export interface PostsResponse {
 export interface MyPostsResponse {
 	my_posts: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Post[];
@@ -108,6 +112,8 @@ export interface PostResponse {
 export interface PostsByTagResponse {
 	posts_by_tag: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Post[];
@@ -117,6 +123,8 @@ export interface PostsByTagResponse {
 export interface RepliesResponse {
 	replies: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Reply[];
@@ -126,6 +134,8 @@ export interface RepliesResponse {
 export interface BookmarkedPostsResponse {
 	bookmarked_posts: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Post[];
@@ -153,6 +163,8 @@ interface PopularTag {
 export interface PopularTagResponse {
 	popular_tags: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: PopularTag[];
@@ -162,6 +174,8 @@ export interface PopularTagResponse {
 export interface TopPostsResponse {
 	top_posts: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: TopPost[];
@@ -180,6 +194,8 @@ interface Report {
 export interface MyReportsResponse {
 	reports: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next: null | string;
 		previous: null | string;
 		results: Report[];
@@ -209,6 +225,8 @@ export interface ReportIssueData extends IssueData {
 
 export interface Issue {
 	id: string;
+	reported_by_id: string;
+	assigned_to_id?: string;
 	apartment_unit: string;
 	reported_by: string;
 	title: string;
@@ -245,6 +263,8 @@ export interface UpdateIssueData extends IssueStatusData {
 export interface MyIssuesResponse {
 	my_issues: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next?: string;
 		previous?: string;
 		results: Issue[];
@@ -254,6 +274,8 @@ export interface MyIssuesResponse {
 export interface MyAssignedIssuesResponse {
 	assigned_issues: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next?: string;
 		previous?: string;
 		results: Issue[];
@@ -294,6 +316,10 @@ export interface User {
 
 export interface UserResponse {
 	id: string;
+	is_staff: boolean;
+	is_superuser: boolean;
+	is_guest: boolean;
+	guest_expires_at: string | null;
 	email: string;
 	first_name: string;
 	last_name: string;
@@ -386,6 +412,8 @@ export interface Profile {
 export interface ProfilesResponse {
 	profiles: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next?: string;
 		previous?: string;
 		results: Profile[];
@@ -394,6 +422,8 @@ export interface ProfilesResponse {
 
 export interface ProfileActivityPage<T> {
 	count: number;
+	page_size: number;
+	total_pages: number;
 	next: string | null;
 	previous: string | null;
 	results: T[];
@@ -438,6 +468,8 @@ export interface RatingData {
 export interface NonTenantResponse {
 	non_tenant_profiles: {
 		count: number;
+		page_size: number;
+		total_pages: number;
 		next?: string;
 		previous?: string;
 		results: Profile[];

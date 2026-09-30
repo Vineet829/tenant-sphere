@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import FormShell from "@/components/estate/FormShell";
 import UpdatePostForm from "@/components/forms/update-post/UpdatePostForm";
 import type { Metadata } from "next";
@@ -13,7 +14,7 @@ interface UpdateParamsProps {
 	};
 }
 
-export default function UpdatePostPage({ params }: UpdateParamsProps) {
+function UpdatePostPage({ params }: UpdateParamsProps) {
 	return (
 		<FormShell
 			eyebrow="Community"
@@ -28,4 +29,9 @@ export default function UpdatePostPage({ params }: UpdateParamsProps) {
 			<UpdatePostForm params={params} />
 		</FormShell>
 	);
+}
+
+export default async function ProtectedPage({ params }: { params: Promise<UpdateParamsProps["params"]> }) {
+	const props = { params: await params };
+	return <ProtectedRoute><UpdatePostPage {...props} /></ProtectedRoute>;
 }

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import { ApartmentContext } from "@/components/estate/FormContexts";
 import FormShell, { FormSteps } from "@/components/estate/FormShell";
 import CreateIssueForm from "@/components/forms/report-issue/CreateIssueForm";
@@ -14,7 +15,7 @@ const STEPS = [
 	{ title: "Resolved", text: "The fix is done and the issue is closed." },
 ];
 
-export default function ReportIssuePage() {
+function ReportIssuePage() {
 	return (
 		<FormShell
 			eyebrow="Get help"
@@ -35,4 +36,8 @@ export default function ReportIssuePage() {
 			<CreateIssueForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><ReportIssuePage /></ProtectedRoute>;
 }

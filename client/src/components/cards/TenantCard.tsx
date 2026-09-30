@@ -15,7 +15,6 @@ import PaginationSection from "../shared/PaginationSection";
 import ProtectedRoute from "../shared/ProtectedRoutes";
 import UsersSearch from "../shared/search/UsersSearch";
 
-const PAGE_SIZE = 9;
 
 function factsFor(tenant: Profile): PersonFact[] {
 	const home = tenant.apartment;
@@ -45,7 +44,7 @@ function TenantCardContent() {
 
 	const tenants = data?.profiles.results ?? [];
 	const totalCount = data?.profiles.count || 0;
-	const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+	const totalPages = data?.profiles.total_pages ?? 0;
 
 	return (
 		<div className="es-page es-page--wide">

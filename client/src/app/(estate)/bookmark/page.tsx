@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import BookmarkedPostCard from "@/components/cards/BookmarkedPostCard";
 import type { Metadata } from "next";
 
@@ -7,10 +8,14 @@ export const metadata: Metadata = {
 };
 
 
-export default function BookmarkedPostsPage() {
+function BookmarkedPostsPage() {
 	return (
 		<>
 			<BookmarkedPostCard />
 		</>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><BookmarkedPostsPage /></ProtectedRoute>;
 }

@@ -4,25 +4,21 @@ import Spinner from "@/components/shared/Spinner";
 import { useActivateUserMutation } from "@/lib/redux/features/auth/authApiSlice";
 import { CircleCheck, Info } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 
-interface ActivationProps {
-	params: {
-		uid: string;
-		token: string;
-	};
-}
-
-export default function ActivationPage({ params }: ActivationProps) {
+export default function ActivationPage() {
+	const { uid, token } = useParams<{ uid: string; token: string }>();
+	const started = useRef(false);
 	const router = useRouter();
 	const [activateUser, { isSuccess, isError, error }] = useActivateUserMutation();
 
 	useEffect(() => {
-		const { uid, token } = params;
+		if (started.current) return;
+		started.current = true;
 		activateUser({ uid, token });
-	}, [activateUser, params]);
+	}, [activateUser, uid, token]);
 
 	useEffect(() => {
 		if (isSuccess) {

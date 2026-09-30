@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import { IssueContext } from "@/components/estate/FormContexts";
 import FormShell from "@/components/estate/FormShell";
 import UpdateIssueForm from "@/components/forms/update-issue/UpdateIssueForm";
@@ -14,7 +15,7 @@ interface UpdateParamsProps {
 	};
 }
 
-export default function UpdateIssuePage({ params }: UpdateParamsProps) {
+function UpdateIssuePage({ params }: UpdateParamsProps) {
 	return (
 		<FormShell
 			eyebrow="Assigned to you"
@@ -30,4 +31,9 @@ export default function UpdateIssuePage({ params }: UpdateParamsProps) {
 			<UpdateIssueForm params={params} />
 		</FormShell>
 	);
+}
+
+export default async function ProtectedPage({ params }: { params: Promise<UpdateParamsProps["params"]> }) {
+	const props = { params: await params };
+	return <ProtectedRoute><UpdateIssuePage {...props} /></ProtectedRoute>;
 }

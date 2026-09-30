@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import TechnicianCard from "@/components/cards/TechnicianCard";
 import type { Metadata } from "next";
 
@@ -9,10 +10,14 @@ export const metadata: Metadata = {
 
 
 
-export default function TechniciansPage() {
+function TechniciansPage() {
 	return (
 		<>
 			<TechnicianCard />
 		</>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><TechniciansPage /></ProtectedRoute>;
 }

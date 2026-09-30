@@ -9,7 +9,7 @@ import { PriorityPill, StatusPill } from "@/components/estate/Pills";
 import { DetailSkeleton } from "@/components/estate/Skeletons";
 import { label, plural } from "@/components/estate/format";
 import { useDeleteIssueMutation, useGetSingleIssueQuery } from "@/lib/redux/features/issues/issueApiSlice";
-import { useGetUserProfileQuery } from "@/lib/redux/features/users/usersApiSlice";
+import { useGetUserQuery } from "@/lib/redux/features/auth/authApiSlice";
 import { extractErrorMessage } from "@/utils";
 import {
 	ArrowLeft,
@@ -59,11 +59,10 @@ export default function IssueDetails({ params }: IssueDetailsProps) {
 	const issue = data?.issue;
 	const router = useRouter();
 
-	const { data: currentUser } = useGetUserProfileQuery();
-
-	const canUpdate = issue?.assigned_to === currentUser?.profile.full_name;
-
-	const canDelete = issue?.reported_by === currentUser?.profile.full_name;
+	const { data: currentUser } = useGetUserQuery();
+	const staff = Boolean(currentUser?.is_staff || currentUser?.is_superuser);
+	const canUpdate = Boolean(issue && currentUser && (staff || issue.assigned_to_id === currentUser.id));
+	const canDelete = Boolean(issue && currentUser && (staff || issue.reported_by_id === currentUser.id));
 
 	const [deleteIssue, { isLoading: isDeleting }] = useDeleteIssueMutation();
 

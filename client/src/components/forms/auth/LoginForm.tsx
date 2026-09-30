@@ -1,5 +1,6 @@
 "use client";
 
+import { loginDestination } from "@/utils/loginDestination";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -35,7 +36,7 @@ export default function LoginForm({ disabled = false, onBusyChange }: Props) {
 			await loginUser(values).unwrap();
 			dispatch(setAuth());
 			toast.success("Login Successful");
-			router.push("/welcome");
+			router.replace(loginDestination());
 			reset();
 		} catch (error) {
 			setServerError(authErrorMessage(error));

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import FormShell, { FormContext } from "@/components/estate/FormShell";
 import EditProfileForm from "@/components/forms/profile/EditProfileForm";
 import { UsersRound } from "lucide-react";
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 	description: "Signed in users can edit their profile information",
 };
 
-export default function EditProfilePage() {
+function EditProfilePage() {
 	return (
 		<FormShell
 			eyebrow="Your space"
@@ -28,4 +29,8 @@ export default function EditProfilePage() {
 			<EditProfileForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><EditProfilePage /></ProtectedRoute>;
 }

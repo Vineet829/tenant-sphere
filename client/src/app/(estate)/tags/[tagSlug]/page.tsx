@@ -15,10 +15,11 @@ interface SlugParamsProps {
 
 
 
-export default function TagPostsPage({ params }: SlugParamsProps) {
+export default async function TagPostsPage({ params }: { params: Promise<SlugParamsProps["params"]> }) {
+	const resolved = await params;
 	return (
 		<>
-			<PostTagCard params={params} />
+			<PostTagCard params={resolved} />
 		</>
 	);
 }

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import PostDetails from "@/components/post/PostDetails";
 import type { Metadata } from "next";
 
@@ -13,10 +14,15 @@ interface ParamsProps {
 	};
 }
 
-export default function PostDetailPage({ params }: ParamsProps) {
+function PostDetailPage({ params }: ParamsProps) {
 	return (
 		<>
 			<PostDetails params={params} />
 		</>
 	);
+}
+
+export default async function ProtectedPage({ params }: { params: Promise<ParamsProps["params"]> }) {
+	const props = { params: await params };
+	return <ProtectedRoute><PostDetailPage {...props} /></ProtectedRoute>;
 }

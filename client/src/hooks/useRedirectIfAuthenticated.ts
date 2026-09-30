@@ -1,3 +1,4 @@
+import { loginDestination } from "@/utils/loginDestination";
 import { useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -8,7 +9,7 @@ const useRedirectIfAuthenticated = () => {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			router.push("/welcome");
+			router.replace(loginDestination());
 		}
 	}, [isAuthenticated, router]);
 };

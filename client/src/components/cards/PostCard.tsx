@@ -15,7 +15,6 @@ import { MessagesSquare, PenLine } from "lucide-react";
 import Link from "next/link";
 import PaginationSection from "../shared/PaginationSection";
 
-const PAGE_SIZE = 9;
 
 export default function PostCard() {
 	const page = useAppSelector((state: PostState) => state.post.page);
@@ -24,7 +23,7 @@ export default function PostCard() {
 	const { profile } = useUserProfile();
 
 	const totalCount = data?.posts.count || 0;
-	const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+	const totalPages = data?.posts.total_pages ?? 0;
 	const posts = sortByDateDescending(data?.posts.results ?? [], "created_at");
 
 	return (

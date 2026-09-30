@@ -1,28 +1,18 @@
 export default function extractErrorMessage(error: unknown): string | null {
-	if (typeof error === "object" && error !== null && "data" in error) {
-		const errorData = (error as { data: any }).data;
-
-		if ("detail" in errorData && typeof errorData.detail === "string") {
-			return errorData.detail;
-		}
-
-		const messages: string[] = [];
-
-		Object.keys(errorData).forEach((key) => {
-			if (key !== "status_code") {
-				const fieldError = errorData[key];
-				if (Array.isArray(fieldError)) {
-					messages.push(...fieldError);
-				} else if (typeof fieldError === "object" && fieldError !== null) {
-					Object.values(fieldError).forEach((errorMessages: any) => {
-						if (Array.isArray(errorMessages)) {
-							messages.push(...errorMessages);
-						}
-					});
-				}
+	if (typeof error !== "object" || error === null || !("data" in error)) return null;
+	const data: unknown = error.data;
+	if (typeof data !== "object" || data === null || Array.isArray(data)) return null;
+	if ("detail" in data && typeof data.detail === "string") return data.detail;
+	const messages: string[] = [];
+	for (const [key, value] of Object.entries(data)) {
+		if (key === "status_code") continue;
+		if (Array.isArray(value)) messages.push(...value.filter((message): message is string => typeof message === "string"));
+		else if (typeof value === "object" && value !== null) {
+			if ("detail" in value && typeof value.detail === "string") messages.push(value.detail);
+			for (const nested of Object.values(value)) {
+				if (Array.isArray(nested)) messages.push(...nested.filter((message): message is string => typeof message === "string"));
 			}
-		});
-		return messages.length > 0 ? messages.join(", ") : null;
+		}
 	}
-	return null;
+	return messages.length ? messages.join(", ") : null;
 }

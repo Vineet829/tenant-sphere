@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import IssueDetails from "@/components/issue/IssueDetails";
 import type { Metadata } from "next";
 
@@ -13,6 +14,11 @@ interface ParamsProps {
 	};
 }
 
-export default function IssueDetailPage({ params }: ParamsProps) {
+function IssueDetailPage({ params }: ParamsProps) {
 	return <IssueDetails params={params} />;
+}
+
+export default async function ProtectedPage({ params }: { params: Promise<ParamsProps["params"]> }) {
+	const props = { params: await params };
+	return <ProtectedRoute><IssueDetailPage {...props} /></ProtectedRoute>;
 }

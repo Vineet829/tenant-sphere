@@ -1,5 +1,6 @@
 "use client";
 
+import { loginDestination } from "@/utils/loginDestination";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Loader2, Users } from "lucide-react";
 import Link from "next/link";
@@ -9,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import LoginForm from "@/components/forms/auth/LoginForm";
 import RegisterForm from "@/components/forms/auth/RegisterForm";
 import { useRedirectIfAuthenticated } from "@/hooks";
-import { useLoginUserMutation } from "@/lib/redux/features/auth/authApiSlice";
+import { useLoginGuestMutation } from "@/lib/redux/features/auth/authApiSlice";
 import { useAppDispatch } from "@/lib/redux/hooks/typedHooks";
 import { setAuth } from "@/lib/redux/features/auth/authSlice";
 import { UseGoogle } from "@/utils";
@@ -22,7 +23,7 @@ export default function AuthExperience({ mode }: { mode: "login" | "register" })
 	const isRegister = mode === "register";
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const [loginGuest, { isLoading: guestPending }] = useLoginUserMutation();
+	const [loginGuest, { isLoading: guestPending }] = useLoginGuestMutation();
 	const [formPending, setFormPending] = useState(false);
 	const [googlePending, setGooglePending] = useState(false);
 	const [alternativeError, setAlternativeError] = useState<string | null>(null);
@@ -32,10 +33,10 @@ export default function AuthExperience({ mode }: { mode: "login" | "register" })
 		if (busy) return;
 		setAlternativeError(null);
 		try {
-			await loginGuest({ email: "testuser@gmail.com", password: "example1234" }).unwrap();
+			await loginGuest().unwrap();
 			dispatch(setAuth());
-			toast.success("Login Successful");
-			router.push("/welcome");
+			toast.success("Your demo account is ready. Activity expires after 24 hours.");
+			router.replace(loginDestination());
 		} catch (error) {
 			setAlternativeError(authErrorMessage(error));
 		}

@@ -106,13 +106,13 @@ test('active votes request removal and failed requests can be retried safely', a
   }
 });
 
-test('confirmed votes update every cached view immediately; failures preserve state; logout clears it', async () => {
+test('confirmed votes update every cached view immediately; failures preserve state; logout clears it', { timeout: 10000 }, async () => {
   const originalFetch = global.fetch, OriginalRequest = global.Request;
   const gate = deferred();
   let readsBlocked = false, failure = false;
   let confirmed = { ...sample };
   const other = { ...sample, id: 'other-id', slug: 'other', upvotes: 9 };
-  const load = sourceLoader();
+  const load = sourceLoader({ 'cookies-next': { getCookie: () => 'csrf-fixture' } });
   const api = load('src/lib/redux/features/posts/postApiSlice.ts').postApiSlice;
   const users = load('src/lib/redux/features/users/usersApiSlice.ts').usersApiSlice;
   const store = load('src/lib/redux/store.ts').makeStore();

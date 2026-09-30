@@ -53,6 +53,10 @@ export const usersApiSlice = baseApiSlice.injectEndpoints({
 			query: ({ slug, page }) => `/profiles/${encodeURIComponent(slug)}/reviews/?page=${page}`,
 			providesTags: ["User"],
 		}),
+		uploadAvatar: builder.mutation<unknown, FormData>({
+			query: (body) => ({ url: "/profiles/user/avatar/", method: "PATCH", body }),
+			invalidatesTags: (result, error) => error ? [] : ["User"],
+		}),
 		updateUserProfile: builder.mutation<ProfileData, ProfileData>({
 			query: (formData) => ({
 				url: "/profiles/user/update/",
@@ -68,6 +72,7 @@ export const {
 	useGetAllUsersQuery,
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
+	useUploadAvatarMutation,
 	useGetAllTechniciansQuery,
 	useGetProfilePostsQuery,
 	useGetProfileReviewsQuery,

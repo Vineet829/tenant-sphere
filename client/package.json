@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:voting": "node --test tests/voting.test.cjs"
+    "test:voting": "node --test tests/voting.test.cjs",
+    "test:regressions": "node --test tests/*.test.cjs"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import { TechnicianContext } from "@/components/estate/FormContexts";
 import FormShell from "@/components/estate/FormShell";
 import CreateRatingForm from "@/components/forms/add-rating/CreateRatingForm";
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 		"Tenants can rate the technicians, if they are satisfied or dissatisfied with the services rendered to them",
 };
 
-export default function AddRatingPage() {
+function AddRatingPage() {
 	return (
 		<FormShell
 			eyebrow="Technicians"
@@ -25,4 +26,8 @@ export default function AddRatingPage() {
 			<CreateRatingForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><AddRatingPage /></ProtectedRoute>;
 }

@@ -94,8 +94,8 @@ const postQueriesApi = baseApiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ["Post"],
 		}),
-		getAllMyBookmarks: builder.query<BookmarkedPostsResponse, void>({
-			query: () => "/posts/bookmarked/posts/",
+		getAllMyBookmarks: builder.query<BookmarkedPostsResponse, number | void>({
+			query: (page = 1) => `/posts/bookmarked/posts/?page=${page}`,
 			providesTags: ["Post"],
 		}),
 		getTopPosts: builder.query<TopPostsResponse, void>({

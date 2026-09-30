@@ -13,7 +13,6 @@ import { CalendarDays, MapPin, SearchX, Wrench } from "lucide-react";
 import PaginationSection from "../shared/PaginationSection";
 import UsersSearch from "../shared/search/UsersSearch";
 
-const PAGE_SIZE = 9;
 
 function factsFor(technician: Profile): PersonFact[] {
 	return [
@@ -34,7 +33,7 @@ export default function TechnicianCard() {
 
 	const technicians = data?.non_tenant_profiles.results ?? [];
 	const totalCount = data?.non_tenant_profiles.count || 0;
-	const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+	const totalPages = data?.non_tenant_profiles.total_pages ?? 0;
 
 	return (
 		<div className="es-page es-page--wide">

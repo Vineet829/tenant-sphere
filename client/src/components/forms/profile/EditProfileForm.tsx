@@ -5,10 +5,9 @@ import FieldError from "@/components/estate/FieldError";
 import PersonAvatar from "@/components/estate/PersonAvatar";
 import { DetailSkeleton } from "@/components/estate/Skeletons";
 import SubmitButton from "@/components/estate/SubmitButton";
-import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/lib/redux/features/users/usersApiSlice";
+import { useGetUserProfileQuery, useUpdateUserProfileMutation, useUploadAvatarMutation } from "@/lib/redux/features/users/usersApiSlice";
 import { profileSchema, TProfileSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
-import axios from "axios";
 import { AtSign, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,7 +25,7 @@ export default function EditProfileForm() {
 	const profile = data?.profile;
 	const [uploadAccepted, setUploadAccepted] = useState(false);
 	const [uploadError, setUploadError] = useState("");
-	const [uploading, setUploading] = useState(false);
+	const [uploadAvatar, { isLoading: uploading }] = useUploadAvatarMutation();
 	const initialized = useRef(false);
 
 	const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
@@ -57,20 +56,17 @@ export default function EditProfileForm() {
 		formData.append("avatar", file);
 		setUploadAccepted(false);
 		setUploadError("");
-		setUploading(true);
 
 		try {
-			await axios.patch("/api/v1/profiles/user/avatar/", formData);
+			await uploadAvatar(formData).unwrap();
 			await refetch();
 			setUploadAccepted(true);
 		} catch (error) {
-			const detail = axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
-			setUploadError(typeof detail === "string" ? detail
-				: axios.isAxiosError(error) && error.response?.status === 413 ? "Choose an image smaller than 1 MB."
-				: "We could not upload your photo. Choose the file again to retry.");
+			const detail = extractErrorMessage(error);
+			const tooLarge = typeof error === "object" && error !== null && "status" in error && error.status === 413;
+			setUploadError(detail || (tooLarge ? "Choose an image smaller than 1 MB."
+				: "We could not upload your photo. Choose the file again to retry."));
 			input.value = "";
-		} finally {
-			setUploading(false);
 		}
 	};
 

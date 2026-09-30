@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/shared/ProtectedRoutes";
 import FormShell, { FormContext } from "@/components/estate/FormShell";
 import CreateReportForm from "@/components/forms/report-tenant/CreateReportForm";
 import { ShieldCheck } from "lucide-react";
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 	description: "Tenants can report their fellow tenants in cases of misconduct or misbehavior",
 };
 
-export default function ReportTenantPage() {
+function ReportTenantPage() {
 	return (
 		<FormShell
 			eyebrow="Get help"
@@ -29,4 +30,8 @@ export default function ReportTenantPage() {
 			<CreateReportForm />
 		</FormShell>
 	);
+}
+
+export default function ProtectedPage() {
+	return <ProtectedRoute><ReportTenantPage /></ProtectedRoute>;
 }
