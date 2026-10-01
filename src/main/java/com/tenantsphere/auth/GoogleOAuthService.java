@@ -9,6 +9,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;
+import java.time.Instant;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class GoogleOAuthService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GoogleIdentityRepository identities;
 
     public GoogleOAuthService(
             GoogleOAuthProperties properties,
@@ -33,16 +36,17 @@ public class GoogleOAuthService {
             GoogleIdentityProvider identityProvider,
             UserRepository userRepository,
             ProfileRepository profileRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder, GoogleIdentityRepository identities) {
         this.properties = properties;
         this.stateService = stateService;
         this.identityProvider = identityProvider;
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
+        this.identities = identities;
     }
 
-    public String authorizationUrl(String provider, String redirectUri) {
+    public String authorizationUrl(String provider, String redirectUri, HttpServletRequest request) {
         requireProvider(provider);
         if (redirectUri == null || redirectUri.isBlank()) {
             throw new GoogleAuthenticationException("redirect_uri is required.");
@@ -52,7 +56,7 @@ public class GoogleOAuthService {
             throw new GoogleAuthenticationException("redirect_uri is not allowed.");
         }
 
-        String state = stateService.issue(redirectUri);
+        String state = stateService.issue(redirectUri, request);
         return AUTH_ENDPOINT
                 + "?response_type=code"
                 + "&client_id=" + encode(properties.clientId())
@@ -64,13 +68,13 @@ public class GoogleOAuthService {
     }
 
     @Transactional
-    public User login(String provider, String state, String code) {
+    public User login(String provider, String state, String code, HttpServletRequest request) {
         requireProvider(provider);
         if (code == null || code.isBlank()) {
             throw new GoogleAuthenticationException("code is required.");
         }
         String redirectUri = stateService
-                .verify(state)
+                .consume(state, request)
                 .orElseThrow(() -> new GoogleAuthenticationException("Invalid or expired state."));
 
         GoogleUserInfo info = identityProvider.exchange(code, redirectUri);
@@ -78,9 +82,29 @@ public class GoogleOAuthService {
             throw new GoogleAuthenticationException(
                     "Google account email is not verified.");
         }
-        String email = info.email().trim().toLowerCase(Locale.ROOT);
-
-        return userRepository.findByEmailIgnoreCase(email).orElseGet(() -> createUser(info, email));
+        if (info.sub() == null || info.sub().isBlank() || info.sub().length() > 255
+                || info.email() == null || !info.email().contains("@")) {
+            throw new GoogleAuthenticationException("Google did not return a valid identity.");
+        }
+        User user = identities.findById(info.sub()).map(GoogleIdentity::getUser).orElse(null);
+        if (user == null) {
+            String email = info.email().trim().toLowerCase(Locale.ROOT);
+            if (userRepository.existsByEmailIgnoreCase(email)) {
+                throw new GoogleAuthenticationException(
+                        "An account with this email already exists. Sign in with your password.");
+            }
+            user = createUser(info, email);
+            GoogleIdentity identity = new GoogleIdentity();
+            identity.setSubject(info.sub());
+            identity.setUser(user);
+            identities.save(identity);
+        }
+        if (!user.isActive() || profileRepository.findByUserPkid(user.getPkid())
+                .map(Profile::isBanned).orElse(false)) {
+            throw new GoogleAuthenticationException("This account cannot sign in.");
+        }
+        user.setLastLogin(Instant.now());
+        return user;
     }
 
     private User createUser(GoogleUserInfo info, String email) {

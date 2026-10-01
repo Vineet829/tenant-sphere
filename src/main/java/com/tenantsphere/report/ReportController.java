@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportController {
 
     private static final int PAGE_SIZE = 10;
-    private static final String LIST_URL = "http://localhost:8080/api/v1/reports/me/";
 
     private final ReportRepository reportRepository;
     private final ReportWriteService reportWriteService;
@@ -53,12 +52,12 @@ public class ReportController {
         PageRequest pageable = PageRequest.of(
                 Math.max(page - 1, 0),
                 PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
+                Sort.by(Sort.Direction.DESC, "createdAt", "pkid"));
 
         Page<ReportResponse> result = reportRepository
                 .findByReportedByPkid(principal.getUser().getPkid(), pageable)
                 .map(ReportResponse::from);
 
-        return PageResponse.from(result, LIST_URL);
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 }

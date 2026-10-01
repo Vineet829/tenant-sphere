@@ -1,6 +1,7 @@
 package com.tenantsphere.auth;
 
 import com.tenantsphere.config.AppProperties;
+import com.tenantsphere.common.AfterCommit;
 import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
 import java.time.Duration;
@@ -34,10 +35,10 @@ public class PasswordResetService {
     @Transactional
     public void requestReset(String email) {
         Optional<User> user = userRepository.findByEmailIgnoreCase(email.trim());
-        user.filter(User::isActive).ifPresent(candidate -> {
+        user.filter(candidate -> candidate.isActive() && !candidate.isGuest()).ifPresent(candidate -> {
             String token =
                     tokenService.issue(candidate, VerificationPurpose.PASSWORD_RESET, passwordResetTtl);
-            mailer.sendPasswordReset(candidate, tokenService.encodeUid(candidate), token);
+            AfterCommit.run(() -> mailer.sendPasswordReset(candidate, tokenService.encodeUid(candidate), token));
         });
     }
 
@@ -55,6 +56,6 @@ public class PasswordResetService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        mailer.sendPasswordChanged(user);
+        AfterCommit.run(() -> mailer.sendPasswordChanged(user));
     }
 }

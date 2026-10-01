@@ -9,6 +9,7 @@ public record TopPostResponse(
         String slug,
         String authorUsername,
         int upvotes,
+        int downvotes,
         long viewCount,
         long repliesCount,
         String avatar,

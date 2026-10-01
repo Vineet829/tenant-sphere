@@ -17,23 +17,19 @@ show-logs:
 show-logs-api:
 	docker compose -f local.yml logs api
 
-makemigrations:
-	docker compose -f local.yml run --rm api python manage.py makemigrations
+# Flyway applies database migrations when the API starts; there is no separate migrate step.
 
-migrate:
-	docker compose -f local.yml run --rm api python manage.py migrate
-
-collectstatic:
-	docker compose -f local.yml run --rm api python manage.py collectstatic --no-input --clear
-
+# Usage: make superuser EMAIL=admin@example.com USERNAME=community_admin (prompts for the password).
 superuser:
-	docker compose -f local.yml run --rm api python manage.py createsuperuser
+	docker compose -f local.yml run --rm --no-deps --entrypoint java api \
+		-Dloader.main=com.tenantsphere.admin.CreateAdminCommand -cp /app/app.jar \
+		org.springframework.boot.loader.launch.PropertiesLauncher $(EMAIL) $(USERNAME)
 
 db-volume:
-	docker volume inspect api_estate_prod_postgres_data
+	docker volume inspect tenant-sphere-spring-port_tenant_prod_postgres_data
 
 mailpit-volume:
-	docker volume inspect api_estate_prod_mailpit_data
+	docker volume inspect tenant-sphere-spring-port_tenant_prod_mailpit_data
 
 estate-db:
-	docker compose -f local.yml exec postgres psql --username=vineet --dbname=estate
+	docker compose -f local.yml exec postgres sh -c 'psql -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'

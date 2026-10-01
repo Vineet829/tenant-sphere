@@ -12,22 +12,24 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
+    Page<Post> findByAuthorPkidOrderByCreatedAtDescPkidDesc(Long authorPkid, Pageable pageable);
+
     @EntityGraph(attributePaths = {"author", "tags"})
-    @Query("select p from Post p order by p.upvotes desc, p.createdAt desc")
+    @Query("select p from Post p order by p.createdAt desc, p.pkid desc")
     Page<Post> findAllOrdered(Pageable pageable);
 
     @EntityGraph(attributePaths = {"author", "tags"})
     List<Post> findAllBy();
 
     @EntityGraph(attributePaths = {"author", "tags"})
-    @Query("select p from Post p where p.author.pkid = :authorPkid order by p.upvotes desc, p.createdAt desc")
+    @Query("select p from Post p where p.author.pkid = :authorPkid order by p.createdAt desc, p.pkid desc")
     Page<Post> findByAuthor(@Param("authorPkid") Long authorPkid, Pageable pageable);
 
     @EntityGraph(attributePaths = {"author", "tags"})
     @Query("""
             select p from Post p join p.bookmarkedBy u
             where u.pkid = :userPkid
-            order by p.createdAt desc, p.updatedAt desc
+            order by p.createdAt desc, p.updatedAt desc, p.pkid desc
             """)
     Page<Post> findBookmarkedBy(@Param("userPkid") Long userPkid, Pageable pageable);
 
@@ -54,12 +56,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Long> findUpvotedPkids(
             @Param("userPkid") Long userPkid, @Param("postPkids") List<Long> postPkids);
 
+    @Query("select p.pkid from Post p join p.downvotedBy u where u.pkid = :userPkid and p.pkid in :postPkids")
+    List<Long> findDownvotedPkids(
+            @Param("userPkid") Long userPkid, @Param("postPkids") List<Long> postPkids);
+
     @EntityGraph(attributePaths = {"author"})
     @Query("""
             select p from Post p
-            left join ContentView v on v.contentType = 'post' and v.objectPkid = p.pkid
-            group by p
-            order by p.upvotes desc, count(v) desc, p.createdAt desc
+            order by (p.upvotes - p.downvotes) desc, p.viewCount desc, p.createdAt desc, p.pkid desc
             """)
     List<Post> findTopPosts(Pageable pageable);
 }

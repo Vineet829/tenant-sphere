@@ -1,6 +1,10 @@
 package com.tenantsphere.config;
 
 import com.tenantsphere.auth.JwtCookieAuthenticationFilter;
+import com.tenantsphere.admin.AdminLoginView;
+import com.vaadin.flow.spring.security.AuthenticationContext;
+import com.vaadin.flow.spring.security.NavigationAccessControlConfigurer;
+import com.vaadin.flow.spring.security.RequestUtil;
 import com.tenantsphere.common.ApiAccessDeniedHandler;
 import com.tenantsphere.common.ApiAuthenticationEntryPoint;
 import jakarta.servlet.DispatcherType;
@@ -42,16 +46,50 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public AuthenticationContext authenticationContext() {
+        return new AuthenticationContext();
+    }
+
+    @Bean
+    public static NavigationAccessControlConfigurer navigationAccessControlConfigurer() {
+        return new NavigationAccessControlConfigurer()
+                .withAnnotatedViewAccessChecker()
+                .withLoginView(AdminLoginView.class);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(
+            HttpSecurity http, AuthenticationContext authenticationContext, AppProperties properties,
+            RequestUtil requestUtil) throws Exception {
+        var csrfRepository = new org.springframework.security.web.csrf.CookieCsrfTokenRepository();
+        csrfRepository.setCookieName(properties.cookie().secure() ? "__Host-XSRF-TOKEN" : "XSRF-TOKEN");
+        csrfRepository.setCookieCustomizer(cookie -> cookie.path("/").httpOnly(false)
+                .secure(properties.cookie().secure()).sameSite("Lax"));
         http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf(csrf -> csrf
+                    .csrfTokenRepository(csrfRepository)
+                    // The token is read from a cookie, never reflected in a compressed response body.
+                    .csrfTokenRequestHandler(new org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler())
+                    .ignoringRequestMatchers(request -> !request.getRequestURI().startsWith("/api/")
+                            && !request.getRequestURI().equals("/admin/logout")))
+            // JWT authentication is checked on every request. Applying the session-fixation
+            // strategy on each check rotates Vaadin's UI session and races concurrent uploads.
+            // Both password-login entry points rotate an existing session explicitly instead.
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionFixation(f -> f.none()))
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR)
+                .permitAll()
+                // Vaadin initializes its login UI through the servlet root. View annotations
+                // enforce navigation access; this matcher never applies to REST endpoints.
+                .requestMatchers(request -> request.getRequestURI().equals(request.getContextPath() + "/admin/")
+                        && requestUtil.isFrameworkInternalRequest(request))
                 .permitAll()
                 .requestMatchers(
                     "/actuator/health",
                     "/api/v1/auth/login/",
+                    "/api/v1/auth/csrf/",
+                    "/api/v1/auth/guest/",
                     "/api/v1/auth/refresh/",
                     "/api/v1/auth/logout/",
                     "/api/v1/auth/users/",
@@ -61,9 +99,15 @@ public class SecurityConfig {
                     "/api/v1/auth/users/reset_password_confirm/",
                     "/api/v1/auth/o/*/",
                     "/admin/login",
+                    "/admin/login/",
+                    "/admin/VAADIN/**",
+                    "/admin-assets/**",
+                    "/supersecret",
+                    "/supersecret/**",
                     "/VAADIN/**",
                     "/media/**")
                 .permitAll()
+                .requestMatchers("/admin", "/admin/**").hasAnyRole("STAFF", "SUPERUSER")
                 .requestMatchers(HttpMethod.GET,
                     "/api/v1/posts/",
                     "/api/v1/posts/top-posts/",
@@ -72,11 +116,22 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated()
             )
+            .logout(logout -> logout
+                .logoutUrl("/admin/logout")
+                .logoutSuccessUrl("/admin/login")
+                .deleteCookies(properties.cookie().accessName(), properties.cookie().refreshName(),
+                        properties.cookie().loggedInName()))
             .exceptionHandling(handling -> handling
-                .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint((request, response, error) -> {
+                    if (request.getRequestURI().startsWith("/admin") && "GET".equals(request.getMethod())) {
+                        response.sendRedirect("/admin/login");
+                    } else authenticationEntryPoint.commence(request, response, error);
+                })
                 .accessDeniedHandler(accessDeniedHandler)
             )
             .addFilterBefore(jwtCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        SecurityFilterChain chain = http.build();
+        AuthenticationContext.applySecurityConfiguration(http, authenticationContext);
+        return chain;
     }
 }

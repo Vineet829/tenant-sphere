@@ -22,7 +22,8 @@ public class CookieService {
     public void writeAuthCookies(HttpServletResponse response, String accessToken, String refreshToken) {
         add(response, config.accessName(), accessToken, accessTtl, true);
         add(response, config.refreshName(), refreshToken, refreshTtl, true);
-        add(response, config.loggedInName(), "true", accessTtl, false);
+        // This is a hint to attempt session restoration, never an authorization credential.
+        add(response, config.loggedInName(), "true", refreshTtl, false);
     }
 
     public void clearAuthCookies(HttpServletResponse response) {

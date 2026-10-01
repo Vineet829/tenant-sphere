@@ -4,7 +4,6 @@ import com.tenantsphere.post.dto.ReplyCreateRequest;
 import com.tenantsphere.post.dto.ReplyResponse;
 import com.tenantsphere.profile.ProfileRepository;
 import com.tenantsphere.user.User;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,12 +41,11 @@ public class PostReplyService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReplyResponse> listNewestFirst(UUID postId) {
+    public org.springframework.data.domain.Page<ReplyResponse> listNewestFirst(UUID postId, org.springframework.data.domain.Pageable pageable) {
         Post post = postRepository.findByExternalId(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found."));
-        return replyRepository.findByPostPkidOrderByCreatedAtDesc(post.getPkid()).stream()
-                .map(reply -> ReplyResponse.from(reply, avatarFor(reply.getAuthor())))
-                .toList();
+        return replyRepository.findByPostPkid(post.getPkid(), pageable)
+                .map(reply -> ReplyResponse.from(reply, avatarFor(reply.getAuthor())));
     }
 
     private String avatarFor(User user) {

@@ -38,7 +38,11 @@ public class AuthService {
             throw new InvalidCredentialsException();
         }
 
-        if (!user.isActive() || !passwordEncoder.matches(rawPassword, user.getPassword())) {
+        String encodedPassword = user.getPassword();
+        boolean unusablePassword = encodedPassword == null || encodedPassword.startsWith("!");
+        boolean passwordMatches = passwordEncoder.matches(rawPassword,
+                user.isGuest() || unusablePassword ? DUMMY_HASH : encodedPassword);
+        if (!passwordMatches || unusablePassword || user.isGuest() || !canSignIn(user)) {
             throw new InvalidCredentialsException();
         }
 
@@ -50,10 +54,15 @@ public class AuthService {
     public User requireActiveUser(UUID externalId) {
         User user = userRepository.findByExternalId(externalId)
                 .orElseThrow(InvalidCredentialsException::new);
-        if (!user.isActive()) {
+        if (!canSignIn(user)) {
             throw new InvalidCredentialsException();
         }
         return user;
+    }
+
+    private boolean canSignIn(User user) {
+        return user.isSessionEligible() && !profileRepository.findByUserPkid(user.getPkid())
+                .map(Profile::isBanned).orElse(false);
     }
 
     @Transactional(readOnly = true)

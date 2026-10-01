@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Lock;
+import jakarta.persistence.LockModeType;
 
 public interface IssueRepository extends JpaRepository<Issue, Long> {
 
@@ -27,4 +29,9 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     @EntityGraph(attributePaths = {"apartment", "reportedBy", "assignedTo"})
     @Query("select i from Issue i where i.id = :externalId")
     Optional<Issue> findByExternalId(@Param("externalId") UUID externalId);
+
+    // Lock only the issue row; a fetch join would also try to lock the nullable assignee.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select i from Issue i where i.id = :externalId")
+    Optional<Issue> findByExternalIdForUpdate(@Param("externalId") UUID externalId);
 }

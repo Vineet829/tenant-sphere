@@ -1,5 +1,7 @@
 # Tenant Sphere
 
+On the `spring-port` branch, the active backend is Spring Boot with PostgreSQL. The Spring administration app replaces Django admin at `/admin/login`; see [administration setup and operations](docs/ADMINISTRATION.md) for the production build, administrator creation, permissions and supported management features. `local.yml` and `production.yml` run the Spring API (`docker/spring/Dockerfile`), PostgreSQL, the Next.js client and Nginx; settings are documented in `.envs/.env.example`. The Django/Celery files and historical walkthrough below describe the original implementation.
+
 
 In my current apartment complex, I’ve encountered several frustrating issues with maintenance and services. Here are some of the main problems:
 

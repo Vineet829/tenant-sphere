@@ -10,8 +10,10 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 @Table(name = "users")
 @Getter
 @Setter
@@ -32,6 +34,19 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "auth_version", nullable = false)
+    private long authVersion = 0;
+
+    public void setPassword(String password) {
+        if (this.password != null && !this.password.equals(password)) authVersion++;
+        this.password = password;
+    }
+
+    public void setActive(boolean active) {
+        if (this.active && !active) authVersion++;
+        this.active = active;
+    }
+
     @Column(name = "is_active", nullable = false)
     private boolean active = false;
 
@@ -49,6 +64,16 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Profile profile;
+
+    @Column(name = "is_guest", nullable = false)
+    private boolean guest = false;
+
+    @Column(name = "guest_expires_at")
+    private Instant guestExpiresAt;
+
+    public boolean isSessionEligible() {
+        return active && (!guest || (guestExpiresAt != null && guestExpiresAt.isAfter(Instant.now())));
+    }
 
     public String getFullName() {
         return (firstName + " " + lastName).trim();

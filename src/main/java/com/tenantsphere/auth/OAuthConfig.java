@@ -13,6 +13,9 @@ public class OAuthConfig {
     @Bean
     @ConditionalOnMissingBean
     public GoogleIdentityProvider googleIdentityProvider(GoogleOAuthProperties properties) {
-        return new GoogleIdentityClient(RestClient.create(), properties);
+        var factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(java.time.Duration.ofSeconds(5));
+        factory.setReadTimeout(java.time.Duration.ofSeconds(10));
+        return new GoogleIdentityClient(RestClient.builder().requestFactory(factory).build(), properties);
     }
 }

@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public final class Countries {
 
+    private static final Set<String> ISO_CODES = Set.of(Locale.getISOCountries());
     private static final Map<String, String> NAME_TO_CODE = buildNameIndex();
 
     private Countries() {}
@@ -15,11 +17,12 @@ public final class Countries {
         if (isoCode == null || isoCode.isBlank()) {
             return "";
         }
-        String name = new Locale.Builder()
-                .setRegion(isoCode.toUpperCase(Locale.ROOT))
+        String code = isoCode.trim().toUpperCase(Locale.ROOT);
+        if (!ISO_CODES.contains(code)) return "";
+        return new Locale.Builder()
+                .setRegion(code)
                 .build()
                 .getDisplayCountry(Locale.ENGLISH);
-        return name.equals(isoCode) ? "" : name;
     }
 
     public static Optional<String> codeOf(String country) {

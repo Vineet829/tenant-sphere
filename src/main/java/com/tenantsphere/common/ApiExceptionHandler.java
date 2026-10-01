@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -26,6 +29,20 @@ public class ApiExceptionHandler {
 
     public ApiExceptionHandler(HandlerLabelResolver labelResolver) {
         this.labelResolver = labelResolver;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleConflict(
+            DataIntegrityViolationException e, HttpServletRequest request) {
+        return respond(request, HttpStatus.CONFLICT,
+                Map.of("detail", "This request conflicts with existing data. Refresh and try again."));
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<Object> handleMultipart(MultipartException e, HttpServletRequest request) {
+        boolean tooLarge = e instanceof MaxUploadSizeExceededException;
+        return respond(request, tooLarge ? HttpStatus.PAYLOAD_TOO_LARGE : HttpStatus.BAD_REQUEST,
+                Map.of("detail", tooLarge ? "The uploaded file is too large." : "Provide a valid multipart image upload."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

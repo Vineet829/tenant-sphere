@@ -25,23 +25,38 @@ spring:
   mail:
     host: ${EMAIL_HOST:localhost}
     port: ${EMAIL_PORT:1025}
+    username: ${EMAIL_HOST_USER:}
+    password: ${EMAIL_HOST_PASSWORD:}
     properties:
       mail:
         smtp:
-          auth: false
+          auth: ${EMAIL_USE_AUTH:false}
+          localhost: ${EMAIL_CLIENT_NAME:localhost}
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
           starttls:
-            enable: false
+            enable: ${EMAIL_USE_TLS:false}
+            required: ${EMAIL_USE_TLS:false}
 
   jackson:
     property-naming-strategy: SNAKE_CASE
     default-property-inclusion: always
     serialization:
       write-dates-as-timestamps: false
+    deserialization:
+      accept-float-as-int: false
 
 server:
+  forward-headers-strategy: framework
   port: 8000
   servlet:
     context-path: /
+
+# API errors and uploaded media belong to Spring MVC, not the admin UI fallback.
+vaadin:
+  url-mapping: /admin/*
+  exclude-urls: /api/**,/media/**,/actuator/**
 
 management:
   endpoints:
@@ -53,6 +68,8 @@ management:
       show-details: never
 
 app:
+  guest:
+    enabled: ${GUEST_LOGIN_ENABLED:false}
   jwt:
     signing-key: ${SIGNING_KEY}
     access-token-ttl: PT30M
@@ -79,4 +96,4 @@ app:
 
 logging:
   level:
-    com.tenantsphere: DEBUG
+    com.tenantsphere: ${APP_LOG_LEVEL:INFO}

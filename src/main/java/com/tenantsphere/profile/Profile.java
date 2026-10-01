@@ -10,12 +10,16 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 @Table(name = "profiles")
 @Getter
 @Setter
 public class Profile extends BaseEntity {
+
+    public static final int DEACTIVATION_REPORTERS = 5;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_pkid", nullable = false, unique = true)
@@ -52,7 +56,7 @@ public class Profile extends BaseEntity {
     private String slug;
 
     public boolean isBanned() {
-        return reportCount >= 5;
+        return reportCount >= DEACTIVATION_REPORTERS;
     }
 
     public void recalculateReputation() {

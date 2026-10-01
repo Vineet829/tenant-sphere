@@ -55,11 +55,19 @@ public class AuthController {
         this.refreshCookieName = properties.cookie().refreshName();
     }
 
+    @GetMapping("/csrf/")
+    public ResponseEntity<Void> csrf(org.springframework.security.web.csrf.CsrfToken token) {
+        token.getToken(); // Materialize the deferred token and write its cookie.
+        return ResponseEntity.noContent().header("Cache-Control", "no-store").build();
+    }
+
     @PostMapping("/login/")
     public MessageResponse login(
-            @Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+            @Valid @RequestBody LoginRequest request, HttpServletRequest servletRequest,
+            HttpServletResponse response) {
 
         User user = authService.authenticate(request.email(), request.password());
+        if (servletRequest.getSession(false) != null) servletRequest.changeSessionId();
         issueCookies(user.getId(), response);
         return new MessageResponse("Login Successful.");
     }
@@ -74,6 +82,7 @@ public class AuthController {
             throw new InvalidCredentialsException();
         }
         User user = authService.requireActiveUser(userId);
+        if (!jwtService.isCurrent(token, user)) throw new InvalidCredentialsException();
         issueCookies(user.getId(), response);
         return new MessageResponse("Access tokens refreshed successfully");
     }

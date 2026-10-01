@@ -4,6 +4,7 @@ import com.tenantsphere.auth.dto.AuthorizationUrlResponse;
 import com.tenantsphere.auth.dto.MessageResponse;
 import com.tenantsphere.user.User;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +35,9 @@ public class ProviderAuthController {
     @GetMapping("/{provider}/")
     public AuthorizationUrlResponse authorizationUrl(
             @PathVariable String provider,
-            @RequestParam("redirect_uri") String redirectUri) {
+            @RequestParam("redirect_uri") String redirectUri, HttpServletRequest request) {
         return new AuthorizationUrlResponse(
-                googleOAuthService.authorizationUrl(provider, redirectUri));
+                googleOAuthService.authorizationUrl(provider, redirectUri, request));
     }
 
     @PostMapping("/{provider}/")
@@ -45,8 +46,9 @@ public class ProviderAuthController {
             @PathVariable String provider,
             @RequestParam("state") String state,
             @RequestParam("code") String code,
-            HttpServletResponse response) {
-        User user = googleOAuthService.login(provider, state, code);
+            HttpServletRequest request, HttpServletResponse response) {
+        User user = googleOAuthService.login(provider, state, code, request);
+        if (request.getSession(false) != null) request.changeSessionId();
         UUID userId = user.getId();
         cookieService.writeAuthCookies(
                 response, jwtService.issueAccessToken(userId), jwtService.issueRefreshToken(userId));

@@ -7,6 +7,7 @@ import com.tenantsphere.common.PageResponse;
 import com.tenantsphere.profile.dto.ProfileResponse;
 import com.tenantsphere.profile.dto.UpdateProfileRequest;
 import com.tenantsphere.profile.dto.UpdateProfileResponse;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {
-
-    private static final String LIST_URL = "http://localhost:8080/api/v1/profiles/all/";
-    private static final String NON_TENANT_URL =
-            "http://localhost:8080/api/v1/profiles/non-tenant-profiles/";
 
     private final ProfileService profileService;
     private final AvatarService avatarService;
@@ -52,7 +49,7 @@ public class ProfileController {
         int size = Math.min(Math.max(pageSize, 1), 100);
         Page<ProfileResponse> result =
                 profileService.listTenants(PageRequest.of(Math.max(page - 1, 0), size), search);
-        return PageResponse.from(result, LIST_URL);
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/non-tenant-profiles/")
@@ -65,7 +62,7 @@ public class ProfileController {
         int size = Math.min(Math.max(pageSize, 1), 100);
         Page<ProfileResponse> result =
                 profileService.listNonTenants(PageRequest.of(Math.max(page - 1, 0), size), search);
-        return PageResponse.from(result, NON_TENANT_URL);
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/user/update/")
@@ -77,7 +74,7 @@ public class ProfileController {
     @PatchMapping("/user/update/")
     @ObjectLabel("profile")
     public UpdateProfileResponse update(
-            @RequestBody UpdateProfileRequest request,
+            @Valid @RequestBody UpdateProfileRequest request,
             @AuthenticationPrincipal AppUserDetails principal) {
         return profileService.update(principal.getUser(), request);
     }
@@ -88,6 +85,6 @@ public class ProfileController {
             @AuthenticationPrincipal AppUserDetails principal) {
         avatarService.upload(principal.getUser(), avatar);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new MessageBody("Avatar upload started."));
+                .body(new MessageBody("Avatar updated successfully."));
     }
 }

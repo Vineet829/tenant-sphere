@@ -5,6 +5,7 @@ import com.tenantsphere.apartment.ApartmentRepository;
 import com.tenantsphere.issue.dto.IssueCreateRequest;
 import com.tenantsphere.issue.dto.IssueStatusUpdateRequest;
 import com.tenantsphere.mail.MailService;
+import com.tenantsphere.common.AfterCommit;
 import com.tenantsphere.user.User;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -50,21 +51,21 @@ public class IssueWriteService {
         }
         issueRepository.save(issue);
 
-        mailService.send(
+        AfterCommit.run(() -> mailService.send(
                 reporter.getEmail(),
                 "Issue Report Confirmation",
                 "Your issue \"" + issue.getTitle() + "\" has been logged on "
-                        + mailService.siteName() + ".");
+                        + mailService.siteName() + "."));
         return issue;
     }
 
     @Transactional
     public Issue updateStatus(UUID issueId, IssueStatusUpdateRequest request, User actor) {
-        Issue issue = requireIssue(issueId);
+        Issue issue = requireIssueForUpdate(issueId);
 
         boolean assignee = issue.getAssignedTo() != null
                 && issue.getAssignedTo().getPkid().equals(actor.getPkid());
-        if (!actor.isStaff() && !assignee) {
+        if (!actor.isStaff() && !actor.isSuperuser() && !assignee) {
             throw new AccessDeniedException("You do not have permission to update the issue");
         }
 
@@ -83,24 +84,26 @@ public class IssueWriteService {
                 && previous != IssueStatus.RESOLVED;
         if (nowResolved) {
             issue.setResolvedOn(LocalDate.now());
+        } else if (issue.getStatus() != IssueStatus.RESOLVED) {
+            issue.setResolvedOn(null);
         }
         issueRepository.save(issue);
 
         if (nowResolved) {
-            mailService.send(
+            AfterCommit.run(() -> mailService.send(
                     issue.getReportedBy().getEmail(),
                     "Issue Resolved",
                     "Your issue \"" + issue.getTitle() + "\" has been resolved on "
-                            + mailService.siteName() + ".");
+                            + mailService.siteName() + "."));
         }
         return issue;
     }
 
     @Transactional
     public void delete(UUID issueId, User actor) {
-        Issue issue = requireIssue(issueId);
+        Issue issue = requireIssueForUpdate(issueId);
         boolean reporter = issue.getReportedBy().getPkid().equals(actor.getPkid());
-        if (!reporter && !actor.isStaff()) {
+        if (!reporter && !actor.isStaff() && !actor.isSuperuser()) {
             throw new AccessDeniedException("You do not have permission to delete this issue");
         }
         issueRepository.delete(issue);
@@ -112,9 +115,20 @@ public class IssueWriteService {
         boolean reporter = issue.getReportedBy().getPkid().equals(actor.getPkid());
         boolean assignee = issue.getAssignedTo() != null
                 && issue.getAssignedTo().getPkid().equals(actor.getPkid());
-        if (!reporter && !assignee && !actor.isStaff()) {
+        if (!reporter && !assignee && !actor.isStaff() && !actor.isSuperuser()) {
             throw new AccessDeniedException("You do not have permission to view this issue");
         }
+        return issue;
+    }
+
+    private Issue requireIssueForUpdate(UUID issueId) {
+        Issue issue = issueRepository.findByExternalIdForUpdate(issueId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "No Issue matches the given query."));
+        // Hydrate response relations while the transaction is open, without locking outer joins.
+        org.hibernate.Hibernate.initialize(issue.getApartment());
+        org.hibernate.Hibernate.initialize(issue.getReportedBy());
+        org.hibernate.Hibernate.initialize(issue.getAssignedTo());
         return issue;
     }
 

@@ -9,3 +9,10 @@ venv/
 *.log
 staticfiles/
 .envs/*
+# The Spring image builds from the repository root; keep unrelated trees out of the context.
+node_modules/
+target/
+client/
+imgs/
+src/main/frontend/generated/
+src/main/bundles/

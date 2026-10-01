@@ -3,11 +3,16 @@ package com.tenantsphere.post;
 import com.tenantsphere.auth.AppUserDetails;
 import com.tenantsphere.common.MessageBody;
 import com.tenantsphere.user.User;
+import com.tenantsphere.post.dto.PostVoteRequest;
+import com.tenantsphere.post.dto.PostVoteResponse;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +28,22 @@ public class PostVoteController {
     }
 
     @PatchMapping("/{postId}/upvote/")
-    public MessageBody upvote(
+    public PostVoteResponse upvote(
             @PathVariable UUID postId, @AuthenticationPrincipal AppUserDetails principal) {
-        voteService.upvote(postId, principal.getUser());
-        return new MessageBody("Post upvoted successfully!");
+        return voteService.upvote(postId, principal.getUser());
     }
 
     @PatchMapping("/{postId}/downvote/")
-    public MessageBody downvote(
+    public PostVoteResponse downvote(
             @PathVariable UUID postId, @AuthenticationPrincipal AppUserDetails principal) {
-        voteService.downvote(postId, principal.getUser());
-        return new MessageBody("Post downvoted successfully!");
+        return voteService.downvote(postId, principal.getUser());
+    }
+
+    @PutMapping("/{postId}/vote/")
+    public PostVoteResponse setVote(
+            @PathVariable UUID postId, @Valid @RequestBody PostVoteRequest request,
+            @AuthenticationPrincipal AppUserDetails principal) {
+        return voteService.setVote(postId, principal.getUser(), request.vote());
     }
 
     @PatchMapping("/{slug}/bookmark/")

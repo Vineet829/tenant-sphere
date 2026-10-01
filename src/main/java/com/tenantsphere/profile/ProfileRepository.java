@@ -3,14 +3,20 @@ package com.tenantsphere.profile;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Profile p where p.pkid = :pkid")
+    Optional<Profile> findByPkidForUpdate(@Param("pkid") Long pkid);
 
     Optional<Profile> findByUserPkid(Long userPkid);
 
@@ -26,6 +32,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             join fetch p.user u
             where u.staff = false
               and u.superuser = false
+              and u.guest = false
               and p.occupation = com.tenantsphere.profile.Occupation.TENANT
             order by p.createdAt desc, p.updatedAt desc
             """)
@@ -36,6 +43,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             join fetch p.user u
             where u.staff = false
               and u.superuser = false
+              and u.guest = false
               and p.occupation <> com.tenantsphere.profile.Occupation.TENANT
             order by p.createdAt desc, p.updatedAt desc
             """)
@@ -46,6 +54,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             join fetch p.user u
             where u.staff = false
               and u.superuser = false
+              and u.guest = false
               and p.occupation = com.tenantsphere.profile.Occupation.TENANT
               and (lower(u.username) like %:term%
                    or lower(u.firstName) like %:term%
@@ -59,6 +68,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             join fetch p.user u
             where u.staff = false
               and u.superuser = false
+              and u.guest = false
               and p.occupation <> com.tenantsphere.profile.Occupation.TENANT
               and (lower(u.username) like %:term%
                    or lower(u.firstName) like %:term%

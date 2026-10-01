@@ -201,3 +201,11 @@ client/.vercel
 # typescript
 client/*.tsbuildinfo
 client/next-env.d.ts
+
+# Vaadin frontend build outputs (the resident app remains in client/)
+/node_modules/
+/src/main/frontend/generated/
+/src/main/bundles/
+/vite.generated.ts
+/types.d.ts
+/.local-run/

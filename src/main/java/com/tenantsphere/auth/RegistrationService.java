@@ -2,6 +2,7 @@ package com.tenantsphere.auth;
 
 import com.tenantsphere.auth.dto.RegisterRequest;
 import com.tenantsphere.common.Slugs;
+import com.tenantsphere.common.AfterCommit;
 import com.tenantsphere.config.AppProperties;
 import com.tenantsphere.profile.Profile;
 import com.tenantsphere.profile.ProfileRepository;
@@ -74,7 +75,8 @@ public class RegistrationService {
     @Transactional
     public void resendActivation(String email) {
         Optional<User> user = userRepository.findByEmailIgnoreCase(email.trim());
-        user.filter(candidate -> !candidate.isActive()).ifPresent(this::sendActivation);
+        user.filter(candidate -> !candidate.isActive() && !isBanned(candidate))
+                .ifPresent(this::sendActivation);
     }
 
     @Transactional
@@ -84,6 +86,9 @@ public class RegistrationService {
             return false;
         }
         User activated = user.get();
+        if (isBanned(activated)) {
+            return false;
+        }
         activated.setActive(true);
         userRepository.save(activated);
         return true;
@@ -91,7 +96,11 @@ public class RegistrationService {
 
     private void sendActivation(User user) {
         String token = tokenService.issue(user, VerificationPurpose.ACTIVATION, activationTtl);
-        mailer.sendActivation(user, tokenService.encodeUid(user), token);
+        AfterCommit.run(() -> mailer.sendActivation(user, tokenService.encodeUid(user), token));
+    }
+
+    private boolean isBanned(User user) {
+        return profileRepository.findByUserPkid(user.getPkid()).map(Profile::isBanned).orElse(false);
     }
 
     private String uniqueSlug(String username) {

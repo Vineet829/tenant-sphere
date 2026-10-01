@@ -70,7 +70,7 @@ public class PostController {
 
         Page<PostResponse> result = postService.toResponses(
                 postRepository.findAllOrdered(pageable(page, PAGE_SIZE)), viewer(principal), true);
-        return PageResponse.from(result, url("/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/my-posts/")
@@ -82,7 +82,7 @@ public class PostController {
         User user = principal.getUser();
         Page<PostResponse> result = postService.toResponses(
                 postRepository.findByAuthor(user.getPkid(), pageable(page, 10)), user, false);
-        return PageResponse.from(result, url("/my-posts/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/bookmarked/posts/")
@@ -94,7 +94,7 @@ public class PostController {
         User user = principal.getUser();
         Page<PostResponse> result = postService.toResponses(
                 postRepository.findBookmarkedBy(user.getPkid(), pageable(page, 10)), user, true);
-        return PageResponse.from(result, url("/bookmarked/posts/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/top-posts/")
@@ -104,7 +104,7 @@ public class PostController {
         List<TopPostResponse> responses = postService.toTopResponses(posts);
         Page<TopPostResponse> page =
                 new PageImpl<>(responses, PageRequest.of(0, Math.max(responses.size(), 1)), responses.size());
-        return PageResponse.from(page, url("/top-posts/"));
+        return PageResponse.from(page, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/popular-tags/")
@@ -117,7 +117,7 @@ public class PostController {
                 .toList();
         Page<PopularTagResponse> page =
                 new PageImpl<>(tags, PageRequest.of(0, Math.max(tags.size(), 1)), tags.size());
-        return PageResponse.from(page, url("/popular-tags/"));
+        return PageResponse.from(page, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/tags/{tagSlug}/")
@@ -129,7 +129,7 @@ public class PostController {
 
         Page<PostByTagResponse> result = postService.toTagResponses(
                 postRepository.findByTagSlug(tagSlug, pageable(page, 10)), viewer(principal));
-        return PageResponse.from(result, url("/tags/" + tagSlug + "/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/{slug}/")
@@ -172,7 +172,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}/delete/")
-    public ResponseEntity<MessageBody> delete(
+    public ResponseEntity<Void> delete(
             @PathVariable UUID postId, @AuthenticationPrincipal AppUserDetails principal) {
 
         Post post = postRepository.findByExternalId(postId)
@@ -182,8 +182,7 @@ public class PostController {
             throw new AccessDeniedException("You do not have permission to delete this post.");
         }
         postRepository.delete(post);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(new MessageBody("Post deleted successfully!"));
+        return ResponseEntity.noContent().build();
     }
 
     private String uniqueSlug(String base) {
@@ -253,7 +252,4 @@ public class PostController {
         return PageRequest.of(Math.max(page - 1, 0), size);
     }
 
-    private String url(String suffix) {
-        return "http://localhost:8080/api/v1/posts" + suffix;
-    }
 }

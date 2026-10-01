@@ -69,7 +69,7 @@ public class PostService {
             return new PostByTagResponse(
                     full.id(), full.title(), full.slug(), full.authorUsername(),
                     full.isBookmarked(), full.createdAt(), full.updatedAt(), full.viewCount(),
-                    full.upvotes(), full.downvotes(), full.isUpvoted(), full.repliesCount(),
+                    full.upvotes(), full.downvotes(), full.isUpvoted(), full.isDownvoted(), full.repliesCount(),
                     full.avatar(), full.body(), full.tags());
         });
     }
@@ -90,6 +90,7 @@ public class PostService {
                     post.getSlug(),
                     post.getAuthor().getUsername(),
                     post.getUpvotes(),
+                    post.getDownvotes(),
                     context.viewCounts().getOrDefault(post.getPkid(), 0L),
                     context.replyCounts().getOrDefault(post.getPkid(), 0L),
                     context.avatars().get(post.getAuthor().getPkid()),
@@ -117,6 +118,7 @@ public class PostService {
                 post.getUpvotes(),
                 post.getDownvotes(),
                 context.upvoted().contains(post.getPkid()),
+                context.downvoted().contains(post.getPkid()),
                 withRepliesCount ? context.replyCounts().getOrDefault(post.getPkid(), 0L) : null,
                 context.avatars().get(post.getAuthor().getPkid()),
                 post.getBody(),
@@ -132,18 +134,26 @@ public class PostService {
         Map<Long, String> avatars = new HashMap<>();
         Set<Long> bookmarked = new HashSet<>();
         Set<Long> upvoted = new HashSet<>();
+        Set<Long> downvoted = new HashSet<>();
 
         if (pkids.isEmpty()) {
-            return new Context(viewCounts, replies, replyCounts, avatars, bookmarked, upvoted);
+            return new Context(viewCounts, replies, replyCounts, avatars, bookmarked, upvoted, downvoted);
         }
 
         contentViewRepository.countByObjects(CONTENT_TYPE, pkids)
                 .forEach(row -> viewCounts.put(row.getObjectPkid(), row.getTotal()));
 
-        List<Reply> allReplies = replyRepository.findByPostPkidInOrderByCreatedAtAsc(pkids);
+        // Listings that only show reply counts must not load every reply and its author.
+        List<Reply> allReplies = withReplies
+                ? replyRepository.findByPostPkidInOrderByCreatedAtAsc(pkids)
+                : List.of();
         for (Reply reply : allReplies) {
             replies.computeIfAbsent(reply.getPost().getPkid(), key -> new ArrayList<>()).add(reply);
             replyCounts.merge(reply.getPost().getPkid(), 1L, Long::sum);
+        }
+        if (!withReplies) {
+            replyRepository.countByPosts(pkids)
+                    .forEach(row -> replyCounts.put(row.getPostPkid(), row.getTotal()));
         }
 
         Set<Long> authorPkids = new HashSet<>();
@@ -164,12 +174,10 @@ public class PostService {
         if (viewer != null) {
             bookmarked.addAll(postRepository.findBookmarkedPkids(viewer.getPkid(), pkids));
             upvoted.addAll(postRepository.findUpvotedPkids(viewer.getPkid(), pkids));
+            downvoted.addAll(postRepository.findDownvotedPkids(viewer.getPkid(), pkids));
         }
 
-        if (!withReplies) {
-            replies.clear();
-        }
-        return new Context(viewCounts, replies, replyCounts, avatars, bookmarked, upvoted);
+        return new Context(viewCounts, replies, replyCounts, avatars, bookmarked, upvoted, downvoted);
     }
 
     private record Context(
@@ -178,5 +186,6 @@ public class PostService {
             Map<Long, Long> replyCounts,
             Map<Long, String> avatars,
             Set<Long> bookmarked,
-            Set<Long> upvoted) {}
+            Set<Long> upvoted,
+            Set<Long> downvoted) {}
 }

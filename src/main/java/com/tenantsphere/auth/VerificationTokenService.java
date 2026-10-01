@@ -1,6 +1,7 @@
 package com.tenantsphere.auth;
 
 import com.tenantsphere.user.User;
+import com.tenantsphere.user.UserRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,14 +21,18 @@ public class VerificationTokenService {
     private static final Base64.Decoder DECODER = Base64.getUrlDecoder();
 
     private final VerificationTokenRepository tokenRepository;
+    private final UserRepository userRepository;
     private final SecureRandom random = new SecureRandom();
 
-    public VerificationTokenService(VerificationTokenRepository tokenRepository) {
+    public VerificationTokenService(VerificationTokenRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public String issue(User user, VerificationPurpose purpose, Duration ttl) {
+        // Use the same lock order for issuing and consuming tokens, and for moderation.
+        userRepository.findByExternalIdForUpdate(user.getId()).orElseThrow();
         tokenRepository.deleteByUserAndPurpose(user.getPkid(), purpose);
 
         byte[] material = new byte[32];
@@ -48,6 +53,12 @@ public class VerificationTokenService {
     public Optional<User> consume(String uid, String rawToken, VerificationPurpose purpose) {
         Optional<UUID> externalId = decodeUid(uid);
         if (externalId.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Keep the lock until the caller commits the password/account change.
+        // Concurrent requests must observe the token's committed used_at value.
+        if (userRepository.findByExternalIdForUpdate(externalId.get()).isEmpty()) {
             return Optional.empty();
         }
 

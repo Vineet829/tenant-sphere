@@ -9,6 +9,10 @@ import java.util.UUID;
 
 public record CurrentUserResponse(
         UUID id,
+        boolean isStaff,
+        boolean isSuperuser,
+        boolean isGuest,
+        Instant guestExpiresAt,
         String email,
         String firstName,
         String lastName,
@@ -26,6 +30,10 @@ public record CurrentUserResponse(
     public static CurrentUserResponse from(User user, Profile profile) {
         return new CurrentUserResponse(
                 user.getId(),
+                user.isStaff(),
+                user.isSuperuser(),
+                user.isGuest(),
+                user.getGuestExpiresAt(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),

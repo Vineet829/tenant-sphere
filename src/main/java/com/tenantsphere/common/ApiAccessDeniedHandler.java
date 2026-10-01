@@ -20,6 +20,9 @@ public class ApiAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(
             HttpServletRequest request, HttpServletResponse response, AccessDeniedException e)
             throws IOException {
-        writer.write(request, response, 403, e.getMessage());
+        writer.write(request, response, 403,
+                e instanceof org.springframework.security.web.csrf.CsrfException
+                        ? "Your security token is missing or expired. Please reload and try again."
+                        : "You do not have permission to perform this action.");
     }
 }

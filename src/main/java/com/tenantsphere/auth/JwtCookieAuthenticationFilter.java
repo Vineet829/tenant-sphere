@@ -63,7 +63,9 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
         try {
             UUID userId = jwtService.extractUserId(token, TokenType.ACCESS);
             User user = userRepository.findByExternalId(userId).orElse(null);
-            if (user == null || !user.isActive()) {
+            if (user == null || !user.isSessionEligible()
+                    || (user.getProfile() != null && user.getProfile().isBanned())
+                    || !jwtService.isCurrent(token, user)) {
                 return;
             }
             AppUserDetails principal = new AppUserDetails(user);

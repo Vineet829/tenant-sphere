@@ -1,26 +1,32 @@
 
 
 services:
-  api: &api
+  api:
     build:
       context: .
-      dockerfile: ./docker/local/django/Dockerfile
-    image: tenant_prod_api
-    container_name: tenant_prod_api
+      dockerfile: ./docker/spring/Dockerfile
+    image: tenant_spring_api
+    container_name: tenant_spring_api
     volumes:
-      - .:/app:z
-      - ./staticfiles:/app/staticfiles
+      - tenant_prod_media:/app/media
     # ports:
     #   - "8000:8000"
     expose:
       - "8000"
     env_file:
       - ./.envs/.env.local
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      # Local nginx serves plain HTTP; secure cookies would be dropped by the browser.
+      COOKIE_SECURE: "false"
+      EMAIL_HOST: mailpit
+      EMAIL_PORT: "1025"
+      EMAIL_USE_AUTH: "false"
+      EMAIL_USE_TLS: "false"
     depends_on:
       - postgres
       - mailpit
-      - redis
-    command: /start
     networks:
       - tenant_prod_nw
 
@@ -45,13 +51,13 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
-    volumes:  
+    volumes:
       - tenant_prod_mailpit_data:/data
     environment:
       MP_MAX_MESSAGES: 5000
       MP_DATA_FILE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1  
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
       - tenant_prod_nw
 
@@ -68,42 +74,12 @@ services:
     volumes:
       - ./client:/app
       - /app/node_modules
-    # add this line(uncomment it) so that hot module reloading can work when working with windows subsystem for linux. 
+    # add this line(uncomment it) so that hot module reloading can work when working with windows subsystem for linux.
     # environment:
     #   - WATCHPACK_POLLING=true
     networks:
       - tenant_prod_nw
 
-  redis:
-    image: redis:7.0-alpine3.19
-    command: redis-server --appendonly yes
-    container_name: tenant_redis
-    volumes:
-      - tenant_redis_prod_data:/data
-    networks:
-      - tenant_prod_nw
-
-  celeryworker:
-    <<: *api
-    image: tenant_prod_celeryworker
-    container_name: tenant_prod_celeryworker
-    command: /start-celeryworker
-
-  celerybeat:
-    <<: *api
-    image: tenant_prod_celerybeat
-    container_name: tenant_prod_celerybeat
-    command: /start-celerybeat
-
-  flower:
-    <<: *api
-    image: tenant_prod_flower
-    container_name: tenant_prod_flower
-    ports:
-      - "5555:5555"
-    command: /start-flower
-
-  
   nginx:
     build:
       context: ./docker/local/nginx
@@ -113,13 +89,13 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./staticfiles:/app/staticfiles
       - logs_store:/var/log/nginx
     depends_on:
       - api
+      - client
     networks:
       - tenant_prod_nw
-    
+
 
 networks:
   tenant_prod_nw:
@@ -128,7 +104,5 @@ networks:
 volumes:
   tenant_prod_postgres_data: {}
   tenant_prod_mailpit_data: {}
+  tenant_prod_media: {}
   logs_store: {}
-  tenant_redis_prod_data: {}
-
-

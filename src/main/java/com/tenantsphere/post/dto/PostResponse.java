@@ -16,6 +16,7 @@ public record PostResponse(
         int upvotes,
         int downvotes,
         boolean isUpvoted,
+        boolean isDownvoted,
         @JsonInclude(JsonInclude.Include.NON_NULL) Long repliesCount,
         String avatar,
         String body,

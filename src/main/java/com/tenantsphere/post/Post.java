@@ -37,11 +37,16 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "author_pkid", nullable = false)
     private User author;
 
-    @Column(name = "upvotes", nullable = false)
+    // Managed by PostVoteRepository; editing or bookmarking a stale entity must not overwrite votes.
+    @Column(name = "upvotes", nullable = false, updatable = false)
     private int upvotes = 0;
 
-    @Column(name = "downvotes", nullable = false)
+    @Column(name = "downvotes", nullable = false, updatable = false)
     private int downvotes = 0;
+
+    // Maintained by database triggers on content_views (V9); read only for ranking.
+    @Column(name = "view_count", nullable = false, insertable = false, updatable = false)
+    private int viewCount = 0;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

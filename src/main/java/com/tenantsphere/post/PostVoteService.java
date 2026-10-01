@@ -1,6 +1,7 @@
 package com.tenantsphere.post;
 
 import com.tenantsphere.user.User;
+import com.tenantsphere.post.dto.PostVoteResponse;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,45 +12,40 @@ import org.springframework.web.server.ResponseStatusException;
 public class PostVoteService {
 
     private final PostRepository postRepository;
+    private final PostVoteRepository votes;
 
-    public PostVoteService(PostRepository postRepository) {
+    public PostVoteService(PostRepository postRepository, PostVoteRepository votes) {
         this.postRepository = postRepository;
+        this.votes = votes;
     }
 
     @Transactional
-    public void upvote(UUID postId, User user) {
-        Post post = requireById(postId);
-        boolean changed = false;
-
-        if (post.getDownvotedBy().removeIf(u -> u.getPkid().equals(user.getPkid()))) {
-            post.setDownvotes(Math.max(0, post.getDownvotes() - 1));
-            changed = true;
-        }
-        if (post.getUpvotedBy().stream().noneMatch(u -> u.getPkid().equals(user.getPkid()))) {
-            post.getUpvotedBy().add(user);
-            post.setUpvotes(post.getUpvotes() + 1);
-            changed = true;
-        }
-        if (changed) {
-            postRepository.save(post);
-        }
+    public PostVoteResponse upvote(UUID postId, User user) {
+        return changeVote(postId, user, 1, true);
     }
 
     @Transactional
-    public void downvote(UUID postId, User user) {
-        Post post = requireById(postId);
+    public PostVoteResponse downvote(UUID postId, User user) {
+        return changeVote(postId, user, -1, true);
+    }
 
-        if (post.getUpvotedBy().removeIf(u -> u.getPkid().equals(user.getPkid()))) {
-            post.setUpvotes(Math.max(0, post.getUpvotes() - 1));
+    @Transactional
+    public PostVoteResponse setVote(UUID postId, User user, int vote) {
+        if (vote < -1 || vote > 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vote must be -1, 0 or 1.");
         }
-        if (post.getDownvotedBy().stream().anyMatch(u -> u.getPkid().equals(user.getPkid()))) {
-            post.getDownvotedBy().removeIf(u -> u.getPkid().equals(user.getPkid()));
-            post.setDownvotes(Math.max(0, post.getDownvotes() - 1));
-        } else {
-            post.getDownvotedBy().add(user);
-            post.setDownvotes(post.getDownvotes() + 1);
-        }
-        postRepository.save(post);
+        return changeVote(postId, user, vote, false);
+    }
+
+    private PostVoteResponse changeVote(UUID postId, User user, int requested, boolean toggle) {
+        long post = votes.lockPost(postId);
+        int previous = votes.currentVote(post, user.getPkid());
+        int next = toggle && previous == requested ? 0 : requested;
+        String message = next == 1 ? "Post upvoted successfully!"
+                : next == -1 ? "Post downvoted successfully!"
+                : previous == 1 ? "Upvote removed"
+                : previous == -1 ? "Downvote removed" : "Vote removed";
+        return votes.setVote(post, user.getPkid(), next, message);
     }
 
     @Transactional(readOnly = true)
@@ -71,11 +67,6 @@ public class PostVoteService {
         Post post = requireBySlug(slug);
         post.getBookmarkedBy().removeIf(u -> u.getPkid().equals(user.getPkid()));
         postRepository.save(post);
-    }
-
-    private Post requireById(UUID postId) {
-        return postRepository.findByExternalId(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found."));
     }
 
     private Post requireBySlug(String slug) {

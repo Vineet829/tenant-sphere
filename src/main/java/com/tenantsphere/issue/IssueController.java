@@ -68,7 +68,7 @@ public class IssueController {
             throw new AccessDeniedException(STAFF_ONLY);
         }
         Page<IssueResponse> result = issueService.toResponses(issueRepository.findAllBy(pageable(page)));
-        return PageResponse.from(result, url("/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/me/")
@@ -79,7 +79,7 @@ public class IssueController {
 
         Page<IssueResponse> result = issueService.toResponses(
                 issueRepository.findByReportedByPkid(principal.getUser().getPkid(), pageable(page)));
-        return PageResponse.from(result, url("/me/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @GetMapping("/assigned/")
@@ -90,7 +90,7 @@ public class IssueController {
 
         Page<IssueResponse> result = issueService.toResponses(
                 issueRepository.findByAssignedToPkid(principal.getUser().getPkid(), pageable(page)));
-        return PageResponse.from(result, url("/assigned/"));
+        return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
     @PostMapping("/create/{apartmentId}/")
@@ -108,7 +108,7 @@ public class IssueController {
     @ObjectLabel("issue")
     public IssueResponse update(
             @PathVariable UUID issueId,
-            @RequestBody IssueStatusUpdateRequest request,
+            @Valid @RequestBody IssueStatusUpdateRequest request,
             @AuthenticationPrincipal AppUserDetails principal) {
         Issue issue = issueWriteService.updateStatus(issueId, request, principal.getUser());
         return IssueResponse.of(issue, 0L);
@@ -139,10 +139,7 @@ public class IssueController {
         return PageRequest.of(
                 Math.max(page - 1, 0),
                 PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, "createdAt").and(Sort.by(Sort.Direction.DESC, "updatedAt")));
+                Sort.by(Sort.Direction.DESC, "createdAt", "updatedAt", "pkid"));
     }
 
-    private String url(String suffix) {
-        return "http://localhost:8080/api/v1/issues" + suffix;
-    }
 }
