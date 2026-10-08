@@ -1,0 +1,677 @@
+{
+  "description": "Curated fictional international identities for existing Cedar Court sample residents. User IDs and homes are preserved.",
+  "profiles": [
+    {
+      "user_id": "d46f0352-2732-5070-bf41-868ffd83084f",
+      "unit_number": "A-102",
+      "gender": "female",
+      "previous": {
+        "username": "shreya_das",
+        "first_name": "Shreya",
+        "last_name": "Das",
+        "slug": "shreya-das",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kochi"
+      },
+      "profile": {
+        "username": "emma_wilson",
+        "first_name": "Emma",
+        "last_name": "Wilson",
+        "slug": "emma-wilson",
+        "country_of_origin": "GB",
+        "city_of_origin": "Bristol"
+      }
+    },
+    {
+      "user_id": "a4a912be-ec8a-56d9-935e-f76c30cb5b20",
+      "unit_number": "A-106",
+      "gender": "female",
+      "previous": {
+        "username": "sheetal_kulkarni",
+        "first_name": "Sheetal",
+        "last_name": "Kulkarni",
+        "slug": "sheetal-kulkarni",
+        "country_of_origin": "IN",
+        "city_of_origin": "Indore"
+      },
+      "profile": {
+        "username": "sofia_martins",
+        "first_name": "Sofia",
+        "last_name": "Martins",
+        "slug": "sofia-martins",
+        "country_of_origin": "PT",
+        "city_of_origin": "Porto"
+      }
+    },
+    {
+      "user_id": "15ef50c4-c86a-56c2-b2d0-7e52ea3ae153",
+      "unit_number": "A-301",
+      "gender": "female",
+      "previous": {
+        "username": "shruti_patil",
+        "first_name": "Shruti",
+        "last_name": "Patil",
+        "slug": "shruti-patil",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kolkata"
+      },
+      "profile": {
+        "username": "elena_garcia",
+        "first_name": "Elena",
+        "last_name": "Garcia",
+        "slug": "elena-garcia",
+        "country_of_origin": "ES",
+        "city_of_origin": "Valencia"
+      }
+    },
+    {
+      "user_id": "ffdba0fd-0ca0-5b57-84fe-a300d5da1037",
+      "unit_number": "A-403",
+      "gender": "female",
+      "previous": {
+        "username": "rekha_ahuja",
+        "first_name": "Rekha",
+        "last_name": "Ahuja",
+        "slug": "rekha-ahuja",
+        "country_of_origin": "IN",
+        "city_of_origin": "Nagpur"
+      },
+      "profile": {
+        "username": "camille_laurent",
+        "first_name": "Camille",
+        "last_name": "Laurent",
+        "slug": "camille-laurent",
+        "country_of_origin": "FR",
+        "city_of_origin": "Lyon"
+      }
+    },
+    {
+      "user_id": "9c40acb4-4922-52a6-871e-c19d27bd96b7",
+      "unit_number": "A-503",
+      "gender": "female",
+      "previous": {
+        "username": "supriya_more",
+        "first_name": "Supriya",
+        "last_name": "More",
+        "slug": "supriya-more",
+        "country_of_origin": "IN",
+        "city_of_origin": "Jaipur"
+      },
+      "profile": {
+        "username": "lena_fischer",
+        "first_name": "Lena",
+        "last_name": "Fischer",
+        "slug": "lena-fischer",
+        "country_of_origin": "DE",
+        "city_of_origin": "Hamburg"
+      }
+    },
+    {
+      "user_id": "6fe05161-cb7f-5941-9e6b-c691fc48ab0a",
+      "unit_number": "B-101",
+      "gender": "female",
+      "previous": {
+        "username": "suchitra_kale",
+        "first_name": "Suchitra",
+        "last_name": "Kale",
+        "slug": "suchitra-kale",
+        "country_of_origin": "IN",
+        "city_of_origin": "Hyderabad"
+      },
+      "profile": {
+        "username": "hana_tanaka",
+        "first_name": "Hana",
+        "last_name": "Tanaka",
+        "slug": "hana-tanaka",
+        "country_of_origin": "JP",
+        "city_of_origin": "Osaka"
+      }
+    },
+    {
+      "user_id": "1c6a4c44-224d-5ada-a627-490103c257b3",
+      "unit_number": "B-201",
+      "gender": "female",
+      "previous": {
+        "username": "suman_ghosh",
+        "first_name": "Suman",
+        "last_name": "Ghosh",
+        "slug": "suman-ghosh",
+        "country_of_origin": "IN",
+        "city_of_origin": "Jaipur"
+      },
+      "profile": {
+        "username": "jiwoo_park",
+        "first_name": "Jiwoo",
+        "last_name": "Park",
+        "slug": "jiwoo-park",
+        "country_of_origin": "KR",
+        "city_of_origin": "Busan"
+      }
+    },
+    {
+      "user_id": "e3c79ee8-324d-5591-bdaf-b1feca5a6b26",
+      "unit_number": "B-304",
+      "gender": "female",
+      "previous": {
+        "username": "madhuri_jagtap",
+        "first_name": "Madhuri",
+        "last_name": "Jagtap",
+        "slug": "madhuri-jagtap",
+        "country_of_origin": "IN",
+        "city_of_origin": "Chennai"
+      },
+      "profile": {
+        "username": "linh_nguyen",
+        "first_name": "Linh",
+        "last_name": "Nguyen",
+        "slug": "linh-nguyen",
+        "country_of_origin": "VN",
+        "city_of_origin": "Hanoi"
+      }
+    },
+    {
+      "user_id": "27a6945b-046d-5812-94b8-07ca50e98ec3",
+      "unit_number": "B-403",
+      "gender": "female",
+      "previous": {
+        "username": "isha_bedi",
+        "first_name": "Isha",
+        "last_name": "Bedi",
+        "slug": "isha-bedi",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kolkata"
+      },
+      "profile": {
+        "username": "isabela_costa",
+        "first_name": "Isabela",
+        "last_name": "Costa",
+        "slug": "isabela-costa",
+        "country_of_origin": "BR",
+        "city_of_origin": "Curitiba"
+      }
+    },
+    {
+      "user_id": "09833140-715e-59e4-8368-4b93037ba752",
+      "unit_number": "B-505",
+      "gender": "female",
+      "previous": {
+        "username": "lakshmi_nair",
+        "first_name": "Lakshmi",
+        "last_name": "Nair",
+        "slug": "lakshmi-nair",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kolkata"
+      },
+      "profile": {
+        "username": "lucia_rossi",
+        "first_name": "Lucia",
+        "last_name": "Rossi",
+        "slug": "lucia-rossi",
+        "country_of_origin": "IT",
+        "city_of_origin": "Bologna"
+      }
+    },
+    {
+      "user_id": "a0c614a1-fe61-5b78-8023-02d53e86ac51",
+      "unit_number": "B-603",
+      "gender": "female",
+      "previous": {
+        "username": "radhika_borkar",
+        "first_name": "Radhika",
+        "last_name": "Borkar",
+        "slug": "radhika-borkar",
+        "country_of_origin": "IN",
+        "city_of_origin": "Mumbai"
+      },
+      "profile": {
+        "username": "amara_okafor",
+        "first_name": "Amara",
+        "last_name": "Okafor",
+        "slug": "amara-okafor",
+        "country_of_origin": "NG",
+        "city_of_origin": "Enugu"
+      }
+    },
+    {
+      "user_id": "f9f74911-71c0-5c30-80ca-ad6fa6f9c77f",
+      "unit_number": "C-101",
+      "gender": "female",
+      "previous": {
+        "username": "roshni_fernandes",
+        "first_name": "Roshni",
+        "last_name": "Fernandes",
+        "slug": "roshni-fernandes",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kochi"
+      },
+      "profile": {
+        "username": "nadia_hassan",
+        "first_name": "Nadia",
+        "last_name": "Hassan",
+        "slug": "nadia-hassan",
+        "country_of_origin": "EG",
+        "city_of_origin": "Alexandria"
+      }
+    },
+    {
+      "user_id": "51d11a6e-79c8-50ed-8e23-c823ca250c5e",
+      "unit_number": "C-106",
+      "gender": "female",
+      "previous": {
+        "username": "maya_dutta",
+        "first_name": "Maya",
+        "last_name": "Dutta",
+        "slug": "maya-dutta",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "maya_thompson",
+        "first_name": "Maya",
+        "last_name": "Thompson",
+        "slug": "maya-thompson",
+        "country_of_origin": "US",
+        "city_of_origin": "Seattle"
+      }
+    },
+    {
+      "user_id": "2c44ae43-e744-53a8-853c-214350584a99",
+      "unit_number": "C-306",
+      "gender": "female",
+      "previous": {
+        "username": "pallavi_naik",
+        "first_name": "Pallavi",
+        "last_name": "Naik",
+        "slug": "pallavi-naik",
+        "country_of_origin": "IN",
+        "city_of_origin": "Hyderabad"
+      },
+      "profile": {
+        "username": "ava_bennett",
+        "first_name": "Ava",
+        "last_name": "Bennett",
+        "slug": "ava-bennett",
+        "country_of_origin": "CA",
+        "city_of_origin": "Vancouver"
+      }
+    },
+    {
+      "user_id": "95575822-3adc-5728-abd7-fcd881601bd4",
+      "unit_number": "C-403",
+      "gender": "female",
+      "previous": {
+        "username": "aparna_pillai",
+        "first_name": "Aparna",
+        "last_name": "Pillai",
+        "slug": "aparna-pillai",
+        "country_of_origin": "IN",
+        "city_of_origin": "Bengaluru"
+      },
+      "profile": {
+        "username": "grace_mwangi",
+        "first_name": "Grace",
+        "last_name": "Mwangi",
+        "slug": "grace-mwangi",
+        "country_of_origin": "KE",
+        "city_of_origin": "Nairobi"
+      }
+    },
+    {
+      "user_id": "73715e16-5449-5715-a463-566e80c4861f",
+      "unit_number": "C-504",
+      "gender": "female",
+      "previous": {
+        "username": "sneha_kulkarni",
+        "first_name": "Sneha",
+        "last_name": "Kulkarni",
+        "slug": "sneha-kulkarni",
+        "country_of_origin": "IN",
+        "city_of_origin": "Hyderabad"
+      },
+      "profile": {
+        "username": "zoe_martin",
+        "first_name": "Zoe",
+        "last_name": "Martin",
+        "slug": "zoe-martin",
+        "country_of_origin": "AU",
+        "city_of_origin": "Melbourne"
+      }
+    },
+    {
+      "user_id": "5a3686ff-f99a-5cd1-9df8-803453e2f044",
+      "unit_number": "A-101",
+      "gender": "male",
+      "previous": {
+        "username": "shantanu_biswas",
+        "first_name": "Shantanu",
+        "last_name": "Biswas",
+        "slug": "shantanu-biswas",
+        "country_of_origin": "IN",
+        "city_of_origin": "Nashik"
+      },
+      "profile": {
+        "username": "daniel_brooks",
+        "first_name": "Daniel",
+        "last_name": "Brooks",
+        "slug": "daniel-brooks",
+        "country_of_origin": "US",
+        "city_of_origin": "Portland"
+      }
+    },
+    {
+      "user_id": "a15ce72e-b2d1-5f1c-af62-5ef4f987f69c",
+      "unit_number": "A-206",
+      "gender": "male",
+      "previous": {
+        "username": "abhay_dutta",
+        "first_name": "Abhay",
+        "last_name": "Dutta",
+        "slug": "abhay-dutta",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "ethan_clarke",
+        "first_name": "Ethan",
+        "last_name": "Clarke",
+        "slug": "ethan-clarke",
+        "country_of_origin": "GB",
+        "city_of_origin": "Leeds"
+      }
+    },
+    {
+      "user_id": "cfd48409-6138-535f-aa8a-ad167b90c447",
+      "unit_number": "A-401",
+      "gender": "male",
+      "previous": {
+        "username": "amit_bansal",
+        "first_name": "Amit",
+        "last_name": "Bansal",
+        "slug": "amit-bansal",
+        "country_of_origin": "IN",
+        "city_of_origin": "Chennai"
+      },
+      "profile": {
+        "username": "mateo_alvarez",
+        "first_name": "Mateo",
+        "last_name": "Alvarez",
+        "slug": "mateo-alvarez",
+        "country_of_origin": "ES",
+        "city_of_origin": "Seville"
+      }
+    },
+    {
+      "user_id": "ba0c1f0c-8888-5b6d-9d30-1c04539c8c05",
+      "unit_number": "A-406",
+      "gender": "male",
+      "previous": {
+        "username": "arjun_rao",
+        "first_name": "Arjun",
+        "last_name": "Rao",
+        "slug": "arjun-rao",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "lucas_ferreira",
+        "first_name": "Lucas",
+        "last_name": "Ferreira",
+        "slug": "lucas-ferreira",
+        "country_of_origin": "BR",
+        "city_of_origin": "Recife"
+      }
+    },
+    {
+      "user_id": "98c0272e-f7e2-527b-8b3b-3a7165a13c4a",
+      "unit_number": "A-506",
+      "gender": "male",
+      "previous": {
+        "username": "shirish_jagtap",
+        "first_name": "Shirish",
+        "last_name": "Jagtap",
+        "slug": "shirish-jagtap",
+        "country_of_origin": "IN",
+        "city_of_origin": "Indore"
+      },
+      "profile": {
+        "username": "antoine_moreau",
+        "first_name": "Antoine",
+        "last_name": "Moreau",
+        "slug": "antoine-moreau",
+        "country_of_origin": "FR",
+        "city_of_origin": "Nantes"
+      }
+    },
+    {
+      "user_id": "0b18cb5b-63c6-5bec-9693-069dc875cc5a",
+      "unit_number": "A-604",
+      "gender": "male",
+      "previous": {
+        "username": "sameer_joshi",
+        "first_name": "Sameer",
+        "last_name": "Joshi",
+        "slug": "sameer-joshi",
+        "country_of_origin": "IN",
+        "city_of_origin": "Jaipur"
+      },
+      "profile": {
+        "username": "jonas_weber",
+        "first_name": "Jonas",
+        "last_name": "Weber",
+        "slug": "jonas-weber",
+        "country_of_origin": "DE",
+        "city_of_origin": "Cologne"
+      }
+    },
+    {
+      "user_id": "281ec843-b6a9-5029-ab80-9f0ce90204e7",
+      "unit_number": "B-105",
+      "gender": "male",
+      "previous": {
+        "username": "ashish_saxena",
+        "first_name": "Ashish",
+        "last_name": "Saxena",
+        "slug": "ashish-saxena",
+        "country_of_origin": "IN",
+        "city_of_origin": "Jaipur"
+      },
+      "profile": {
+        "username": "kenji_watanabe",
+        "first_name": "Kenji",
+        "last_name": "Watanabe",
+        "slug": "kenji-watanabe",
+        "country_of_origin": "JP",
+        "city_of_origin": "Kyoto"
+      }
+    },
+    {
+      "user_id": "d84ca50a-3456-5acb-bb79-6606ad080e4c",
+      "unit_number": "B-204",
+      "gender": "male",
+      "previous": {
+        "username": "sudhir_borkar",
+        "first_name": "Sudhir",
+        "last_name": "Borkar",
+        "slug": "sudhir-borkar",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kolkata"
+      },
+      "profile": {
+        "username": "minjun_kim",
+        "first_name": "Minjun",
+        "last_name": "Kim",
+        "slug": "minjun-kim",
+        "country_of_origin": "KR",
+        "city_of_origin": "Seoul"
+      }
+    },
+    {
+      "user_id": "a13da2bc-2307-548c-a3f4-898ca9ecc767",
+      "unit_number": "B-303",
+      "gender": "male",
+      "previous": {
+        "username": "satish_prasad",
+        "first_name": "Satish",
+        "last_name": "Prasad",
+        "slug": "satish-prasad",
+        "country_of_origin": "IN",
+        "city_of_origin": "Kochi"
+      },
+      "profile": {
+        "username": "duc_tran",
+        "first_name": "Duc",
+        "last_name": "Tran",
+        "slug": "duc-tran",
+        "country_of_origin": "VN",
+        "city_of_origin": "Da Nang"
+      }
+    },
+    {
+      "user_id": "f63a1c53-f904-59e8-aa5f-127c650487c1",
+      "unit_number": "B-404",
+      "gender": "male",
+      "previous": {
+        "username": "salman_mirza",
+        "first_name": "Salman",
+        "last_name": "Mirza",
+        "slug": "salman-mirza",
+        "country_of_origin": "IN",
+        "city_of_origin": "Nashik"
+      },
+      "profile": {
+        "username": "marco_conti",
+        "first_name": "Marco",
+        "last_name": "Conti",
+        "slug": "marco-conti",
+        "country_of_origin": "IT",
+        "city_of_origin": "Turin"
+      }
+    },
+    {
+      "user_id": "a2fbceb6-bb0d-544b-8481-78cb23758274",
+      "unit_number": "B-503",
+      "gender": "male",
+      "previous": {
+        "username": "chirag_patel",
+        "first_name": "Chirag",
+        "last_name": "Patel",
+        "slug": "chirag-patel",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "samuel_okeke",
+        "first_name": "Samuel",
+        "last_name": "Okeke",
+        "slug": "samuel-okeke",
+        "country_of_origin": "NG",
+        "city_of_origin": "Lagos"
+      }
+    },
+    {
+      "user_id": "b5429406-6e65-5eda-8bc6-abc801eff6f4",
+      "unit_number": "C-103",
+      "gender": "male",
+      "previous": {
+        "username": "pradeep_ghosh",
+        "first_name": "Pradeep",
+        "last_name": "Ghosh",
+        "slug": "pradeep-ghosh",
+        "country_of_origin": "IN",
+        "city_of_origin": "Hyderabad"
+      },
+      "profile": {
+        "username": "daniel_kamau",
+        "first_name": "Daniel",
+        "last_name": "Kamau",
+        "slug": "daniel-kamau",
+        "country_of_origin": "KE",
+        "city_of_origin": "Nakuru"
+      }
+    },
+    {
+      "user_id": "3f8f7366-aeff-5a5e-8f88-b2176df13176",
+      "unit_number": "C-206",
+      "gender": "male",
+      "previous": {
+        "username": "aniket_patil",
+        "first_name": "Aniket",
+        "last_name": "Patil",
+        "slug": "aniket-patil",
+        "country_of_origin": "IN",
+        "city_of_origin": "Bengaluru"
+      },
+      "profile": {
+        "username": "omar_mansour",
+        "first_name": "Omar",
+        "last_name": "Mansour",
+        "slug": "omar-mansour",
+        "country_of_origin": "EG",
+        "city_of_origin": "Cairo"
+      }
+    },
+    {
+      "user_id": "72f5172a-bc5b-5b5d-9507-80221be79242",
+      "unit_number": "C-304",
+      "gender": "male",
+      "previous": {
+        "username": "nikhil_sharma",
+        "first_name": "Nikhil",
+        "last_name": "Sharma",
+        "slug": "nikhil-sharma",
+        "country_of_origin": "IN",
+        "city_of_origin": "Indore"
+      },
+      "profile": {
+        "username": "adam_haddad",
+        "first_name": "Adam",
+        "last_name": "Haddad",
+        "slug": "adam-haddad",
+        "country_of_origin": "LB",
+        "city_of_origin": "Beirut"
+      }
+    },
+    {
+      "user_id": "fbfa9182-3e81-50bd-8acd-5b4e709da0cc",
+      "unit_number": "C-502",
+      "gender": "male",
+      "previous": {
+        "username": "dinesh_pillai",
+        "first_name": "Dinesh",
+        "last_name": "Pillai",
+        "slug": "dinesh-pillai",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "liam_fraser",
+        "first_name": "Liam",
+        "last_name": "Fraser",
+        "slug": "liam-fraser",
+        "country_of_origin": "CA",
+        "city_of_origin": "Ottawa"
+      }
+    },
+    {
+      "user_id": "4ff7036d-4643-5786-871d-18d1866877a4",
+      "unit_number": "C-601",
+      "gender": "male",
+      "previous": {
+        "username": "akash_vora",
+        "first_name": "Akash",
+        "last_name": "Vora",
+        "slug": "akash-vora",
+        "country_of_origin": "IN",
+        "city_of_origin": "Pune"
+      },
+      "profile": {
+        "username": "noah_bennett",
+        "first_name": "Noah",
+        "last_name": "Bennett",
+        "slug": "noah-bennett",
+        "country_of_origin": "NZ",
+        "city_of_origin": "Wellington"
+      }
+    }
+  ]
+}

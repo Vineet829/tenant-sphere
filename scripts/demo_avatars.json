@@ -1,0 +1,982 @@
+{
+  "description": "Distinct avatars for the 122 fictional Cedar Court sample accounts, including the guest bot.",
+  "source": "Bundled with the client in client/public/assets/avatars/cedar-court/.",
+  "portraits": [
+    {
+      "user_id": "0d646f91-cb3f-541d-aff2-86df0131c56f",
+      "username": "aanya_shah",
+      "file": "aanya-shah-v2.jpg",
+      "source": "bundled:aanya_shah_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aanya-shah.jpg",
+      "sha256": "485e5bece9287fa0f127c98668e0380de7838b4fbd6ced0c9ed86cf891a58a60"
+    },
+    {
+      "user_id": "6fc9a386-f231-5e7b-9258-6ff7b879f056",
+      "username": "aarav_kulkarni",
+      "file": "aarav-kulkarni-v2.jpg",
+      "source": "bundled:aarav_kulkarni_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aarav-kulkarni.jpg",
+      "sha256": "4d4fd1f5c16b3f57b53c8fe32894053ebd4c8f7ae110ba34398691f8467dcaf9"
+    },
+    {
+      "user_id": "95f5afe3-e8df-5f0c-94e1-89c8f9acb532",
+      "username": "aarti_dhawan",
+      "file": "aarti-dhawan-v2.jpg",
+      "source": "bundled:aarti_dhawan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aarti-dhawan.jpg",
+      "sha256": "2a88e5d2f47d69a16f53202a45293092cb84436e5f84e5fa0e2af95dcea22dd3"
+    },
+    {
+      "user_id": "607c8de1-4a67-5cdd-a950-55068955552c",
+      "username": "abhishek_dubey",
+      "file": "abhishek-dubey-v2.jpg",
+      "source": "bundled:abhishek_dubey_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/abhishek-dubey.jpg",
+      "sha256": "1f32ebc955610cf2cc09e68a5debe1e504ca25dd13400465c0886b6a6ecfefc3"
+    },
+    {
+      "user_id": "72f5172a-bc5b-5b5d-9507-80221be79242",
+      "username": "adam_haddad",
+      "file": "adam-haddad-v2.jpg",
+      "source": "bundled:adam_haddad_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nikhil-sharma.jpg",
+      "sha256": "d96bb3eda2195c954a1e3eff47981282d00f69ab3d92bfe43ddf26dd001b31ff"
+    },
+    {
+      "user_id": "4cfa5abd-a9a4-5849-aca4-633ee88304f5",
+      "username": "adil_ansari",
+      "file": "adil-ansari-v2.jpg",
+      "source": "bundled:adil_ansari_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/adil-ansari.jpg",
+      "sha256": "f4b9cf88dea4d109f3f508329b16d44552b74e7e35f8d76c6b4d07fbe17f6412"
+    },
+    {
+      "user_id": "1b613155-f097-54d4-b9d7-14944dd6f765",
+      "username": "aditi_deshpande",
+      "file": "aditi-deshpande-v2.jpg",
+      "source": "bundled:aditi_deshpande_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aditi-deshpande.jpg",
+      "sha256": "974f7617d20666519ccf65d61230bb5fde4bcecd28b49e4ad6fb8eba7309f37a"
+    },
+    {
+      "user_id": "f1d066fd-612c-52d5-8b3e-cd64203d71c9",
+      "username": "aditya_desai",
+      "file": "aditya-desai-v2.jpg",
+      "source": "bundled:aditya_desai_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aditya-desai.jpg",
+      "sha256": "c37652c5672bf4e8c548b95ce4e0e6e7de74da70e9907d68161fa149f60ce7da"
+    },
+    {
+      "user_id": "897d3181-5dca-5304-aa70-58bf2e34fda3",
+      "username": "ajay_salunke",
+      "file": "ajay-salunke-v2.jpg",
+      "source": "bundled:ajay_salunke_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ajay-salunke.jpg",
+      "sha256": "2164d55662f8eaa8169747c7596d5de8d50f40d7e8e12e9c70f1f6e536b29cf7"
+    },
+    {
+      "user_id": "7feb63a9-6b74-52a0-84c4-6f4abd61c4f8",
+      "username": "ajit_naik",
+      "file": "ajit-naik-v2.jpg",
+      "source": "bundled:ajit_naik_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ajit-naik.jpg",
+      "sha256": "22e2b4ef118420762e244e295167a4e42feecbf2df1d3f08e9ff6bc28a2d4d0d"
+    },
+    {
+      "user_id": "d9e7ceb0-553a-5fb6-a99a-d5d6eac88fc0",
+      "username": "alok_mishra",
+      "file": "alok-mishra-v2.jpg",
+      "source": "bundled:alok_mishra_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/alok-mishra.jpg",
+      "sha256": "fa68533f0dc1c743f809e8e567b5262e029813c61d83aa86918991104fa5d59f"
+    },
+    {
+      "user_id": "a0c614a1-fe61-5b78-8023-02d53e86ac51",
+      "username": "amara_okafor",
+      "file": "amara-okafor-v2.jpg",
+      "source": "bundled:amara_okafor_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/radhika-borkar.jpg",
+      "sha256": "28d3f5a0ce07fdf40d95ae068e591943fc6a9a7cf1f6947d404a6c08267abb6a"
+    },
+    {
+      "user_id": "aa296edf-112a-58bd-b0e5-12c2559a952c",
+      "username": "amrita_sen",
+      "file": "amrita-sen-v2.jpg",
+      "source": "bundled:amrita_sen_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/amrita-sen.jpg",
+      "sha256": "5277fbac9aa8cac277cf3e74f5aeede3ad0292f51e6f00b89862708c1d1d4fdf"
+    },
+    {
+      "user_id": "98c0272e-f7e2-527b-8b3b-3a7165a13c4a",
+      "username": "antoine_moreau",
+      "file": "antoine-moreau-v2.jpg",
+      "source": "bundled:antoine_moreau_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/shirish-jagtap.jpg",
+      "sha256": "0cd6d6ca504d49f864fddb8a5416b0861b3c10ac2c61a52f0721fec6b2b9a015"
+    },
+    {
+      "user_id": "d0146afb-1458-5164-b6df-b0b77168a4c4",
+      "username": "anupama_pandey",
+      "file": "anupama-pandey-v2.jpg",
+      "source": "bundled:anupama_pandey_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/anupama-pandey.jpg",
+      "sha256": "0d229796aa2b625ab4785ca782f4b36940f36aa5b47d46492da805d17dcaaee8"
+    },
+    {
+      "user_id": "b849d716-e2d6-52e0-8126-0e49853fb0ec",
+      "username": "anushka_rao",
+      "file": "anushka-rao-v2.jpg",
+      "source": "bundled:anushka_rao_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/anushka-rao.jpg",
+      "sha256": "d86f7abbfee799d7af4c8515134b2c31033d50c9d35d745d1f8293f16bbbff35"
+    },
+    {
+      "user_id": "40422a28-90c2-5965-9bc1-c9be6f1b61ab",
+      "username": "arpita_mukherjee",
+      "file": "arpita-mukherjee-v2.jpg",
+      "source": "bundled:arpita_mukherjee_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/arpita-mukherjee.jpg",
+      "sha256": "ceda218ab8462bcdeb6c8501b6cbacc92d3b656af0a7783a0d73cef8e948f730"
+    },
+    {
+      "user_id": "b0747797-35ff-5005-9896-f39f3dac7878",
+      "username": "arun_verma",
+      "file": "arun-verma-v2.jpg",
+      "source": "bundled:arun_verma_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/arun-verma.jpg",
+      "sha256": "0294452b70ee4473b908b5099c5e2894728e8b7aa9cf782369efd21cf239b152"
+    },
+    {
+      "user_id": "970465b3-f4d2-5bea-9f6c-45ab37fec593",
+      "username": "arvind_hegde",
+      "file": "arvind-hegde-v2.jpg",
+      "source": "bundled:arvind_hegde_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/arvind-hegde.jpg",
+      "sha256": "b7f95f3feda39048d336217d9b5c1f98fe6b492db0b340457dbfd9ea397bb659"
+    },
+    {
+      "user_id": "0dccc727-6276-5279-a5d9-ab2dd6844ee5",
+      "username": "asha_thomas",
+      "file": "asha-thomas-v2.jpg",
+      "source": "bundled:asha_thomas_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/asha-thomas.jpg",
+      "sha256": "08e8baf23edcb88ab95d8bd943b05218c283e109e1c9b5d791ecf2a841e83313"
+    },
+    {
+      "user_id": "da5790a0-3b16-548c-a998-49ace7d344c4",
+      "username": "atul_soni",
+      "file": "atul-soni-v2.jpg",
+      "source": "bundled:atul_soni_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/atul-soni.jpg",
+      "sha256": "9c8c2f3a12e202d659b9f92d8f84f76bc9156a98e06fd356ca66d262b0a7d3c9"
+    },
+    {
+      "user_id": "2c44ae43-e744-53a8-853c-214350584a99",
+      "username": "ava_bennett",
+      "file": "ava-bennett-v2.jpg",
+      "source": "bundled:ava_bennett_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/pallavi-naik.jpg",
+      "sha256": "46253e8879a114087ab826ded6cb10b2573e2002aad6fcf09cdef318f0a25f23"
+    },
+    {
+      "user_id": "a97e4146-f5f6-5330-9e71-13f79e39014e",
+      "username": "bhavna_arora",
+      "file": "bhavna-arora-v2.jpg",
+      "source": "bundled:bhavna_arora_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/bhavna-arora.jpg",
+      "sha256": "2a9bb0e9349501a23270029867150a65fd529fd324e73c473a886075653a745a"
+    },
+    {
+      "user_id": "ffdba0fd-0ca0-5b57-84fe-a300d5da1037",
+      "username": "camille_laurent",
+      "file": "camille-laurent-v2.jpg",
+      "source": "bundled:camille_laurent_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rekha-ahuja.jpg",
+      "sha256": "9397c58da02ee1d059057436a7ff4aa03a78fd9ab3d105a90e031ec8258522ad"
+    },
+    {
+      "user_id": "5a3686ff-f99a-5cd1-9df8-803453e2f044",
+      "username": "daniel_brooks",
+      "file": "daniel-brooks-v2.jpg",
+      "source": "bundled:daniel_brooks_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/shantanu-biswas.jpg",
+      "sha256": "60136a8ece8e10b8920736e56e88fbf3d294026b7038953dc5643d77802e2496"
+    },
+    {
+      "user_id": "b5429406-6e65-5eda-8bc6-abc801eff6f4",
+      "username": "daniel_kamau",
+      "file": "daniel-kamau-v2.jpg",
+      "source": "bundled:daniel_kamau_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/pradeep-ghosh.jpg",
+      "sha256": "ac6b0891e2a14d96140e0d35e30a64c82f414fa755d3876f68f84ab647a251d1"
+    },
+    {
+      "user_id": "d705107f-36c5-520b-a02c-f638cf8627bb",
+      "username": "deepti_chawla",
+      "file": "deepti-chawla-v2.jpg",
+      "source": "bundled:deepti_chawla_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/deepti-chawla.jpg",
+      "sha256": "af24a36734b6a78b8fab647f447c6bea92b719fdae216518f3cffc78ae11ed30"
+    },
+    {
+      "user_id": "3e8fa33d-6a84-5003-a6c3-84668dc214ca",
+      "username": "dev_patel",
+      "file": "dev-patel-v2.jpg",
+      "source": "bundled:dev_patel_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/dev-patel.jpg",
+      "sha256": "0af7b7d1802c653ea0f40fad1d4213f3d52e05dc91ea23615284be7b785bdaea"
+    },
+    {
+      "user_id": "f5229722-8787-54a7-8c70-762e455c8012",
+      "username": "divya_reddy",
+      "file": "divya-reddy-v2.jpg",
+      "source": "bundled:divya_reddy_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/divya-reddy.jpg",
+      "sha256": "b3677bf5744eda3b6c48ed8988ff186485227b442f65d18e1de6a0541dead3a7"
+    },
+    {
+      "user_id": "a13da2bc-2307-548c-a3f4-898ca9ecc767",
+      "username": "duc_tran",
+      "file": "duc-tran-v2.jpg",
+      "source": "bundled:duc_tran_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/satish-prasad.jpg",
+      "sha256": "1894bc02b5c81612a4cd7213e90f492fb78249c6085980f649d2385cf7dfea52"
+    },
+    {
+      "user_id": "15ef50c4-c86a-56c2-b2d0-7e52ea3ae153",
+      "username": "elena_garcia",
+      "file": "elena-garcia-v2.jpg",
+      "source": "bundled:elena_garcia_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/shruti-patil.jpg",
+      "sha256": "b3c46997efbd7415dc92a42f822f9e84e5fcf3f48f800463eca0f7db744ca159"
+    },
+    {
+      "user_id": "d46f0352-2732-5070-bf41-868ffd83084f",
+      "username": "emma_wilson",
+      "file": "emma-wilson-v2.jpg",
+      "source": "bundled:emma_wilson_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/shreya-das.jpg",
+      "sha256": "0feae23a60c934b4d3ed0309e31d030f0ff7720fd76bd7924120c85b8729d6f3"
+    },
+    {
+      "user_id": "a15ce72e-b2d1-5f1c-af62-5ef4f987f69c",
+      "username": "ethan_clarke",
+      "file": "ethan-clarke-v2.jpg",
+      "source": "bundled:ethan_clarke_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/abhay-dutta.jpg",
+      "sha256": "99b7ed8a9c2650dff95ad4592438d5e91b3ad535f964a050ff008b96adc8c76b"
+    },
+    {
+      "user_id": "275d4a96-6049-55bd-a1e8-06eb94e18b7b",
+      "username": "farhan_shaikh",
+      "file": "farhan-shaikh-v2.jpg",
+      "source": "bundled:farhan_shaikh_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/farhan-shaikh.jpg",
+      "sha256": "6224de67008d7639751abfd6a29738e8b01a902892171923f3b1d5954d4d11ec"
+    },
+    {
+      "user_id": "eb15b420-e462-5564-8e22-e679307b9ff4",
+      "username": "gaurav_arora",
+      "file": "gaurav-arora-v2.jpg",
+      "source": "bundled:gaurav_arora_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/gaurav-arora.jpg",
+      "sha256": "d97efd3a5fd603f75b860f502a5fb784ea6d1ed4f47e57040f29f032b9daadfb"
+    },
+    {
+      "user_id": "bd1a20e4-8341-5099-949c-1bbb90f1fdbd",
+      "username": "gayatri_inamdar",
+      "file": "gayatri-inamdar-v2.jpg",
+      "source": "bundled:gayatri_inamdar_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/gayatri-inamdar.jpg",
+      "sha256": "e68e081e93a7b0fe808f4f60342f23346a0343453bb5fe3cca81b7ff02bdd7bf"
+    },
+    {
+      "user_id": "30d2230c-aef2-5e33-a646-a9f29a72bfc5",
+      "username": "geeta_trivedi",
+      "file": "geeta-trivedi-v2.jpg",
+      "source": "bundled:geeta_trivedi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/geeta-trivedi.jpg",
+      "sha256": "0015ab589b461471750570c2ed03eb903c96e3ca086ec70c9c74ad71329dd2ed"
+    },
+    {
+      "user_id": "95575822-3adc-5728-abd7-fcd881601bd4",
+      "username": "grace_mwangi",
+      "file": "grace-mwangi-v2.jpg",
+      "source": "bundled:grace_mwangi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aparna-pillai.jpg",
+      "sha256": "149fd2c84d1e6c5e02868d20dd261b1cee963510218ea5cadcaf4ed29e94e7bd"
+    },
+    {
+      "user_id": "6fe05161-cb7f-5941-9e6b-c691fc48ab0a",
+      "username": "hana_tanaka",
+      "file": "hana-tanaka-v2.jpg",
+      "source": "bundled:hana_tanaka_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/suchitra-kale.jpg",
+      "sha256": "c4ca549305d71b641cdeed666789b7338b52acf827b5030f93182cbddffdab62"
+    },
+    {
+      "user_id": "c4a1db94-b52d-52ee-ace3-28b7a9510563",
+      "username": "harpreet_singh",
+      "file": "harpreet-singh-v2.jpg",
+      "source": "bundled:harpreet_singh_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/harpreet-singh.jpg",
+      "sha256": "730c4a5c18c8a2e1b224a21b716c74f04bd9a9fe01db4a239f15a2a1bbc7fb52"
+    },
+    {
+      "user_id": "8f05b4ec-f8d6-564d-8d7a-18f43fccb3b1",
+      "username": "harsh_jain",
+      "file": "harsh-jain-v2.jpg",
+      "source": "bundled:harsh_jain_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/harsh-jain.jpg",
+      "sha256": "52ca38fb288bea0ee01edd6bec0543f2a29061e9cb4e294143c0b0e9ad98bef0"
+    },
+    {
+      "user_id": "0f40d39e-713d-52a2-a6e0-157a03481f75",
+      "username": "hema_rangan",
+      "file": "hema-rangan-v2.jpg",
+      "source": "bundled:hema_rangan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/hema-rangan.jpg",
+      "sha256": "2816b36f98c63ebbf0c40c116b41ae4dbd485bc5d7f70be4839844ef5233495a"
+    },
+    {
+      "user_id": "5eed52a3-acb0-5837-9e60-3cba68e1e2d2",
+      "username": "hemant_sawant",
+      "file": "hemant-sawant-v2.jpg",
+      "source": "bundled:hemant_sawant_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/hemant-sawant.jpg",
+      "sha256": "ef667bf174613339e7fa0878a75617442894d9550fdcd89b9bda593cdbf19c23"
+    },
+    {
+      "user_id": "cf440b2d-c0d2-54b2-9aa5-d496ab83e1e6",
+      "username": "imran_ali",
+      "file": "imran-ali-v2.jpg",
+      "source": "bundled:imran_ali_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/imran-ali.jpg",
+      "sha256": "86504ce4458ed86343644e9b4e6836309bad21e2da74730b9aba0a51828434e8"
+    },
+    {
+      "user_id": "e66f64a2-0efb-5fbb-af2a-a78ffc98e673",
+      "username": "imran_sheikh",
+      "file": "imran-sheikh-v2.jpg",
+      "source": "bundled:imran_sheikh_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/imran-sheikh.jpg",
+      "sha256": "9e8fa987d0961efd70bb47b320d76cff734b28743e96e53ac00088bf9f93763f"
+    },
+    {
+      "user_id": "23c5c51e-8c23-568f-9fca-e981d1b7bc89",
+      "username": "imtiaz_khan",
+      "file": "imtiaz-khan-v2.jpg",
+      "source": "bundled:imtiaz_khan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/imtiaz-khan.jpg",
+      "sha256": "058d10a6db501f6a80180c869ba04a8de21066313c2e7592fa5e10fe324d9536"
+    },
+    {
+      "user_id": "27a6945b-046d-5812-94b8-07ca50e98ec3",
+      "username": "isabela_costa",
+      "file": "isabela-costa-v2.jpg",
+      "source": "bundled:isabela_costa_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/isha-bedi.jpg",
+      "sha256": "ad9a36576b4b710e820f75d276843bf03bb668e997485c77efc96220001fc23c"
+    },
+    {
+      "user_id": "c4e89fea-c751-533a-8f39-848ffd7e5556",
+      "username": "ishita_bose",
+      "file": "ishita-bose-v2.jpg",
+      "source": "bundled:ishita_bose_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ishita-bose.jpg",
+      "sha256": "ff2f6717d18cad89e7d5a1156acb2d95ad691158835838b9f79f036b91bcd978"
+    },
+    {
+      "user_id": "1c6a4c44-224d-5ada-a627-490103c257b3",
+      "username": "jiwoo_park",
+      "file": "jiwoo-park-v2.jpg",
+      "source": "bundled:jiwoo_park_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/suman-ghosh.jpg",
+      "sha256": "bf0bb9c6dcca001ca7ebd826168394615f1f65821b3dfc1980b9de141f1bc911"
+    },
+    {
+      "user_id": "0b18cb5b-63c6-5bec-9693-069dc875cc5a",
+      "username": "jonas_weber",
+      "file": "jonas-weber-v2.jpg",
+      "source": "bundled:jonas_weber_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sameer-joshi.jpg",
+      "sha256": "65afb47dd260e31e2df7d951f68c1de86ead61a96741591f0d85c76ca49ba066"
+    },
+    {
+      "user_id": "806ad6b1-382e-5a37-9f25-e4884b0ebe18",
+      "username": "kabir_sethi",
+      "file": "kabir-sethi-v2.jpg",
+      "source": "bundled:kabir_sethi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/kabir-sethi.jpg",
+      "sha256": "99b20b1b2b1698c7c2b6a38d0f2d6a9a4ecadb6efa3fb3ea5b841d565b8ca648"
+    },
+    {
+      "user_id": "e87fa4c0-fddb-5d6a-88a3-89164b99387f",
+      "username": "kavya_menon",
+      "file": "kavya-menon-v2.jpg",
+      "source": "bundled:kavya_menon_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/kavya-menon.jpg",
+      "sha256": "cd8690c76d985b326baa4ca53e36ce9f6157df2fd43a6f729e159657ca2ba829"
+    },
+    {
+      "user_id": "281ec843-b6a9-5029-ab80-9f0ce90204e7",
+      "username": "kenji_watanabe",
+      "file": "kenji-watanabe-v2.jpg",
+      "source": "bundled:kenji_watanabe_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ashish-saxena.jpg",
+      "sha256": "434bef7bc8df196230ed35429a1fdd5012e61bc67478a9e2ca5c73af35203bfc"
+    },
+    {
+      "user_id": "020e552a-965c-59c7-b4da-379fee27eb52",
+      "username": "komal_soni",
+      "file": "komal-soni-v2.jpg",
+      "source": "bundled:komal_soni_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/komal-soni.jpg",
+      "sha256": "ee02207b1326bf929ac6403caa64bbb6f09e45d831102cc498cbb2f493d7e05d"
+    },
+    {
+      "user_id": "caf17057-5dfb-52a5-88ab-8c39f128a0f1",
+      "username": "kritika_suri",
+      "file": "kritika-suri-v2.jpg",
+      "source": "bundled:kritika_suri_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/kritika-suri.jpg",
+      "sha256": "4430477caa59643a81e33a30fa5752e7f9e4cab5d1db209609e9d8824fdbc782"
+    },
+    {
+      "user_id": "6aa13565-2f08-5c52-9ef6-adbecd890d84",
+      "username": "kunal_shah",
+      "file": "kunal-shah-v2.jpg",
+      "source": "bundled:kunal_shah_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/kunal-shah.jpg",
+      "sha256": "2f7c29a143318ee1a9cc3e4a9ee82b74892b58fb6a8aaecd4bb9071cb800ed53"
+    },
+    {
+      "user_id": "7018a164-74c8-5147-899b-27e29a19fc4d",
+      "username": "leena_vora",
+      "file": "leena-vora-v2.jpg",
+      "source": "bundled:leena_vora_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/leena-vora.jpg",
+      "sha256": "7e4c206f99326bef1ec1bed046bce7151be210934606c68a2a5b7a12fb7fbe33"
+    },
+    {
+      "user_id": "9c40acb4-4922-52a6-871e-c19d27bd96b7",
+      "username": "lena_fischer",
+      "file": "lena-fischer-v2.jpg",
+      "source": "bundled:lena_fischer_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/supriya-more.jpg",
+      "sha256": "4d667e72abfdad7d48b423b97c45d5a3b11383b2ea5b8e0bd2332370d56eea37"
+    },
+    {
+      "user_id": "fbfa9182-3e81-50bd-8acd-5b4e709da0cc",
+      "username": "liam_fraser",
+      "file": "liam-fraser-v2.jpg",
+      "source": "bundled:liam_fraser_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/dinesh-pillai.jpg",
+      "sha256": "974dea4e04ccf1bf14a7d51e59e61e3713f8aa624c65cf0a736132d879ccbc66"
+    },
+    {
+      "user_id": "e3c79ee8-324d-5591-bdaf-b1feca5a6b26",
+      "username": "linh_nguyen",
+      "file": "linh-nguyen-v2.jpg",
+      "source": "bundled:linh_nguyen_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/madhuri-jagtap.jpg",
+      "sha256": "001cf803db08f857dfb9be9c39b702dfe5bb1077368cdb3c9b98ae34355d5f13"
+    },
+    {
+      "user_id": "ba0c1f0c-8888-5b6d-9d30-1c04539c8c05",
+      "username": "lucas_ferreira",
+      "file": "lucas-ferreira-v2.jpg",
+      "source": "bundled:lucas_ferreira_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/arjun-rao.jpg",
+      "sha256": "758a7571a3c4c183596b4eaeb85828259fd0a1a66444fc832c771ad3f48055e7"
+    },
+    {
+      "user_id": "09833140-715e-59e4-8368-4b93037ba752",
+      "username": "lucia_rossi",
+      "file": "lucia-rossi-v2.jpg",
+      "source": "bundled:lucia_rossi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/lakshmi-nair.jpg",
+      "sha256": "43d1f1bfaaa8261b4dd7d67cf6de00abca0ac28b4d3796fc35fa7bb7063c48f3"
+    },
+    {
+      "user_id": "ce6f2135-9ffa-50bf-9ed1-02578ff39e10",
+      "username": "mahesh_jadhav",
+      "file": "mahesh-jadhav-v2.jpg",
+      "source": "bundled:mahesh_jadhav_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/mahesh-jadhav.jpg",
+      "sha256": "1cb38cc88d749c705a67f5f260aae38d225c8d4ea43dfc403f65c9e6ec6d1207"
+    },
+    {
+      "user_id": "ad6a227c-659a-532e-b021-f0cee5cbad7f",
+      "username": "malini_krishnan",
+      "file": "malini-krishnan-v2.jpg",
+      "source": "bundled:malini_krishnan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/malini-krishnan.jpg",
+      "sha256": "a04787a6d3534461807fc88ac7e819f1b98030529ea708723662c69348ec8f01"
+    },
+    {
+      "user_id": "59f76930-2f7a-5f32-861e-8fe5c86ef2a7",
+      "username": "manoj_vishwakarma",
+      "file": "manoj-vishwakarma-v2.jpg",
+      "source": "bundled:manoj_vishwakarma_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/manoj-vishwakarma.jpg",
+      "sha256": "8a69af6f33cab4082a7e7e33d8128529951cb102a7063cc99a821f3c21904756"
+    },
+    {
+      "user_id": "f63a1c53-f904-59e8-aa5f-127c650487c1",
+      "username": "marco_conti",
+      "file": "marco-conti-v2.jpg",
+      "source": "bundled:marco_conti_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/salman-mirza.jpg",
+      "sha256": "f3d97039ff61a1d9f7c28ac420dd826b9de8eca0bf5c7167b66ab30e5e103536"
+    },
+    {
+      "user_id": "cfd48409-6138-535f-aa8a-ad167b90c447",
+      "username": "mateo_alvarez",
+      "file": "mateo-alvarez-v2.jpg",
+      "source": "bundled:mateo_alvarez_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/amit-bansal.jpg",
+      "sha256": "84881e7ec0668acdb01cbee5575e16f23cfdddd89287f3ed912673be6d8df412"
+    },
+    {
+      "user_id": "51d11a6e-79c8-50ed-8e23-c823ca250c5e",
+      "username": "maya_thompson",
+      "file": "maya-thompson-v2.jpg",
+      "source": "bundled:maya_thompson_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/maya-dutta.jpg",
+      "sha256": "03971c36ce73f0013d8f5eb3d958944a1e60af19264bb6148a915735f987eb9a"
+    },
+    {
+      "user_id": "be252d05-67b2-5da0-bd03-c07be0e3f87c",
+      "username": "meera_iyer",
+      "file": "meera-iyer-v2.jpg",
+      "source": "bundled:meera_iyer_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/meera-iyer.jpg",
+      "sha256": "af54d05e55263687806148b6f01f75f63ecf637f0909a5cce8c1ca012612745d"
+    },
+    {
+      "user_id": "d84ca50a-3456-5acb-bb79-6606ad080e4c",
+      "username": "minjun_kim",
+      "file": "minjun-kim-v2.jpg",
+      "source": "bundled:minjun_kim_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sudhir-borkar.jpg",
+      "sha256": "f0cbc52d1df5027db0516b76bc5fa0f33a23f5e016e9e057d8a58100a48fd85c"
+    },
+    {
+      "user_id": "95210b55-f643-5407-8418-e2438d1881a1",
+      "username": "mohit_chawla",
+      "file": "mohit-chawla-v2.jpg",
+      "source": "bundled:mohit_chawla_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/mohit-chawla.jpg",
+      "sha256": "c128e5ddf48190ce9dcbb084b841cc7236ea2e4a36c634b4d85c73a28159ead1"
+    },
+    {
+      "user_id": "f9f74911-71c0-5c30-80ca-ad6fa6f9c77f",
+      "username": "nadia_hassan",
+      "file": "nadia-hassan-v2.jpg",
+      "source": "bundled:nadia_hassan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/roshni-fernandes.jpg",
+      "sha256": "a51cd930f0b06335de742468a208c90f09e9166c281cfd82ffc8d92fcdaf2f17"
+    },
+    {
+      "user_id": "fef82cfc-d659-5b0d-9583-5fe284b3706a",
+      "username": "nandini_gupta",
+      "file": "nandini-gupta-v2.jpg",
+      "source": "bundled:nandini_gupta_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nandini-gupta.jpg",
+      "sha256": "d9ad1401786f51513ea3ff4d8bda5985581a567eb2ce5d58866e41b3ccba9ab3"
+    },
+    {
+      "user_id": "450de640-6af7-538e-9053-82ae8827d986",
+      "username": "navin_pandey",
+      "file": "navin-pandey-v2.jpg",
+      "source": "bundled:navin_pandey_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/navin-pandey.jpg",
+      "sha256": "9c24e330c2f6977c8cea2a2192cc3d6cf7833a631c4c02066f2f0554e42a08bd"
+    },
+    {
+      "user_id": "d9842db3-cbb9-589f-af3b-6cff65b15128",
+      "username": "nilesh_patil",
+      "file": "nilesh-patil-v2.jpg",
+      "source": "bundled:nilesh_patil_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nilesh-patil.jpg",
+      "sha256": "02ead0fceb1011e51478924de6db1af887f2e6520aaa5b5cab82168146dd1de7"
+    },
+    {
+      "user_id": "1355111e-c548-5d1b-b3de-36b5324d897b",
+      "username": "nisha_bansal",
+      "file": "nisha-bansal-v2.jpg",
+      "source": "bundled:nisha_bansal_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nisha-bansal.jpg",
+      "sha256": "c9e3cc2155a7e4d0e3439a59ec0472e04803beddc72a0abb0fa601d8b8899a8c"
+    },
+    {
+      "user_id": "e538acea-9c67-5a5f-82ea-be9cbef70906",
+      "username": "nisha_rao",
+      "file": "nisha-rao-v2.jpg",
+      "source": "bundled:nisha_rao_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nisha-rao.jpg",
+      "sha256": "570e6aa695dd0529fe80b063d0811b051f9d09ed467bc012aae606a1efe1aaf9"
+    },
+    {
+      "user_id": "4e7c8125-1ea1-52ba-9fbd-1d4eb1a49749",
+      "username": "nishant_kaul",
+      "file": "nishant-kaul-v2.jpg",
+      "source": "bundled:nishant_kaul_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/nishant-kaul.jpg",
+      "sha256": "aebf8e2b0fae3a253a989adc39deb3f5a58d70b36b40b980f97d07e62f2f18a2"
+    },
+    {
+      "user_id": "4ff7036d-4643-5786-871d-18d1866877a4",
+      "username": "noah_bennett",
+      "file": "noah-bennett-v2.jpg",
+      "source": "bundled:noah_bennett_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/akash-vora.jpg",
+      "sha256": "fc4adc1d46bdbd496e92168e163ffeb564c46675a31ddf74b75dfccb20effb53"
+    },
+    {
+      "user_id": "3f8f7366-aeff-5a5e-8f88-b2176df13176",
+      "username": "omar_mansour",
+      "file": "omar-mansour-v2.jpg",
+      "source": "bundled:omar_mansour_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/aniket-patil.jpg",
+      "sha256": "f0717bf80d1b648dfed2416639e01590a4bfa7e999537965b697c7462f5dc56f"
+    },
+    {
+      "user_id": "24484e87-af0d-5e3b-a36b-0653d7fbfd31",
+      "username": "pooja_verma",
+      "file": "pooja-verma-v2.jpg",
+      "source": "bundled:pooja_verma_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/pooja-verma.jpg",
+      "sha256": "4cb6480ed3f79badf10182cc88e595a6382a376352ac6935268ed307223ecb7b"
+    },
+    {
+      "user_id": "16720dc9-da16-5737-9c08-a3dbae744423",
+      "username": "pranav_kulkarni",
+      "file": "pranav-kulkarni-v2.jpg",
+      "source": "bundled:pranav_kulkarni_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/pranav-kulkarni.jpg",
+      "sha256": "c21e1ff2c6e2b174bef1d74e994fb14d840ecf12307f6a4329299cbe6280aa8e"
+    },
+    {
+      "user_id": "d21e34fa-f96e-5615-98f8-f669545cca0e",
+      "username": "priya_nair",
+      "file": "priya-nair-v2.jpg",
+      "source": "bundled:priya_nair_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/priya-nair.jpg",
+      "sha256": "5aff893a38916ff524421e01b9111b2a5ffd4026bb89d72ab0e6d20a009eeec9"
+    },
+    {
+      "user_id": "8e8bf3c9-9d39-533d-9f7a-62f65b5d367e",
+      "username": "priyanka_dubey",
+      "file": "priyanka-dubey-v2.jpg",
+      "source": "bundled:priyanka_dubey_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/priyanka-dubey.jpg",
+      "sha256": "120ec57e2b15cb82a475fb0d9e7bf9de4103f273f88798114a28aaedd62cb0c3"
+    },
+    {
+      "user_id": "b0ad6a0a-9229-5aa7-8380-fc66ba8e584e",
+      "username": "rachana_shetty",
+      "file": "rachana-shetty-v2.jpg",
+      "source": "bundled:rachana_shetty_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rachana-shetty.jpg",
+      "sha256": "00ce1be1a28ae7cb27be12df02633fd1a26dae117eaed35d2674f21f95ee5e6a"
+    },
+    {
+      "user_id": "3737ff8a-0f9c-5773-aaf4-29d25ccb3041",
+      "username": "rahul_sinha",
+      "file": "rahul-sinha-v2.jpg",
+      "source": "bundled:rahul_sinha_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rahul-sinha.jpg",
+      "sha256": "0788810ac83d39736457904b0146a98d30251219bebc0f1332b66a60a93698f4"
+    },
+    {
+      "user_id": "79de9990-6876-59e4-a0dc-110198848e0c",
+      "username": "rakesh_verma",
+      "file": "rakesh-verma-v2.jpg",
+      "source": "bundled:rakesh_verma_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rakesh-verma.jpg",
+      "sha256": "57b18fb8e65270d12cd3700e9f9bb816c14089be2b2ba109e61fe9fc610b819e"
+    },
+    {
+      "user_id": "6ce55078-b26d-55bd-b652-f7bce7e25152",
+      "username": "ranjit_ahuja",
+      "file": "ranjit-ahuja-v2.jpg",
+      "source": "bundled:ranjit_ahuja_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ranjit-ahuja.jpg",
+      "sha256": "56895a280ead80eb14156433003249054a57b949ab187ab0f97bfc469bbf0f88"
+    },
+    {
+      "user_id": "64db13b4-0a0c-5c51-a321-a3de30e7f66a",
+      "username": "rashmi_saxena",
+      "file": "rashmi-saxena-v2.jpg",
+      "source": "bundled:rashmi_saxena_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rashmi-saxena.jpg",
+      "sha256": "e76e63b4498c489a9ded7045f736d481171c6d6928a0610427417bba8c252fc0"
+    },
+    {
+      "user_id": "39010517-e7fb-5837-ada6-07a6c6381907",
+      "username": "renuka_hegde",
+      "file": "renuka-hegde-v2.jpg",
+      "source": "bundled:renuka_hegde_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/renuka-hegde.jpg",
+      "sha256": "bdfde02e8c3c7bce8ecc7832005144596647a2583b51b255dc908ae1c08e8f98"
+    },
+    {
+      "user_id": "63018105-707d-585e-8561-f22f1d7f061c",
+      "username": "ritesh_shetty",
+      "file": "ritesh-shetty-v2.jpg",
+      "source": "bundled:ritesh_shetty_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ritesh-shetty.jpg",
+      "sha256": "6592993adb0b5d7d6a8f0ca410114bb2cf87efd10deb03d4090d6721a5fcf590"
+    },
+    {
+      "user_id": "1261f6bb-aa1d-5273-8109-d7aa1fd2e362",
+      "username": "ritu_bhatia",
+      "file": "ritu-bhatia-v2.jpg",
+      "source": "bundled:ritu_bhatia_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/ritu-bhatia.jpg",
+      "sha256": "61dab2b78569e7536b79776096c61695e9fd46d6557e6db8e66fee2ac8a4fc3f"
+    },
+    {
+      "user_id": "641c7187-bf23-5cef-922a-41d94cda5c54",
+      "username": "riya_kapoor",
+      "file": "riya-kapoor-v2.jpg",
+      "source": "bundled:riya_kapoor_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/riya-kapoor.jpg",
+      "sha256": "f452c3a3a4860880a72c74015258165507e66869281d43fe66394d60f793cf16"
+    },
+    {
+      "user_id": "8dd43609-e042-5ad1-bf67-040ad5da2f86",
+      "username": "rohan_mehta",
+      "file": "rohan-mehta-v2.jpg",
+      "source": "bundled:rohan_mehta_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rohan-mehta.jpg",
+      "sha256": "964d5f0c6e6001883f88fd7a49fa023ab4326c6b99f9a73f27566db6910548f0"
+    },
+    {
+      "user_id": "07970654-976f-5a13-b2a0-9ac301728462",
+      "username": "rohan_sethi",
+      "file": "rohan-sethi-v2.jpg",
+      "source": "bundled:rohan_sethi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/rohan-sethi.jpg",
+      "sha256": "bdba2eb4ecfc3eec10a5df49b9d86fd836ebb32191d76a95b8975040d5f7f0e6"
+    },
+    {
+      "user_id": "c322fb5e-6ef9-561e-9ffb-cfdb3fe660a9",
+      "username": "sachin_more",
+      "file": "sachin-more-v2.jpg",
+      "source": "bundled:sachin_more_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sachin-more.jpg",
+      "sha256": "d6b699bc41dfb4f04919844f2043589e1b4ca72dd0ab40083187d4d6edd2a4cd"
+    },
+    {
+      "user_id": "28c2f8ae-5b8d-5043-bfb8-cec08ea2e74b",
+      "username": "saira_mirza",
+      "file": "saira-mirza-v2.jpg",
+      "source": "bundled:saira_mirza_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/saira-mirza.jpg",
+      "sha256": "6bfba0ca97fcc48d55398ad8e7f422ed94adf7a469f7d2c36a459d14bfffccd9"
+    },
+    {
+      "user_id": "618bcf40-d60c-5289-807b-8f7c592a2327",
+      "username": "sakshi_jain",
+      "file": "sakshi-jain-v2.jpg",
+      "source": "bundled:sakshi_jain_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sakshi-jain.jpg",
+      "sha256": "6d2e2a31780feda322ea522b880e251221cfa72fcacd2be06b74f529dc81db4e"
+    },
+    {
+      "user_id": "a2fbceb6-bb0d-544b-8481-78cb23758274",
+      "username": "samuel_okeke",
+      "file": "samuel-okeke-v2.jpg",
+      "source": "bundled:samuel_okeke_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/chirag-patel.jpg",
+      "sha256": "a2df88167ee2b287ac254a0ae40392ef586f3d8de4894441520f4faf6916257a"
+    },
+    {
+      "user_id": "aed82e71-7a62-5da7-a0a3-dcf381fa1ee1",
+      "username": "sandeep_bhat",
+      "file": "sandeep-bhat-v2.jpg",
+      "source": "bundled:sandeep_bhat_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sandeep-bhat.jpg",
+      "sha256": "ff0cd6f7ae33e52999afb8a7d88c78bd0b83e47605f45347ce85c60d2fef87a5"
+    },
+    {
+      "user_id": "dec78e46-3b85-5c3a-bb6e-d36acf271dc6",
+      "username": "sanjay_das",
+      "file": "sanjay-das-v2.jpg",
+      "source": "bundled:sanjay_das_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sanjay-das.jpg",
+      "sha256": "b3febc803b1e5d65c5e66d0a198a7101dde5bfc59b736d99950116d32db3410b"
+    },
+    {
+      "user_id": "946634db-d8de-508a-8d01-2b2496b2335c",
+      "username": "sara_khan",
+      "file": "sara-khan-v2.jpg",
+      "source": "bundled:sara_khan_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sara-khan.jpg",
+      "sha256": "8dabd138455367add8f09a64f1cdaa579a6aab00299c9e210982a943f6d0f4d3"
+    },
+    {
+      "user_id": "a1832150-4a3d-549f-8f32-4c5bd66d61eb",
+      "username": "saurabh_gupta",
+      "file": "saurabh-gupta-v2.jpg",
+      "source": "bundled:saurabh_gupta_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/saurabh-gupta.jpg",
+      "sha256": "eec420d6c092abea904d5a30750e883fb2d2b5e38489ec902d6295b2946364ea"
+    },
+    {
+      "user_id": "578e0c11-e307-5b5f-8d13-dc834bbc855f",
+      "username": "savita_khanna",
+      "file": "savita-khanna-v2.jpg",
+      "source": "bundled:savita_khanna_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/savita-khanna.jpg",
+      "sha256": "219276104a0b0f7a357f86761bff10ac5746f02ba31f7313cf9da1c69da7a5cb"
+    },
+    {
+      "user_id": "a68a3766-076a-5a07-a6f6-002f1d69e808",
+      "username": "seema_wadhwa",
+      "file": "seema-wadhwa-v2.jpg",
+      "source": "bundled:seema_wadhwa_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/seema-wadhwa.jpg",
+      "sha256": "f0e3c8aefb7cbae2f5d2e726c8dd43d83d51fd780f8b051b04917bd3af860d99"
+    },
+    {
+      "user_id": "96add205-026b-59cd-acba-5552c1ff0236",
+      "username": "sharad_kale",
+      "file": "sharad-kale-v2.jpg",
+      "source": "bundled:sharad_kale_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sharad-kale.jpg",
+      "sha256": "98f30f528cefbb8ffe2dfd091c9b2409ca007d77c2573c853b35c5567d515af2"
+    },
+    {
+      "user_id": "a4a912be-ec8a-56d9-935e-f76c30cb5b20",
+      "username": "sofia_martins",
+      "file": "sofia-martins-v2.jpg",
+      "source": "bundled:sofia_martins_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sheetal-kulkarni.jpg",
+      "sha256": "ebf9e7d58bbf0317b3705a519d1e959335cfe32e9eda0b6abb56cf278e03518a"
+    },
+    {
+      "user_id": "32ae887b-2971-581b-b80e-88bc9a688c41",
+      "username": "sonia_grover",
+      "file": "sonia-grover-v2.jpg",
+      "source": "bundled:sonia_grover_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sonia-grover.jpg",
+      "sha256": "bcf6d54bd52e92e1305b92503788a035ebb3d13a47f6134010aefd749c6d6791"
+    },
+    {
+      "user_id": "1661c352-aacb-5251-9a37-6a925d2ea229",
+      "username": "sumit_bedi",
+      "file": "sumit-bedi-v2.jpg",
+      "source": "bundled:sumit_bedi_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sumit-bedi.jpg",
+      "sha256": "4888e3a0bd0c15a4ee9aa83860bf3ba7a076361231a7f691522c6879a5314e2e"
+    },
+    {
+      "user_id": "837102c9-5fc8-5866-8a99-dae4be330da7",
+      "username": "suresh_inamdar",
+      "file": "suresh-inamdar-v2.jpg",
+      "source": "bundled:suresh_inamdar_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/suresh-inamdar.jpg",
+      "sha256": "aac3a1c1b237ae3ed6942331a7f96bbaa52ce5d9f036bbfc567d1c03bb985118"
+    },
+    {
+      "user_id": "64d8be3d-3ce1-5314-9257-ad3d0d6c44fa",
+      "username": "suresh_pawar",
+      "file": "suresh-pawar-v2.jpg",
+      "source": "bundled:suresh_pawar_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/suresh-pawar.jpg",
+      "sha256": "f972436556e40e73adc8521d63772786efa0ef10da7932d6b1161062d50cabaf"
+    },
+    {
+      "user_id": "7cf67acf-99eb-5fdc-9511-26374ff4695a",
+      "username": "swati_agarwal",
+      "file": "swati-agarwal-v2.jpg",
+      "source": "bundled:swati_agarwal_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/swati-agarwal.jpg",
+      "sha256": "e2062bca029400c6c33bf5bfc9a4084c3cd00927e1ce527c140de7b69f8544ac"
+    },
+    {
+      "user_id": "54ea4070-edc9-53e5-a22b-e1fce218f63c",
+      "username": "tejas_gokhale",
+      "file": "tejas-gokhale-v2.jpg",
+      "source": "bundled:tejas_gokhale_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/tejas-gokhale.jpg",
+      "sha256": "6740a891d5c463fced3c1680d17ec56fe7fe6e2f9d413e2a5390487f24ac7e73"
+    },
+    {
+      "user_id": "d6b0adab-bb3f-470a-ac58-ecc6f1ea26a1",
+      "username": "testuser",
+      "file": "testuser-bot-v5.jpg",
+      "source": "bundled:testuser_bot_v5",
+      "previous_avatar": "/assets/avatars/cedar-court/testuser-v4.jpg",
+      "sha256": "e1ed234a5e59ed3bb24923990e3cb6bfcee7f217a6edd0c557e99eb0440c8f81"
+    },
+    {
+      "user_id": "29ba6caf-34d9-5036-ba76-2747fd24da7e",
+      "username": "urmila_sawant",
+      "file": "urmila-sawant-v2.jpg",
+      "source": "bundled:urmila_sawant_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/urmila-sawant.jpg",
+      "sha256": "81a0418253790b0e11706e2a8aa7d3c88e5f19a165314b54c8b5ac6693ad8e12"
+    },
+    {
+      "user_id": "10bcf953-e228-5455-bf29-8cc9992f90ae",
+      "username": "varun_kapoor",
+      "file": "varun-kapoor-v2.jpg",
+      "source": "bundled:varun_kapoor_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/varun-kapoor.jpg",
+      "sha256": "198e625d790010deb47836139cf35fec01a89c78b8683d035e1b736806827521"
+    },
+    {
+      "user_id": "83febdb2-5148-5f27-99b2-c7d0360d85d0",
+      "username": "vidya_prasad",
+      "file": "vidya-prasad-v2.jpg",
+      "source": "bundled:vidya_prasad_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/vidya-prasad.jpg",
+      "sha256": "de6572ba6ffc2ca8686a8e628f8eb124c3e0c0b0b117e441ac6406bc3d2b0ba6"
+    },
+    {
+      "user_id": "de31dc33-5740-51cc-9823-013fb731ee92",
+      "username": "vikram_nair",
+      "file": "vikram-nair-v2.jpg",
+      "source": "bundled:vikram_nair_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/vikram-nair.jpg",
+      "sha256": "507eed95f244778927b35fd7b954c61c735c6de49b03bb97716e9672c09bdc95"
+    },
+    {
+      "user_id": "d3606cf5-dc50-54cc-ad7a-cc6b136e228c",
+      "username": "vinay_agarwal",
+      "file": "vinay-agarwal-v2.jpg",
+      "source": "bundled:vinay_agarwal_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/vinay-agarwal.jpg",
+      "sha256": "608b916859291001d0efbc4cb72a5e4267c4e5ab2ba3590ced7770f7ee5e8601"
+    },
+    {
+      "user_id": "b79c8120-9e70-5644-b3e6-a677fa6657a5",
+      "username": "vinod_yadav",
+      "file": "vinod-yadav-v2.jpg",
+      "source": "bundled:vinod_yadav_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/vinod-yadav.jpg",
+      "sha256": "82f1c8f3473a527185400d72b4e8adf77baaecaf39e384dba11e5a5935de2794"
+    },
+    {
+      "user_id": "73715e16-5449-5715-a463-566e80c4861f",
+      "username": "zoe_martin",
+      "file": "zoe-martin-v2.jpg",
+      "source": "bundled:zoe_martin_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/sneha-kulkarni.jpg",
+      "sha256": "bae4c827372c58615d888bfd2bd17c25baede1f710ada67b1ec9d37c01d524e3"
+    },
+    {
+      "user_id": "e445ed6e-4b12-5f5e-8b81-6b19ad4b8144",
+      "username": "zubin_fernandes",
+      "file": "zubin-fernandes-v2.jpg",
+      "source": "bundled:zubin_fernandes_v2",
+      "previous_avatar": "/assets/avatars/cedar-court/zubin-fernandes.jpg",
+      "sha256": "ac4b36ec76946a58b1eabe941e338445d186b0897c20dd1040368fb55d61e44a"
+    }
+  ]
+}
