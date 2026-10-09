@@ -4,6 +4,7 @@ import { FormFieldComponent } from "@/components/forms/FormFieldComponent";
 import { useResetPasswordConfirmMutation } from "@/lib/redux/features/auth/authApiSlice";
 import { passwordResetConfirmSchema, TPasswordResetConfirmSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -21,6 +22,7 @@ export default function PasswordResetConfirmForm() {
 		reset,
 		formState: { errors },
 	} = useForm<TPasswordResetConfirmSchema>({
+		resolver: zodResolver(passwordResetConfirmSchema),
 		mode: "all",
 		defaultValues: {
 			uid: uid as string,

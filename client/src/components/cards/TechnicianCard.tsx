@@ -26,8 +26,8 @@ function factsFor(technician: Profile): PersonFact[] {
 }
 
 export default function TechnicianCard() {
-	const searchTerm = useAppSelector((state: UserState) => state.user.searchTerm);
-	const page = useAppSelector((state: UserState) => state.user.page);
+	const searchTerm = useAppSelector((state: UserState) => state.user.techSearchTerm);
+	const page = useAppSelector((state: UserState) => state.user.techPage);
 	const { data, isLoading, isFetching, isError, refetch } = useGetAllTechniciansQuery({ searchTerm, page });
 	const ready = !isLoading && !isError;
 
@@ -49,7 +49,11 @@ export default function TechnicianCard() {
 			/>
 
 			<div className="es-toolbar">
-				<UsersSearch placeholder="Search technicians by name or username" label="Search technicians" />
+				<UsersSearch
+					placeholder="Search technicians by name or username"
+					label="Search technicians"
+					variant="technician"
+				/>
 			</div>
 
 			{isLoading ? (
@@ -85,7 +89,7 @@ export default function TechnicianCard() {
 				</EmptyState>
 			)}
 
-			<PaginationSection totalPages={totalPages} entityType="user" />
+			<PaginationSection totalPages={totalPages} entityType="technician" />
 		</div>
 	);
 }

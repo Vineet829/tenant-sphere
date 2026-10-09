@@ -27,7 +27,7 @@ export default function OccupationSelectField({ setValue, control }: OccupationS
 	const profile = profileData?.profile;
 
 	useEffect(() => {
-		if (profile?.gender) {
+		if (profile?.occupation) {
 			const occupationValue = occupationOptions.find((option) => option.value === profile.occupation);
 
 			if (occupationValue && isOccupation(occupationValue.value)) {

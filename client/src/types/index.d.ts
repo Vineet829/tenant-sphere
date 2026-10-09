@@ -2,6 +2,8 @@ export interface UserState {
 	user: {
 		searchTerm: string;
 		page: number;
+		techSearchTerm: string;
+		techPage: number;
 	};
 }
 
