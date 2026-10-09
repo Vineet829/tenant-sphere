@@ -3,8 +3,9 @@
 import SegmentedField from "@/components/estate/SegmentedField";
 import SubmitButton from "@/components/estate/SubmitButton";
 import { useUpdateIssueMutation } from "@/lib/redux/features/issues/issueApiSlice";
-import { TIssueUpdateSchema } from "@/lib/validationSchemas";
+import { issueUpdateSchema, TIssueUpdateSchema } from "@/lib/validationSchemas";
 import { extractErrorMessage } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -26,7 +27,9 @@ export default function UpdateIssueForm({ params }: UpdateParamsProps) {
 		control,
 		reset,
 		formState: { errors },
-	} = useForm<TIssueUpdateSchema>();
+	} = useForm<TIssueUpdateSchema>({
+		resolver: zodResolver(issueUpdateSchema),
+	});
 
 	const onSubmit = async (formValues: TIssueUpdateSchema) => {
 		if (issueId) {

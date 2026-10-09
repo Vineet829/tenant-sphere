@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, Check, Home, MessageCircle, ShieldCheck, Wrench } from "lucide-react";
+import { ArrowRight, Check, Home, MessageCircle, ShieldCheck, Wrench } from "lucide-react";
 import { Instrument_Serif, Manrope } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,8 +53,7 @@ export default function HomeContent() {
 					</Link>
 					<a href="#everyday" className={styles.headerExplore}>Everyday living, made easier</a>
 					<nav className={styles.navigation} aria-label="Main navigation">
-						<Link href="/login" prefetch={false} className={styles.loginLink}>Log in</Link>
-						<Link href="/register" prefetch={false} className={styles.navButton}>Get started <ArrowRight size={16} aria-hidden="true" /></Link>
+						<Link href="/login" prefetch={false} className={styles.loginButton}>Log in <ArrowRight size={16} aria-hidden="true" /></Link>
 					</nav>
 				</header>
 
@@ -67,7 +66,6 @@ export default function HomeContent() {
 							<p className={styles.description}>Get things fixed. Keep conversations going. Bring the everyday life of your building together, in one thoughtful space.</p>
 							<div className={styles.heroActions}>
 								<Link href="/register" prefetch={false} className={styles.primaryButton}>Join your community <ArrowRight size={19} aria-hidden="true" /></Link>
-								<a href="#everyday" className={styles.exploreLink}>Take a look around <ArrowDown size={17} aria-hidden="true" /></a>
 							</div>
 							<div className={styles.heroNote}><Home size={17} strokeWidth={1.5} aria-hidden="true" /><span>For the people who make a building a home.</span></div>
 						</div>

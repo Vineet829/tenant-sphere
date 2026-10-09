@@ -45,16 +45,10 @@
 .navigation {
 	@apply flex items-center gap-[28px] text-[14px] font-semibold;
 }
-.loginLink {
-	@apply [padding-block:12px];
-}
-.loginLink:hover {
-	@apply underline underline-offset-[5px];
-}
-.navButton {
+.loginButton {
 	@apply inline-flex items-center gap-[16px] [border:1px_solid_#537376] rounded-[5px] [padding:13px_18px] [transition:background_.2s,_border-color_.2s];
 }
-.navButton:hover {
+.loginButton:hover {
 	@apply [background:#25484b] border-[#8ba8a1];
 }
 .main {
@@ -98,18 +92,12 @@
 	@apply [background:#d1e7be] [transform:translateY(-2px)] [box-shadow:0_8px_24px_#00000024];
 }
 .primaryButton svg,
-.navButton svg {
+.loginButton svg {
 	@apply [transition:transform_.2s];
 }
 .primaryButton:hover svg,
-.navButton:hover svg {
+.loginButton:hover svg {
 	@apply [transform:translateX(3px)];
-}
-.exploreLink {
-	@apply inline-flex items-center gap-[10px] [padding-block:12px] text-[14px] font-semibold;
-}
-.exploreLink:hover {
-	@apply underline underline-offset-[5px];
 }
 .heroNote {
 	@apply flex items-center gap-[10px] mt-[27px] text-[color:var(--muted)] text-[12px] leading-[1.6];
@@ -317,11 +305,8 @@
 	.navigation {
 		@apply gap-[17px];
 	}
-	.navButton {
-		@apply text-[12px] [padding:11px_13px] gap-[9px];
-	}
-	.navButton svg {
-		@apply hidden;
+	.loginButton {
+		@apply [padding:11px_15px] gap-[12px];
 	}
 	.main {
 		@apply pt-[47px];
@@ -393,12 +378,6 @@
 	}
 	.footer > a {
 		@apply flex-col items-end gap-[2px];
-	}
-}
-
-@screen home-nav-compact {
-	.navButton {
-		@apply hidden;
 	}
 }
 

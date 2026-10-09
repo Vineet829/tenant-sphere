@@ -61,8 +61,8 @@ export function IssueContext({ id }: { id: string }) {
 
 /** The technician being rated, when they are in the directory we already hold. */
 export function TechnicianContext() {
-	const searchTerm = useAppSelector((state) => state.user.searchTerm);
-	const page = useAppSelector((state) => state.user.page);
+	const searchTerm = useAppSelector((state) => state.user.techSearchTerm);
+	const page = useAppSelector((state) => state.user.techPage);
 	const { data } = useGetAllTechniciansQuery({ searchTerm, page });
 	const [username, setUsername] = useState("");
 

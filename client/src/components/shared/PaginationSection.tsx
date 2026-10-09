@@ -1,19 +1,22 @@
 import { setCurrentPage as setPostCurrentPage } from "@/lib/redux/features/posts/postSlice";
-import { setCurrentPage as setUserCurrentPage } from "@/lib/redux/features/users/userSlice";
+import { setTechCurrentPage, setCurrentPage as setUserCurrentPage } from "@/lib/redux/features/users/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationSectionProps {
 	totalPages: number;
-	entityType: "user" | "post";
+	entityType: "user" | "technician" | "post";
 }
 
 const PaginationSection = ({ totalPages, entityType }: PaginationSectionProps) => {
 	const dispatch = useAppDispatch();
 
-	const currentPage = useAppSelector((state) => (entityType === "user" ? state.user.page : state.post.page));
+	const currentPage = useAppSelector((state) =>
+		entityType === "user" ? state.user.page : entityType === "technician" ? state.user.techPage : state.post.page,
+	);
 
-	const setCurrentPageAction = entityType === "user" ? setUserCurrentPage : setPostCurrentPage;
+	const setCurrentPageAction =
+		entityType === "user" ? setUserCurrentPage : entityType === "technician" ? setTechCurrentPage : setPostCurrentPage;
 
 	const goTo = (page: number) => {
 		dispatch(setCurrentPageAction(page));

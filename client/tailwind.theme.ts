@@ -25,9 +25,6 @@ export const tenantTheme = {
 		"home-compact": {
 			raw: "(max-width: 1320px)",
 		},
-		"home-nav-compact": {
-			raw: "(max-width: 576px)",
-		},
 		"home-mobile": {
 			raw: "(max-width: 468px)",
 		},

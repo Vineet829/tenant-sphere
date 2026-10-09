@@ -1,6 +1,11 @@
 "use client";
 
-import { setCurrentPage, setSearchTerm } from "@/lib/redux/features/users/userSlice";
+import {
+	setCurrentPage,
+	setSearchTerm,
+	setTechCurrentPage,
+	setTechSearchTerm,
+} from "@/lib/redux/features/users/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks/typedHooks";
 import { Search } from "lucide-react";
 import React from "react";
@@ -8,18 +13,22 @@ import React from "react";
 type UsersSearchProps = {
 	placeholder?: string;
 	label?: string;
+	// Tenants and technicians keep their own search, so one directory's filter never carries into the other.
+	variant?: "tenant" | "technician";
 };
 
 const UsersSearch = ({
 	placeholder = "Search by name or username",
 	label = "Search the directory",
+	variant = "tenant",
 }: UsersSearchProps) => {
 	const dispatch = useAppDispatch();
-	const searchTerm = useAppSelector((state) => state.user.searchTerm);
+	const technician = variant === "technician";
+	const searchTerm = useAppSelector((state) => (technician ? state.user.techSearchTerm : state.user.searchTerm));
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch(setCurrentPage(1));
-		dispatch(setSearchTerm(event.target.value));
+		dispatch(technician ? setTechCurrentPage(1) : setCurrentPage(1));
+		dispatch(technician ? setTechSearchTerm(event.target.value) : setSearchTerm(event.target.value));
 	};
 
 	return (

@@ -211,6 +211,21 @@
 .spinner {
 	@apply animate-auth-spin;
 }
+.statusLayout {
+	@apply flex-[1] grid place-items-center [padding-block:35px];
+}
+.panel.statusPanel {
+	@apply justify-self-center max-w-[430px] flex flex-col items-center text-center;
+}
+.statusPanel .formHeading {
+	@apply mb-0;
+}
+.statusIcon {
+	@apply inline-flex items-center justify-center w-[56px] h-[56px] mb-[24px] rounded-full [border-width:3px] [border-style:solid] [border-color:var(--auth-accent)_var(--auth-line)_var(--auth-line)] animate-auth-spin;
+}
+.statusIcon.statusIconDone {
+	@apply animate-none [border-color:var(--auth-accent)] [background:var(--auth-accent)] text-brand-jade-ink;
+}
 .skipLink {
 	@apply fixed z-[60] left-[20px] top-[12px] [padding:12px_18px] rounded-[4px] [background:#c4dcb2];
 

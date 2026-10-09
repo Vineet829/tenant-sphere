@@ -46,7 +46,8 @@ export default function AuthExperience({ mode }: { mode: "login" | "register" })
 		if (busy) return;
 		setGooglePending(true);
 		setAlternativeError(null);
-		try { await UseGoogle(); } finally { setGooglePending(false); }
+		// A successful start leaves for Google, so the button stays busy until the page changes.
+		if (!(await UseGoogle())) setGooglePending(false);
 	};
 
 	return (

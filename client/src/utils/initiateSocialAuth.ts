@@ -7,7 +7,7 @@ interface SocialAuthResponse {
 export default async function InitiateSocialAuth(
 	provider: string,
 	redirect: string,
-) {
+): Promise<boolean> {
 	
 	try {
 		const callback = `${window.location.origin}/${redirect}`;
@@ -25,11 +25,12 @@ export default async function InitiateSocialAuth(
 
 		if (res.status === 200 && typeof window !== "undefined") {
 			window.location.replace(data.authorization_url);
-		} else {
-			toast.error("Something went wrong with social authentication");
+			return true;
 		}
+		toast.error("Something went wrong with social authentication");
 	} catch (e) {
 		console.error(e);
 		toast.error("An error occurred during social authentication");
 	}
+	return false;
 }
