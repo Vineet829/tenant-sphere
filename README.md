@@ -1,141 +1,190 @@
 # Tenant Sphere
 
-On the `spring-port` branch, the active backend is Spring Boot with PostgreSQL. The Spring administration app replaces Django admin at `/admin/login`; see [administration setup and operations](docs/ADMINISTRATION.md) for the production build, administrator creation, permissions and supported management features. `local.yml` and `production.yml` run the Spring API (`docker/spring/Dockerfile`), PostgreSQL, the Next.js client and Nginx; settings are documented in `.envs/.env.example`. The Django/Celery files and historical walkthrough below describe the original implementation.
+Tenant Sphere is a community app for apartment complexes, where tenants report
+maintenance issues and troublesome neighbors, technicians handle the issues
+assigned to them, and everyone shares posts with the community. It is
+available at [tenant.confidental.online](https://tenant.confidental.online).
 
+## Why I Built It
 
-In my current apartment complex, I’ve encountered several frustrating issues with maintenance and services. Here are some of the main problems:
+In my apartment complex, we reported problems through a shared WhatsApp
+account, and messages often got lost. Technicians sometimes ignored requests,
+and there was no simple way to report noisy or troublesome neighbors. Tenant
+Sphere gives each of these a proper place. Issues are tracked and assigned,
+technicians are rated on their work, and reports about a tenant lead to a
+warning and, if enough neighbors report them, to their account being
+deactivated.
 
-- **Communication Issues**: We have to report problems through a shared WhatsApp account, but messages often get lost. This leads to many issues going unresolved for too long.
-  
-- **Unresponsive Technicians**: Sometimes, technicians ignore our requests or come up with excuses, making it hard to get the help we really need.
-  
-- **Reporting Problem Neighbors**: It’s difficult to report noisy or troublesome neighbors, which can negatively impact the vibe of our community.
+## Features
 
+- **Community Posts**: Write posts, reply to each other, and upvote or
+  downvote. Filter posts by tag, see the top posts, and bookmark posts to read
+  later.
+- **Issue Reporting**: Report a problem with your apartment and follow its
+  status. An administrator assigns it to a technician, who updates it as they
+  work.
+- **Tenant Reports**: Report a neighbor for misconduct. The first report sends
+  them a warning email that doesn't say who reported them. Once five different
+  tenants have reported someone, their account is deactivated automatically,
+  and an administrator can reactivate it. Reports from guest accounts don't
+  count.
+- **Tenants and Technicians**: Browse the tenants and technicians in your
+  community, and rate technicians on their work.
+- **Profiles**: Edit your profile and avatar, and see your posts, activity,
+  and reputation.
+- **Accounts**: Sign up with email activation, sign in with Google, and reset
+  a forgotten password. Visitors can also look around with a temporary guest
+  account that expires after 24 hours.
+- **Administration**: Manage users, posts, issues, reports, ratings, tags,
+  apartments, and groups in an admin console, with a change history.
 
+## Roles
 
-To tackle these challenges, I created an app that makes it easy for tenants to report issues and bad behavior. The app is designed to:
+- **Tenant**: Every new account starts as a tenant.
+- **Technician**: Choosing a trade on your profile, such as plumber or
+  electrician, lists you as a technician.
+- **Administrator**: Staff accounts manage the community in the admin console
+  and assign issues to technicians.
 
-- **Simplify Communication**: Users can easily report apartment problems and tenant misconduct through the app, ensuring quick responses and efficient issue resolution.
+## Privacy
 
-- **Hold Technicians Accountable**: Specific tasks can be assigned to technicians to monitor how they handle reported issues.
+- Signed-in tenants can see each other's name, avatar, bio, gender, home
+  country and city, occupation, reputation, and apartment unit, building, and
+  floor. Email addresses and phone numbers aren't shown.
+- The list of posts, the top posts, and posts by tag can be read without
+  signing in.
+- A report is seen only by the tenant who filed it and the administrators.
+- An issue is seen only by the tenant who reported it, the assigned
+  technician, and staff.
 
-- **Create a Safer Community**: It is simple to report noisy or troublesome behavior and send warnings to those involved, helping everyone feel safe and comfortable at home.
+## Architecture
 
+- **Client**: A Next.js 15 app with React 19, Redux Toolkit, and Tailwind CSS.
+- **Backend**: A Java 21 and Spring Boot 3.5 API on PostgreSQL 16, with Flyway
+  migrations. It sends email over SMTP and serves the admin console, built
+  with Vaadin.
+- **Docker**: nginx sits in front of both. It sends `/api` and `/admin` to the
+  backend and everything else to the client.
 
-### Tech Stack Overview
+## Getting Started
 
-- **Docker**: Used to create consistent development and production environments, facilitating deployment with Docker Compose.
+The commands below are for macOS and Linux. On Windows, use WSL.
 
-- **NGINX**: Acts as a reverse proxy for the Django API and React/Next.js frontend, enhancing security and managing traffic effectively.
+### Prerequisites
 
-- **Django REST Framework**: Builds RESTful APIs that support user authentication and various app features.
+- Docker
+- Java 21, Maven, and Node.js 20 to run the backend and client directly
 
-- **Djoser**: Provides views for user registration, login, and password management seamlessly.
+### Run with Docker
 
-- **Celery & Redis**: Handles asynchronous tasks and background job processing, with monitoring capabilities via Flower.
+Copy the example settings, then set `POSTGRES_PASSWORD`, `SIGNING_KEY` from
+`openssl rand -hex 32`, and `DOMAIN=http://localhost:8080` in
+`.envs/.env.local`. The other values can stay as they are, because `local.yml`
+sends mail to Mailpit and allows cookies over plain HTTP.
 
-- **PostgreSQL**: Serves as the primary database for efficiently storing user data, posts, and issues.
+```bash
+cp .envs/.env.example .envs/.env.local
+make build
+```
 
-- **React & Next.js 14**: Powers the frontend, delivering a dynamic user experience with server-side rendering capabilities.
+The first build takes a few minutes. Then open <http://localhost:8080>. Emails
+go to Mailpit at <http://localhost:8025>. To stop the app, run `make down`, or
+`make down-v` to delete the data as well.
 
-- **Redux & Redux Toolkit**: Manages application state across React components effectively.
+### Create an Administrator
 
-- **Tailwind CSS**: Styles components using utility-first CSS, enabling rapid UI development.
+```bash
+make superuser EMAIL=admin@example.com USERNAME=community_admin
+```
 
-- **Git**: Tracks code changes and facilitates collaboration through version control.
+It asks for the password. Then sign in to the admin console at
+<http://localhost:8080/admin/login>. The
+[administration guide](docs/ADMINISTRATION.md) has more.
 
-- **Cloudinary**: Manages image uploads and storage seamlessly.
+### Run the Backend and Client Directly
 
+Use this when working on the code, so you don't rebuild the Docker images
+after each change. PostgreSQL and Mailpit still run in Docker, with the same
+`POSTGRES_PASSWORD` and `SIGNING_KEY` as in `.envs/.env.local`. The first
+start of the backend also installs the admin console's frontend packages, so
+it takes longer.
 
-### Authentication Features
-- **Register a New User:** Easily create a new account to start using the app.
-- **Login:** Securely log in with your registered credentials or use Google OAuth for quick access.
-- **Logout:** End your session securely to protect your account from unauthorized access.
-- **Password Reset:** Quickly request a password reset if you forget your password, ensuring you can regain access to your account.
+```bash
+# Terminal 1: PostgreSQL and Mailpit, then the API on port 8000
+docker compose -f local.yml up -d postgres mailpit
+export POSTGRES_USER=tenantsphere POSTGRES_PASSWORD="your-database-password"
+export SIGNING_KEY="your-signing-key"
+export COOKIE_SECURE=false DOMAIN=http://localhost:3000
+mvn spring-boot:run
+```
 
+```bash
+# Terminal 2: the client on port 3000
+cd client
+npm install
+npm run dev
+```
 
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/11.png" alt="alt text 1" width="850" />
+Open <http://localhost:3000>. The client passes API and admin requests to the
+backend on port 8000.
 
-</p>
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/12.png" alt="alt text 1" width="850" />
+## Tests
 
-</p>
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/1.png" alt="alt text 1" width="850" />
+```bash
+mvn test                  # backend, needs Docker for PostgreSQL
 
-</p>
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/2.png" alt="alt text 1" width="850" />
+cd client                 # after npm install
+npm run lint
+npx tsc --noEmit
+npm run test:regressions
+npm run build
+```
 
-</p>
+## Configuration
 
- <p align="center">
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/15.jpeg" alt="alt text" width="300" height="500">
-</p>
+All settings are in `.envs/.env.example`, which explains each one. Copy it to
+`.envs/.env.local` for `local.yml`, or to `.envs/.env.production` for
+`production.yml`. For production:
 
-### Tenant and Technician Management
-- **View Tenants:** Access a comprehensive list of all tenants in the designated tab for easy management.
-- **View Technicians:** Browse through a list of all technicians in the corresponding tab for quick reference and ratings based on performance.
+- **Keys**: Set a strong `POSTGRES_PASSWORD` and a `SIGNING_KEY` from
+  `openssl rand -hex 32`. Changing the signing key signs everyone out.
+- **Domain**: Set `DOMAIN` to the site's https address, which emails use for
+  their links, and keep `COOKIE_SECURE=true`.
+- **HTTPS**: `production.yml` is a starting point that serves HTTPS with Let's
+  Encrypt certificates. Set your domain in `server_name` and in the
+  certificate paths in `docker/production/nginx/nginx.conf`.
+- **Email**: Set the `EMAIL_*` settings and `DEFAULT_FROM_EMAIL` for a real
+  mail server, such as Gmail with an app password.
+- **Google Sign-In**: Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, and
+  set `REDIRECT_URIS` to your site's address followed by `/google`.
+- **Guest Access**: Set `GUEST_LOGIN_ENABLED=true` to give each visitor a
+  temporary account that expires after 24 hours.
 
+## Known Limitations
 
-<p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/5.png" alt="alt text 1" width="850" />
+- Each installation serves one apartment complex.
+- There are no in-app notifications. Warnings and account changes are sent by
+  email.
 
-</p>
+## Project Structure
 
-<p align="center">
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/13.jpeg" alt="alt text" width="300" height="500">
-</p>
+- `src/`: The Spring Boot backend and the admin console.
+- `client/`: The Next.js client.
+- `package.json`, `vite.config.ts`, and `tsconfig.json` at the root: The admin
+  console's frontend, which Vaadin builds.
+- `docker/`: Dockerfiles and nginx settings for `local.yml` and
+  `production.yml`.
+- `scripts/`: Scripts that fill a community with sample data.
+- `docs/ADMINISTRATION.md`: The admin console guide.
 
-### Profile Management Features
-- **View Profile:** Access and update your profile information, including managing your avatar.
-- **User Posts:** View all posts you have created, complete with timestamps for better tracking.
-- **View Issues and Reports:** Manage reported issues and view assigned issues for effective oversight.
+## Contributing
 
+Bug reports and questions are welcome as
+[issues](https://github.com/Vineet829/tenant-sphere/issues). Please report
+security issues privately through the repository's
+[Security tab](https://github.com/Vineet829/tenant-sphere/security) instead of
+opening an issue.
 
+## License
 
- <p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/4.png" alt="alt text 1" width="850" />
-
-</p>
-
-### Post Management Features
-- **View Posts:** Explore all posts made by tenants, including top posts to stay informed about community discussions.
-- **Bookmark Posts:** Save posts for easy access later in the bookmark tab to ensure you don’t miss important information.
-- **View by Tags:** Filter posts by tags to streamline navigation and find relevant content quickly.
-- **Interact with Posts:** Engage with posts by upvoting, downvoting, replying to comments, and deleting your own posts as needed.
-- **Post Metadata:** Access detailed information about when a post was created and last updated for better context.
-- **Pagination and Search:** Utilize pagination and search functionality to easily navigate through posts and tenants.
-
-
- <p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/3.png" alt="alt text 1" width="850" />
-
-</p>
-
- <p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/9.png" alt="alt text 1" width="850" />
-
-</p>
- <p align="center">
-<img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/14.jpeg" alt="alt text" width="300" height="500">
-</p>
-
-### Issue Reporting
-- **Report Issues:** Directly report any issues related to your apartment through the app for prompt attention.
-- **Report Other Tenants:** Users can report other tenants for various misconducts, with reported individuals receiving a warning from the admin via email. This process helps maintain a safe and respectful community environment.
-
-
- <p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/7.png" alt="alt text 1" width="850" />
-
-</p>
-
- <p align="center">
-    <img src="https://github.com/Vineet829/tenant-sphere/blob/main/imgs/8.png" alt="alt text 1" width="850" />
-
-</p>
-
-   
+[MIT](LICENSE) © 2024-2026 Vineet Singh.
