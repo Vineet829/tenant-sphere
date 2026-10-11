@@ -18,7 +18,7 @@
     "lit": "3.3.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router": "7.17.0"
+    "react-router": "7.18.4"
   },
   "devDependencies": {
     "@babel/preset-react": "7.28.5",
@@ -77,7 +77,7 @@
       "vite": "7.3.5",
       "vite-plugin-checker": "0.12.0"
     },
-    "hash": "6aaa66aec93e6850b8145dd57ddd908cfc550071146fd367edc0549a11e1e6f8",
+    "hash": "a7afe61e249235574fbc620f444261c213a812423375456bb8d5a58069c6c93b",
     "overrides": {
       "@polymer/polymer": "$@polymer/polymer",
       "@vaadin/a11y-base": "24.10.4",
@@ -231,6 +231,7 @@
     "@vaadin/scroller": "24.10.4",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
     "@vaadin/email-field": "24.10.4",
-    "@vaadin/message-input": "24.10.4"
+    "@vaadin/message-input": "24.10.4",
+    "dompurify": "3.4.16"
   }
 }

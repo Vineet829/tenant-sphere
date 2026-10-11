@@ -6,11 +6,18 @@ import { CardsSkeleton } from "@/components/estate/Skeletons";
 import { useGetMyIssuesQuery } from "@/lib/redux/features/issues/issueApiSlice";
 import { Plus, Wrench } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import IssueCard from "../cards/IssueCard";
+import PageControls from "../shared/PageControls";
 import TabHeading from "./TabHeading";
 
 export default function Issues() {
-	const { data, isLoading, isFetching, isError, refetch } = useGetMyIssuesQuery();
+	const [page, setPage] = useState(1);
+	const { currentData: data, isLoading, isFetching, isError, refetch } = useGetMyIssuesQuery(page);
+	const totalPages = data?.my_issues.total_pages ?? page;
+	useEffect(() => {
+		if (data && page > Math.max(totalPages, 1)) setPage(Math.max(totalPages, 1));
+	}, [data, page, totalPages]);
 	const issues = data?.my_issues.results ?? [];
 
 	return (
@@ -25,7 +32,7 @@ export default function Issues() {
 					</Link>
 				}
 			/>
-			{isLoading ? (
+			{isLoading || (!data && isFetching) ? (
 				<CardsSkeleton cards={3} />
 			) : isError ? (
 				<ErrorState what="your issues" onRetry={refetch} retrying={isFetching} />
@@ -40,6 +47,7 @@ export default function Issues() {
 					No issues reported
 				</EmptyState>
 			)}
+			<PageControls page={page} totalPages={totalPages} onChange={setPage} pending={isFetching} />
 		</>
 	);
 }

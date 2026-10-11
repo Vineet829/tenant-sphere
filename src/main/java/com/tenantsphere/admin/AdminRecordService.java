@@ -5,6 +5,7 @@ import com.tenantsphere.common.Slugs;
 import com.tenantsphere.mail.MailService;
 import com.tenantsphere.profile.AvatarService;
 import com.tenantsphere.profile.AvatarStorage;
+import com.tenantsphere.profile.Profile;
 import com.tenantsphere.user.UserRepository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -291,7 +292,12 @@ public class AdminRecordService {
                         || (!staff && !superuser)
                         || (Boolean.TRUE.equals(before.get("is_superuser")) && !superuser)))
             throw new IllegalArgumentException("You cannot remove your own administration access.");
+        // Only turning a resident's account back on waits for their reports
+        // to be reviewed. Reports never turn a staff account off, so they
+        // never keep one off either.
         if (active
+                && !Boolean.TRUE.equals(before.get("is_active"))
+                && !Profile.keptOnByStaffRole(staff, superuser)
                 && db.queryForObject(
                                 "SELECT COALESCE(MAX(report_count),0) FROM profiles WHERE"
                                         + " user_pkid=?",
@@ -437,15 +443,13 @@ public class AdminRecordService {
                     rater = number(out.get("rating_user_pkid"));
             if (rated == rater)
                 throw new IllegalArgumentException("A person cannot rate themselves.");
-            var occupations =
-                    db.queryForList(
-                            "SELECT occupation FROM profiles WHERE user_pkid IN (?,?)",
-                            String.class,
-                            rated,
-                            rater);
-            if (occupations.size() != 2 || Collections.frequency(occupations, "tenant") != 1)
+            // Residents rate technicians on their work, as on the site.
+            String raterOccupation = occupationOf(rater), ratedOccupation = occupationOf(rated);
+            if (!"tenant".equals(raterOccupation)
+                    || ratedOccupation == null
+                    || "tenant".equals(ratedOccupation))
                 throw new IllegalArgumentException(
-                        "Ratings must be between a resident and a technician.");
+                        "A rating must be from a resident to a technician.");
         }
         if (r == AdminResource.REPORTS
                 && Objects.equals(out.get("reported_by_pkid"), out.get("reported_user_pkid")))
@@ -565,10 +569,16 @@ public class AdminRecordService {
                     id);
             var rows =
                     db.queryForList(
-                            "SELECT email,first_name,is_active FROM users WHERE pkid=?", id);
+                            "SELECT email,first_name,is_active,is_staff,is_superuser FROM users WHERE"
+                                    + " pkid=?",
+                            id);
             if (rows.isEmpty()) continue;
             var user = rows.getFirst();
-            if (count >= 5 && Boolean.TRUE.equals(user.get("is_active"))) {
+            if (count >= 5
+                    && Boolean.TRUE.equals(user.get("is_active"))
+                    && !Profile.keptOnByStaffRole(
+                            Boolean.TRUE.equals(user.get("is_staff")),
+                            Boolean.TRUE.equals(user.get("is_superuser")))) {
                 db.update(
                         "UPDATE users SET"
                             + " is_active=FALSE,auth_version=auth_version+1,updated_at=clock_timestamp()"
@@ -620,6 +630,13 @@ public class AdminRecordService {
 
     private void send(String to, String subject, String body) {
         AfterCommit.run(() -> mail.send(to, subject, body));
+    }
+
+    private String occupationOf(long user) {
+        return db.queryForList("SELECT occupation FROM profiles WHERE user_pkid=?", String.class, user)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     static long number(Object value) {

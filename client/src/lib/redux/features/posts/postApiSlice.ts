@@ -42,8 +42,8 @@ const postQueriesApi = baseApiSlice.injectEndpoints({
 			},
 			providesTags: ["Post"],
 		}),
-		getMyPosts: builder.query<MyPostsResponse, void>({
-			query: () => "/posts/my-posts/",
+		getMyPosts: builder.query<MyPostsResponse, number>({
+			query: (page = 1) => `/posts/my-posts/?page=${page}`,
 			providesTags: ["Post"],
 		}),
 		getSinglePost: builder.query<PostResponse, string>({
@@ -70,8 +70,7 @@ const postQueriesApi = baseApiSlice.injectEndpoints({
                 url: `/posts/${postId}/delete/`,
                 method: "DELETE",
             }),
-			invalidatesTags: [{ type: 'Post', id: 'LIST' }],
-        
+			invalidatesTags: ["Post"],
 		}),
 		downvotePost: builder.mutation<UpvoteDownvoteResponse, string>({
 			query: (postId) => ({
@@ -110,8 +109,8 @@ const postQueriesApi = baseApiSlice.injectEndpoints({
 			query: (postId) => `/posts/${postId}/replies/`,
 			providesTags: ["Post"],
 		}),
-		getPostsByTag: builder.query<PostsByTagResponse, string>({
-			query: (tagSlug) => `/posts/tags/${tagSlug}/`,
+		getPostsByTag: builder.query<PostsByTagResponse, { tagSlug: string; page: number }>({
+			query: ({ tagSlug, page }) => `/posts/tags/${tagSlug}/?page=${page}`,
 			providesTags: ["Post"],
 		}),
 		replyToPost: builder.mutation<ReplyResponse, ReplyPostData>({

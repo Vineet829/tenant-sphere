@@ -18,7 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.username = :username")
     Optional<User> findByUsernameForUpdate(@Param("username") String username);
 
-    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "profile")
     @Query("select u from User u where u.id = :externalId")
     Optional<User> findByExternalId(@Param("externalId") UUID externalId);
 

@@ -38,7 +38,10 @@ public class AuthController {
     private final CookieService cookieService;
     private final RegistrationService registrationService;
     private final PasswordResetService passwordResetService;
+    private final RequestLimiter limiter;
+    private final TokenRevocations revocations;
     private final String refreshCookieName;
+    private final String accessCookieName;
 
     public AuthController(
             AuthService authService,
@@ -46,13 +49,18 @@ public class AuthController {
             CookieService cookieService,
             RegistrationService registrationService,
             PasswordResetService passwordResetService,
+            RequestLimiter limiter,
+            TokenRevocations revocations,
             AppProperties properties) {
         this.authService = authService;
         this.jwtService = jwtService;
         this.cookieService = cookieService;
         this.registrationService = registrationService;
         this.passwordResetService = passwordResetService;
+        this.limiter = limiter;
+        this.revocations = revocations;
         this.refreshCookieName = properties.cookie().refreshName();
+        this.accessCookieName = properties.cookie().accessName();
     }
 
     @GetMapping("/csrf/")
@@ -65,10 +73,11 @@ public class AuthController {
     public MessageResponse login(
             @Valid @RequestBody LoginRequest request, HttpServletRequest servletRequest,
             HttpServletResponse response) {
-
+        limiter.consume(RequestLimit.SIGN_IN_ADDRESS, servletRequest.getRemoteAddr());
+        limiter.consume(RequestLimit.SIGN_IN_EMAIL, request.email());
         User user = authService.authenticate(request.email(), request.password());
         if (servletRequest.getSession(false) != null) servletRequest.changeSessionId();
-        issueCookies(user.getId(), response);
+        issueCookies(user.getId(), UUID.randomUUID(), response);
         return new MessageResponse("Login Successful.");
     }
 
@@ -82,15 +91,20 @@ public class AuthController {
             throw new InvalidCredentialsException();
         }
         User user = authService.requireActiveUser(userId);
-        if (!jwtService.isCurrent(token, user)) throw new InvalidCredentialsException();
-        issueCookies(user.getId(), response);
+        if (!jwtService.isCurrent(token, user) || revocations.isRevoked(token)) {
+            throw new InvalidCredentialsException();
+        }
+        // The new tokens stay in the same sign-in, so signing out refuses the old ones with them.
+        issueCookies(user.getId(), jwtService.sessionOf(token).orElseGet(UUID::randomUUID), response);
         return new MessageResponse("Access tokens refreshed successfully");
     }
 
     @PostMapping("/users/")
     @ResponseStatus(HttpStatus.CREATED)
-    public RegisterResponse register(@Valid @RequestBody RegisterRequest request) {
-        User user = registrationService.register(request);
+    public RegisterResponse register(
+            @Valid @RequestBody RegisterRequest request, HttpServletRequest servletRequest) {
+        limiter.consume(RequestLimit.SIGN_UP_ADDRESS, servletRequest.getRemoteAddr());
+        User user = registrationService.register(request, servletRequest.getRemoteAddr());
         return new RegisterResponse(
                 user.getId(),
                 user.getUsername(),
@@ -109,13 +123,16 @@ public class AuthController {
 
     @PostMapping("/users/resend_activation/")
     public ResponseEntity<Void> resendActivation(
-            @Valid @RequestBody ResendActivationRequest request) {
+            @Valid @RequestBody ResendActivationRequest request, HttpServletRequest servletRequest) {
+        limitAccountEmail(servletRequest, request.email());
         registrationService.resendActivation(request.email());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/users/reset_password/")
-    public ResponseEntity<Void> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+    public ResponseEntity<Void> resetPassword(
+            @Valid @RequestBody PasswordResetRequest request, HttpServletRequest servletRequest) {
+        limitAccountEmail(servletRequest, request.email());
         passwordResetService.requestReset(request.email());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -128,8 +145,16 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // Counted whether or not an account has the email, so a refusal says nothing about it.
+    private void limitAccountEmail(HttpServletRequest request, String email) {
+        limiter.consumeAccountEmail(request.getRemoteAddr(), email);
+    }
+
+    // The tokens are refused from now on, not only taken from this browser.
     @PostMapping("/logout/")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        readCookie(request, accessCookieName).ifPresent(revocations::revoke);
+        readCookie(request, refreshCookieName).ifPresent(revocations::revoke);
         cookieService.clearAuthCookies(response);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -141,18 +166,22 @@ public class AuthController {
         return CurrentUserResponse.from(user, profile);
     }
 
-    private void issueCookies(UUID userId, HttpServletResponse response) {
+    private void issueCookies(UUID userId, UUID session, HttpServletResponse response) {
         cookieService.writeAuthCookies(
-                response, jwtService.issueAccessToken(userId), jwtService.issueRefreshToken(userId));
+                response, jwtService.issueAccessToken(userId, session), jwtService.issueRefreshToken(userId, session));
     }
 
     private Optional<String> readRefreshCookie(HttpServletRequest request) {
+        return readCookie(request, refreshCookieName);
+    }
+
+    private static Optional<String> readCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return Optional.empty();
         }
         return Arrays.stream(cookies)
-                .filter(cookie -> refreshCookieName.equals(cookie.getName()))
+                .filter(cookie -> name.equals(cookie.getName()))
                 .map(Cookie::getValue)
                 .filter(value -> !value.isBlank())
                 .findFirst();

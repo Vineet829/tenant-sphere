@@ -21,6 +21,13 @@ public class Profile extends BaseEntity {
 
     public static final int DEACTIVATION_REPORTERS = 5;
 
+    // Staff run the admin console, so reports about them are kept for the
+    // other administrators to see, but never switch their account off:
+    // residents together could otherwise lock every administrator out.
+    public static boolean keptOnByStaffRole(boolean staff, boolean superuser) {
+        return staff || superuser;
+    }
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_pkid", nullable = false, unique = true)
     private User user;

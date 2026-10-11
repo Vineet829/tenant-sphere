@@ -30,6 +30,12 @@ public class ApartmentService {
                     "You are not allowed to create an apartment, you are not a tenant");
         }
 
+        // A tenant lives in one apartment; claiming more would keep other residents out of theirs.
+        if (!user.isSuperuser() && hasApartment(user)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "You already have an apartment. Ask an administrator to change it.");
+        }
+
         if (apartmentRepository.findByUnitNumber(request.unitNumber()).isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "apartment with this unit number already exists.");
@@ -41,6 +47,13 @@ public class ApartmentService {
         apartment.setFloor(request.floor());
         apartment.setTenant(user);
         return apartmentRepository.save(apartment);
+    }
+
+    // The profile is locked first, so two requests at once can't both find no apartment.
+    private boolean hasApartment(User user) {
+        profileRepository.findByUserPkid(user.getPkid())
+                .ifPresent(profile -> profileRepository.findByPkidForUpdate(profile.getPkid()));
+        return apartmentRepository.findFirstByTenantPkidOrderByPkidAsc(user.getPkid()).isPresent();
     }
 
     private boolean isTenant(User user) {

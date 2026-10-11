@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { setLogout } from "@/lib/redux/features/auth/authSlice";
 
 const initialState = {
 	searchTerm: "",
@@ -23,6 +24,10 @@ const userSlice = createSlice({
 		setTechCurrentPage: (state, action: PayloadAction<number>) => {
 			state.techPage = action.payload;
 		},
+	},
+	// The next person to sign in starts without anyone else's search or page.
+	extraReducers: (builder) => {
+		builder.addCase(setLogout, () => initialState);
 	},
 });
 

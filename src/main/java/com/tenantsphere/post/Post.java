@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "posts")
@@ -54,6 +55,7 @@ public class Post extends BaseEntity {
             joinColumns = @JoinColumn(name = "post_pkid"),
             inverseJoinColumns = @JoinColumn(name = "tag_pkid"))
     @OrderBy("name ASC")
+    @BatchSize(size = 50)
     private Set<Tag> tags = new LinkedHashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

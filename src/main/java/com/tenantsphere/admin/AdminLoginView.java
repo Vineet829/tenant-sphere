@@ -114,12 +114,13 @@ public class AdminLoginView extends VerticalLayout {
                 return;
             }
             UUID userId = user.getId();
+            UUID session = UUID.randomUUID();
             var request = VaadinServletRequest.getCurrent().getHttpServletRequest();
             if (request.getSession(false) != null) request.changeSessionId();
             cookieService.writeAuthCookies(
                     VaadinServletResponse.getCurrent().getHttpServletResponse(),
-                    jwtService.issueAccessToken(userId),
-                    jwtService.issueRefreshToken(userId));
+                    jwtService.issueAccessToken(userId, session),
+                    jwtService.issueRefreshToken(userId, session));
             getUI().ifPresent(ui -> ui.getPage().setLocation("/admin/"));
         } catch (RuntimeException exception) {
             loginForm.setError(true);

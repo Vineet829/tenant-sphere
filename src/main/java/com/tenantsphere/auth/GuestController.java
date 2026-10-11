@@ -3,6 +3,7 @@ package com.tenantsphere.auth;
 import com.tenantsphere.auth.dto.MessageResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.UUID;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,9 @@ public class GuestController {
         var user = principal != null && principal.getUser().isGuest()
                 ? principal.getUser() : guests.create(request.getRemoteAddr());
         if (request.getSession(false) != null) request.changeSessionId();
-        cookies.writeAuthCookies(response, jwt.issueAccessToken(user.getId()), jwt.issueRefreshToken(user.getId()));
+        UUID session = UUID.randomUUID();
+        cookies.writeAuthCookies(
+                response, jwt.issueAccessToken(user.getId(), session), jwt.issueRefreshToken(user.getId(), session));
         return new MessageResponse("Your temporary demo account is ready. Activity expires after 24 hours.");
     }
 }

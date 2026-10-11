@@ -42,8 +42,6 @@ services:
       context: ./client
       dockerfile: ./docker/production/Dockerfile
     restart: unless-stopped
-    env_file:
-      - "./client/.env.production"
     expose:
       - "3000"
     networks:
@@ -57,8 +55,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      # The site's host name, such as example.com, for nginx's server_name and certificate paths.
+      SERVER_NAME: ${SERVER_NAME:?Set SERVER_NAME to the site's host name, such as example.com}
     volumes:
-      - ./docker/production/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/production/nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - api
@@ -67,8 +68,7 @@ services:
       - tenant_prod_nw
 
 networks:
-  tenant_prod_nw:
-    external: true
+  tenant_prod_nw: {}
 
 volumes:
   postgres_data:

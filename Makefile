@@ -25,11 +25,12 @@ superuser:
 		-Dloader.main=com.tenantsphere.admin.CreateAdminCommand -cp /app/app.jar \
 		org.springframework.boot.loader.launch.PropertiesLauncher $(EMAIL) $(USERNAME)
 
+# Compose names volumes after the checkout's folder, so ask it for the names.
 db-volume:
-	docker volume inspect tenant-sphere-spring-port_tenant_prod_postgres_data
+	docker volume inspect $$(docker compose -f local.yml volumes --format '{{.Name}}' postgres)
 
 mailpit-volume:
-	docker volume inspect tenant-sphere-spring-port_tenant_prod_mailpit_data
+	docker volume inspect $$(docker compose -f local.yml volumes --format '{{.Name}}' mailpit)
 
 estate-db:
 	docker compose -f local.yml exec postgres sh -c 'psql -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'

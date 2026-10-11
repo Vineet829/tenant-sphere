@@ -1,4 +1,4 @@
-FROM docker.io/node:20.11-alpine3.18 as base
+FROM docker.io/node:22-alpine as base
 
 FROM base as node-build-stage
 

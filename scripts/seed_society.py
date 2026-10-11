@@ -314,7 +314,8 @@ class Society:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--apply', action='store_true', help='Write the fixtures to the local database.')
-    parser.add_argument('--container', default='tenant_prod_postgres', help='Local PostgreSQL container.')
+    parser.add_argument('--container', required=True,
+                        help='The local PostgreSQL container to use, such as tenant_prod_postgres from local.yml.')
     args = parser.parse_args()
     existing = json.loads(psql(args.container, '''SELECT json_build_object(
         'people', (SELECT COALESCE(json_agg(json_build_object('id', u.id, 'username', u.username,

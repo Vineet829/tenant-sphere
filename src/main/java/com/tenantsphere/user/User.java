@@ -1,11 +1,8 @@
 package com.tenantsphere.user;
 
 import com.tenantsphere.common.BaseEntity;
-import com.tenantsphere.profile.Profile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.Getter;
@@ -62,8 +59,10 @@ public class User extends BaseEntity {
     @Column(name = "last_login")
     private Instant lastLogin;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Profile profile;
+    // When the account was first turned on, which the database sets however
+    // that happens. Until then, it is waiting for its activation link.
+    @Column(name = "activated_at", insertable = false, updatable = false)
+    private Instant activatedAt;
 
     @Column(name = "is_guest", nullable = false)
     private boolean guest = false;

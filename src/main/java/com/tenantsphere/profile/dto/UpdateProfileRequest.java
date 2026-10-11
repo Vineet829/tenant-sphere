@@ -10,6 +10,6 @@ public record UpdateProfileRequest(
         String gender,
         String countryOfOrigin,
         @Size(max = 180) String cityOfOrigin,
-        String bio,
+        @Size(max = 1000, message = "A bio can be at most 1,000 characters.") String bio,
         String occupation,
         @Size(max = 30) String phoneNumber) {}

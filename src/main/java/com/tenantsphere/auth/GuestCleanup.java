@@ -10,7 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class GuestCleanup {
     private final JdbcTemplate db;
     private final AvatarStorage avatars;
-    public GuestCleanup(JdbcTemplate db, AvatarStorage avatars) { this.db = db; this.avatars = avatars; }
+    private final RequestLimiter limiter;
+    private final PendingSignUps pendingSignUps;
+    private final TokenRevocations revocations;
+    public GuestCleanup(JdbcTemplate db, AvatarStorage avatars, RequestLimiter limiter, PendingSignUps pendingSignUps,
+            TokenRevocations revocations) {
+        this.db = db; this.avatars = avatars; this.limiter = limiter; this.pendingSignUps = pendingSignUps;
+        this.revocations = revocations;
+    }
 
     @Scheduled(fixedDelayString = "${app.guest.cleanup-delay:600000}")
     @Transactional
@@ -35,5 +42,8 @@ public class GuestCleanup {
             photos.forEach(avatars::removeAfterCommit);
         }
         db.update("DELETE FROM guest_login_limits WHERE window_start < NOW() - INTERVAL '1 hour'");
+        limiter.removeExpired();
+        pendingSignUps.removeExpired();
+        revocations.removeExpired();
     }
 }

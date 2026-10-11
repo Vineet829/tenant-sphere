@@ -16,8 +16,8 @@ export const reportApiSlice = baseApiSlice.injectEndpoints({
 			invalidatesTags: ["Report"],
 		}),
 
-		getMyReports: builder.query<MyReportsResponse, void>({
-			query: () => "/reports/me/",
+		getMyReports: builder.query<MyReportsResponse, number>({
+			query: (page = 1) => `/reports/me/?page=${page}`,
 			providesTags: ["Report"],
 		}),
 	}),

@@ -122,7 +122,7 @@ public final class CreateAdminCommand {
                                             lastName.trim(),
                                             hash);
                             String slug =
-                                    Slugs.of(normalizedUsername)
+                                    Slugs.of(normalizedUsername, "profile")
                                             + "-"
                                             + profileId.toString().substring(0, 8);
                             long profile =

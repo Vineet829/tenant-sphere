@@ -5,6 +5,7 @@ import { ChevronRight, Star, UsersRound, Wrench, X, type LucideIcon } from "luci
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { useState } from "react";
+import { useGetUserQuery } from "@/lib/redux/features/auth/authApiSlice";
 import { estateEditorial, estateSans } from "./fonts";
 import PersonAvatar from "./PersonAvatar";
 import ProfileActivity from "./ProfileActivity";
@@ -53,6 +54,9 @@ export default function PersonCard({ name, username, slug, avatar, bio, badge, f
 	const isTechnician = profileType === "technician";
 	const ProfileIcon = isTechnician ? Wrench : UsersRound;
 	const ratingHref = `/add-rating?username=${encodeURIComponent(username)}`;
+	const { data: viewer } = useGetUserQuery();
+	// Tenants rate technicians; guests' ratings would count against real people's work.
+	const canRate = isTechnician && viewer?.occupation === "tenant" && !viewer.is_guest;
 	const cardFacts = isTechnician
 		? [...summaryFacts, { icon: Star, label: "Rating", value: <RatingStars value={rating} /> }]
 		: summaryFacts;
@@ -82,7 +86,7 @@ export default function PersonCard({ name, username, slug, avatar, bio, badge, f
 							<ChevronRight aria-hidden="true" />
 						</button>
 					</Dialog.Trigger>
-					{isTechnician && (
+					{canRate && (
 						<Link href={ratingHref} className="es-btn es-btn--outline es-btn--sm es-person-rate" aria-label={`Rate ${displayName}`}>
 							<Star aria-hidden="true" />
 							Rate
@@ -136,7 +140,7 @@ export default function PersonCard({ name, username, slug, avatar, bio, badge, f
 								Close
 							</button>
 						</Dialog.Close>
-						{isTechnician && (
+						{canRate && (
 							<Dialog.Close asChild>
 								<Link href={ratingHref} className="es-btn es-btn--primary" aria-label={`Rate ${displayName}`}>
 									<Star aria-hidden="true" />

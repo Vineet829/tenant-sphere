@@ -10,22 +10,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+// A page of posts fetches only their authors with them: fetching a collection, such as the tags,
+// would make Hibernate read every post and page them in memory. The tags of a page's posts load
+// afterwards in one query (Post.tags).
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByAuthorPkidOrderByCreatedAtDescPkidDesc(Long authorPkid, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "tags"})
+    @EntityGraph(attributePaths = {"author"})
     @Query("select p from Post p order by p.createdAt desc, p.pkid desc")
     Page<Post> findAllOrdered(Pageable pageable);
 
     @EntityGraph(attributePaths = {"author", "tags"})
     List<Post> findAllBy();
 
-    @EntityGraph(attributePaths = {"author", "tags"})
+    @EntityGraph(attributePaths = {"author"})
     @Query("select p from Post p where p.author.pkid = :authorPkid order by p.createdAt desc, p.pkid desc")
     Page<Post> findByAuthor(@Param("authorPkid") Long authorPkid, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "tags"})
+    @EntityGraph(attributePaths = {"author"})
     @Query("""
             select p from Post p join p.bookmarkedBy u
             where u.pkid = :userPkid
@@ -33,7 +36,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             """)
     Page<Post> findBookmarkedBy(@Param("userPkid") Long userPkid, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"author", "tags"})
+    @EntityGraph(attributePaths = {"author"})
     @Query("""
             select p from Post p join p.tags t
             where t.slug = :tagSlug

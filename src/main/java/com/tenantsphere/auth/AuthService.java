@@ -8,7 +8,9 @@ import java.time.Instant;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class AuthService {
@@ -19,17 +21,21 @@ public class AuthService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TransactionTemplate transactions;
 
     public AuthService(
             UserRepository userRepository,
             ProfileRepository profileRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            PlatformTransactionManager transactionManager) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
+        this.transactions = new TransactionTemplate(transactionManager);
     }
 
-    @Transactional
+    // The password is checked before a transaction opens: hashing it takes a while, and a database
+    // connection held meanwhile is one of the few that other requests share.
     public User authenticate(String email, String rawPassword) {
         User user = userRepository.findByEmailIgnoreCase(email).orElse(null);
 
@@ -42,10 +48,21 @@ public class AuthService {
         boolean unusablePassword = encodedPassword == null || encodedPassword.startsWith("!");
         boolean passwordMatches = passwordEncoder.matches(rawPassword,
                 user.isGuest() || unusablePassword ? DUMMY_HASH : encodedPassword);
-        if (!passwordMatches || unusablePassword || user.isGuest() || !canSignIn(user)) {
+        if (!passwordMatches || unusablePassword || user.isGuest()) {
             throw new InvalidCredentialsException();
         }
+        return transactions.execute(status -> signIn(user.getPkid(), encodedPassword));
+    }
 
+    // The account as it is now, once its password has matched: one changed or switched off
+    // meanwhile has to be signed in to afresh.
+    private User signIn(Long pkid, String checkedPassword) {
+        User user = userRepository.findById(pkid)
+                .filter(found -> checkedPassword.equals(found.getPassword()))
+                .orElseThrow(InvalidCredentialsException::new);
+        if (!canSignIn(user)) {
+            throw new InvalidCredentialsException();
+        }
         user.setLastLogin(Instant.now());
         return user;
     }

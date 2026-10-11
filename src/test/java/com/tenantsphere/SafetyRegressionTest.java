@@ -21,6 +21,7 @@ import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -245,6 +246,23 @@ class SafetyRegressionTest {
                 .isInstanceOfSatisfying(ResponseStatusException.class,
                         e -> assertThat(e.getReason()).contains("16 million pixels"));
         assertThat(avatar(user)).isNull();
+    }
+
+    @Test
+    void avatarsAreStoredWithoutWhatThePhotoSaysAboutItself() throws Exception {
+        User user = user();
+        byte[] photo = image("jpeg");
+        byte[] comment = "Taken at 51.5007 N 0.1246 W".getBytes(StandardCharsets.ISO_8859_1);
+        var tagged = new ByteArrayOutputStream();
+        tagged.write(photo, 0, 2);
+        tagged.write(new byte[] {(byte) 0xFF, (byte) 0xFE, 0, (byte) (comment.length + 2)});
+        tagged.write(comment);
+        tagged.write(photo, 2, photo.length - 2);
+
+        avatars.upload(user, upload("jpeg", tagged.toByteArray()));
+
+        assertThat(new String(Files.readAllBytes(path(avatar(user))), StandardCharsets.ISO_8859_1))
+                .doesNotContain("51.5007");
     }
 
     @Test

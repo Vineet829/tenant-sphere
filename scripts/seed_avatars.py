@@ -87,7 +87,8 @@ def fixture_rows(portraits):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--apply', action='store_true', help='Prepare portraits and add or upgrade sample photos.')
-    parser.add_argument('--container', default='tenant_prod_postgres', help='Local PostgreSQL container.')
+    parser.add_argument('--container', required=True,
+                        help='The local PostgreSQL container to use, such as tenant_prod_postgres from local.yml.')
     parser.add_argument('--with-identities', action='store_true', help='Update the curated fictional names and hometowns in the same transaction.')
     args = parser.parse_args()
     portraits = load_portraits()

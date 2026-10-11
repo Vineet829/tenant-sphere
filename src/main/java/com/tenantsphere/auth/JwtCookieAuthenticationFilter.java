@@ -1,6 +1,8 @@
 package com.tenantsphere.auth;
 
 import com.tenantsphere.config.AppProperties;
+import com.tenantsphere.profile.Profile;
+import com.tenantsphere.profile.ProfileRepository;
 import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -23,12 +25,20 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
+    private final TokenRevocations revocations;
     private final String accessCookieName;
 
     public JwtCookieAuthenticationFilter(
-            JwtService jwtService, UserRepository userRepository, AppProperties properties) {
+            JwtService jwtService,
+            UserRepository userRepository,
+            ProfileRepository profileRepository,
+            TokenRevocations revocations,
+            AppProperties properties) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
+        this.revocations = revocations;
         this.accessCookieName = properties.cookie().accessName();
     }
 
@@ -64,8 +74,9 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             UUID userId = jwtService.extractUserId(token, TokenType.ACCESS);
             User user = userRepository.findByExternalId(userId).orElse(null);
             if (user == null || !user.isSessionEligible()
-                    || (user.getProfile() != null && user.getProfile().isBanned())
-                    || !jwtService.isCurrent(token, user)) {
+                    || profileRepository.findByUserPkid(user.getPkid()).map(Profile::isBanned).orElse(false)
+                    || !jwtService.isCurrent(token, user)
+                    || revocations.isRevoked(token)) {
                 return;
             }
             AppUserDetails principal = new AppUserDetails(user);

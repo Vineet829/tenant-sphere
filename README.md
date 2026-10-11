@@ -27,7 +27,7 @@ deactivated.
   them a warning email that doesn't say who reported them. Once five different
   tenants have reported someone, their account is deactivated automatically,
   and an administrator can reactivate it. Reports from guest accounts don't
-  count.
+  count, and staff accounts are never deactivated by reports.
 - **Tenants and Technicians**: Browse the tenants and technicians in your
   community, and rate technicians on their work.
 - **Profiles**: Edit your profile and avatar, and see your posts, activity,
@@ -151,8 +151,9 @@ All settings are in `.envs/.env.example`, which explains each one. Copy it to
 - **Domain**: Set `DOMAIN` to the site's https address, which emails use for
   their links, and keep `COOKIE_SECURE=true`.
 - **HTTPS**: `production.yml` is a starting point that serves HTTPS with Let's
-  Encrypt certificates. Set your domain in `server_name` and in the
-  certificate paths in `docker/production/nginx/nginx.conf`.
+  Encrypt certificates. Set `SERVER_NAME` to the site's host name, such as
+  `example.com`, in the shell or in a `.env` file beside `production.yml`.
+  nginx uses it for `server_name` and the certificate paths.
 - **Email**: Set the `EMAIL_*` settings and `DEFAULT_FROM_EMAIL` for a real
   mail server, such as Gmail with an app password.
 - **Google Sign-In**: Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, and

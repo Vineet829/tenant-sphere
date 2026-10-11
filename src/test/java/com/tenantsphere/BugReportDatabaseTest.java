@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.*;
 
 @DataJpaTest(properties = {"spring.jpa.show-sql=false", "spring.devtools.livereload.enabled=false", "app.guest.enabled=true"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({GuestService.class, GuestCleanup.class, AvatarStorage.class, IssueWriteService.class,
+@Import({GuestService.class, GuestCleanup.class, RequestLimiter.class, PendingSignUps.class, AvatarStorage.class, IssueWriteService.class,
         ContentViewRecorder.class, ReportWriteService.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 class BugReportDatabaseTest {
@@ -51,6 +51,7 @@ class BugReportDatabaseTest {
     @Autowired ContentViewRecorder views;
     @Autowired ReportWriteService reports;
     @MockBean MailService mail;
+    @MockBean TokenRevocations revocations;
     @BeforeEach void resetDatabase() { db.execute("TRUNCATE users,guest_login_limits CASCADE"); reset(mail); }
 
     @Test void guestsGetSeparatePrivateDataAndCleanupPreservesResidentsAndVoteCounts() {
@@ -85,6 +86,14 @@ class BugReportDatabaseTest {
         for (int i = 0; i < 5; i++) reports.create(new ReportCreateRequest("Resident report " + i, "Incident", target.getUsername()), resident());
         assertThat(count("SELECT report_count FROM profiles WHERE user_pkid=?", target.getPkid())).isEqualTo(5);
         assertThat(users.findById(target.getPkid()).orElseThrow().isActive()).isFalse();
+    }
+
+    @Test void reportsFromFiveResidentsKeepAStaffAccountOn() {
+        User staff = resident();
+        db.update("UPDATE users SET is_staff=TRUE WHERE pkid=?", staff.getPkid());
+        for (int i = 0; i < 5; i++) reports.create(new ReportCreateRequest("Report " + i, "Incident", staff.getUsername()), resident());
+        assertThat(count("SELECT report_count FROM profiles WHERE user_pkid=?", staff.getPkid())).isEqualTo(5);
+        assertThat(users.findById(staff.getPkid()).orElseThrow().isActive()).isTrue();
     }
 
     @Test void concurrentResolutionSendsOnlyOneNotification() throws Exception {

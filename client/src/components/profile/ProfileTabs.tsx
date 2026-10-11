@@ -17,10 +17,11 @@ function Count({ value }: { value?: number }) {
 }
 
 export default function ProfileTabs() {
-	const { data: posts } = useGetMyPostsQuery();
-	const { data: issues } = useGetMyIssuesQuery();
-	const { data: reports } = useGetMyReportsQuery();
-	const { data: assigned } = useGetMyAssignedIssuesQuery("");
+	// The first page of each list carries its full count.
+	const { data: posts } = useGetMyPostsQuery(1);
+	const { data: issues } = useGetMyIssuesQuery(1);
+	const { data: reports } = useGetMyReportsQuery(1);
+	const { data: assigned } = useGetMyAssignedIssuesQuery(1);
 
 	return (
 		<Tabs.Root className="es-tabs" defaultValue="about">

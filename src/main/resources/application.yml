@@ -16,6 +16,10 @@ spring:
         jdbc:
           time_zone: UTC
         format_sql: true
+        # A page of results that fetches a collection is refused, rather than read whole and paged
+        # in memory.
+        query:
+          fail_on_pagination_over_collection_fetch: true
 
   flyway:
     enabled: true

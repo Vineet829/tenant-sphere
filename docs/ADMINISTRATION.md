@@ -53,7 +53,7 @@ Production builds regenerate the route-specific frontend bundle, so adding an ad
 | Apartments | Create, edit, assign/reassign a tenant, delete with issue cascade preview. |
 | Issues | Create, edit all business fields, assign a person, set status/priority, delete; bulk status changes; related content views. Resolution/reopening updates dates and sends notifications only after commit. |
 | Posts | Create, edit body/author/tags, delete; related content views. Vote totals remain controlled by actual votes. |
-| Ratings | Create, edit and delete; resident/technician pair validation; average rating. |
+| Ratings | Create, edit and delete; a rating is from a resident to a technician; average rating. |
 | Reports | Create, edit reporter/target/details, delete; distinct-reporter counts and reputation stay synchronized. |
 | Content views | Create, edit and delete; real post/issue selection and IP validation. |
 | Tags | Create, rename and delete tags; show usage; removal detaches tags without deleting posts. |
@@ -71,13 +71,14 @@ Generated IDs, timestamps, slugs, votes, report counts and reputation are not ar
 - Permissions and account status are re-read on each operation, including callbacks from an already-open page.
 - Staff cannot grant themselves privileges or change another staff/superuser's credentials.
 - Administrators cannot delete their own account or remove their own administration access. At least one active superuser must remain.
+- Sign-ins, sign-ups, activation and password reset emails, and Google sign-in starts are limited per network address, and sign-ins and emails per email address too; activation and reset emails are also capped at 100 an hour in all, to stay within the sending mailbox's limits. The counts are kept in the database as hashes, so every instance shares them.
 - Password changes and deactivation increment the account's token version. Previously issued access and refresh tokens stop working, including after reactivation. Existing sessions are preserved when migration V5 is first applied.
 - JWT authentication remains stateless. The separate HTTP session holds Vaadin UI state; its ID changes at successful password sign-in, not on every authenticated request. This preserves session-fixation protection without breaking concurrent uploads or navigation.
 - Updates compare the current record revision with the editor's revision to prevent silent lost changes.
 
 ## Reports and deletion
 
-Deactivation occurs at **five different reporting residents/accounts**. Repeated incidents by one person count once. Self-reporting is rejected. Editing, deleting, or cascading reports updates both affected targets. Removing a report does not reactivate an account automatically; an administrator must review and reactivate it explicitly after the count falls below five.
+Deactivation occurs at **five different reporting residents/accounts**. Repeated incidents by one person count once. Self-reporting is rejected. Editing, deleting, or cascading reports updates both affected targets. Removing a report does not reactivate an account automatically; an administrator must review and reactivate it explicitly after the count falls below five. Staff and superuser accounts are never deactivated by reports: their reports are kept for other administrators to review, so residents can't lock the administrators out.
 
 Deletion requires an explicit confirmation with dependent-record counts and effects. The service checks permission to delete every registered model in the cascade, then verifies that the preview is still current. Bulk batches are limited to 100 selected roots and 5,000 dependent registered records. User deletion also repairs surviving vote totals and report counts. Database triggers remove orphaned post/issue content views.
 

@@ -55,10 +55,11 @@ public class PostService {
                 .orElse(false);
     }
 
+    // A list shows each post's number of replies; only a post's own page shows the replies.
     @Transactional(readOnly = true)
-    public Page<PostResponse> toResponses(Page<Post> posts, User viewer, boolean withRepliesCount) {
-        Context context = contextFor(posts.getContent(), true, viewer);
-        return posts.map(post -> toResponse(post, viewer, context, withRepliesCount));
+    public Page<PostResponse> toResponses(Page<Post> posts, User viewer) {
+        Context context = contextFor(posts.getContent(), false, viewer);
+        return posts.map(post -> toResponse(post, viewer, context, true));
     }
 
     @Transactional(readOnly = true)

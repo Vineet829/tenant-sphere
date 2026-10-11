@@ -103,3 +103,38 @@ test('bad login credentials never refresh into the previous account', { timeout:
     assert.deepEqual(requests, ['/api/v1/auth/login/']); assert.equal(store.getState().auth.isAuthenticated, false);
   } finally { store.dispatch(api.util.resetApiState()); global.fetch = oldFetch; global.Request = OldRequest; }
 });
+
+test('deleting a post refreshes the post lists that showed it', { timeout: 10000 }, async () => {
+  const oldFetch = global.fetch, OldRequest = global.Request;
+  const load = sourceLoader({ 'cookies-next': { getCookie: () => 'browser-csrf' } });
+  const api = load('src/lib/redux/features/posts/postApiSlice.ts').postApiSlice;
+  const store = load('src/lib/redux/store.ts').makeStore();
+  const lists = [];
+  global.Request = class extends OldRequest { constructor(input, init) { super(typeof input === 'string' ? new URL(input, 'http://localhost') : input, init); } };
+  global.fetch = async request => {
+    if (request.method === 'DELETE') return Response.json({ message: 'Deleted' });
+    lists.push(new URL(request.url).pathname);
+    return Response.json({ posts: { count: 0, next: null, previous: null, results: [] } });
+  };
+  try {
+    const list = store.dispatch(api.endpoints.getAllPosts.initiate({ page: 1 }));
+    await list;
+    await store.dispatch(api.endpoints.deletePost.initiate('post-id')).unwrap();
+    await new Promise(resolve => setTimeout(resolve, 50));
+    assert.deepEqual(lists, ['/api/v1/posts/', '/api/v1/posts/']);
+    list.unsubscribe();
+  } finally { store.dispatch(api.util.resetApiState()); global.fetch = oldFetch; global.Request = OldRequest; }
+});
+
+test('signing out forgets the directory searches and post pages', () => {
+  const load = sourceLoader({ 'cookies-next': { getCookie: () => undefined } });
+  const store = load('src/lib/redux/store.ts').makeStore();
+  const users = load('src/lib/redux/features/users/userSlice.ts');
+  const posts = load('src/lib/redux/features/posts/postSlice.ts');
+  store.dispatch(users.setSearchTerm('neighbour'));
+  store.dispatch(users.setTechCurrentPage(3));
+  store.dispatch(posts.setCurrentPage(4));
+  store.dispatch(load('src/lib/redux/features/auth/authSlice.ts').setLogout());
+  assert.deepEqual(store.getState().user, { searchTerm: '', page: 1, techSearchTerm: '', techPage: 1 });
+  assert.deepEqual(store.getState().post, { page: 1 });
+});

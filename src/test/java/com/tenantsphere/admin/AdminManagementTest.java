@@ -549,6 +549,40 @@ class AdminManagementTest {
     }
 
     @Test
+    void reportsKeepAStaffAccountOnAndItCanStillBeEdited() {
+        long staff = createUser("reported_staff");
+        db.update("UPDATE users SET is_staff=TRUE WHERE pkid=?", staff);
+        for (int i = 0; i < 5; i++) {
+            writes.save(AdminResource.REPORTS, null, null, report(createUser("staff_reporter" + i), staff));
+        }
+        assertThat(
+                        db.queryForObject(
+                                "SELECT report_count FROM profiles WHERE user_pkid=?",
+                                Integer.class,
+                                staff))
+                .isEqualTo(5);
+        assertThat(
+                        db.queryForObject(
+                                "SELECT is_active FROM users WHERE pkid=?", Boolean.class, staff))
+                .isTrue();
+
+        var row = queries.read(AdminResource.USERS, staff);
+        row.put("first_name", "Renamed");
+        save(AdminResource.USERS, staff, row);
+        row = queries.read(AdminResource.USERS, staff);
+        row.put("is_active", false);
+        save(AdminResource.USERS, staff, row);
+        row = queries.read(AdminResource.USERS, staff);
+        row.put("is_active", true);
+        save(AdminResource.USERS, staff, row);
+        assertThat(
+                        db.queryForObject(
+                                "SELECT is_active FROM users WHERE pkid=?", Boolean.class, staff))
+                .isTrue();
+        verify(mail, never()).send(anyString(), contains("Deactivation"), anyString());
+    }
+
+    @Test
     void movingAReportUpdatesBothTargetsAndSelfReportingIsRejected() {
         long reporter = createUser("reporter"),
                 a = createUser("target_a"),
@@ -714,7 +748,24 @@ class AdminManagementTest {
                                                 5,
                                                 "comment",
                                                 "Invalid")))
-                .hasMessageContaining("resident and a technician");
+                .hasMessageContaining("from a resident to a technician");
+        long technician = fixture("rating_plumber", false, false, "plumber");
+        assertThatThrownBy(
+                        () ->
+                                writes.save(
+                                        AdminResource.RATINGS,
+                                        null,
+                                        null,
+                                        map(
+                                                "rated_user_pkid",
+                                                a,
+                                                "rating_user_pkid",
+                                                technician,
+                                                "rating",
+                                                5,
+                                                "comment",
+                                                "Invalid")))
+                .hasMessageContaining("from a resident to a technician");
         assertThatThrownBy(
                         () ->
                                 writes.save(

@@ -74,10 +74,12 @@ function HeaderContent() {
 						<Pencil aria-hidden="true" />
 						Edit profile
 					</Link>
-					<Link href="/apartment" className={`es-btn ${home ? "es-btn--ghost" : "es-btn--primary"}`}>
-						<Plus aria-hidden="true" />
-						{home ? "Add apartment" : "Add your apartment"}
-					</Link>
+					{!home && (
+						<Link href="/apartment" className="es-btn es-btn--primary">
+							<Plus aria-hidden="true" />
+							Add your apartment
+						</Link>
+					)}
 				</div>
 			</div>
 

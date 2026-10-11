@@ -7,11 +7,17 @@ import { longDate, timeAgo } from "@/components/estate/format";
 import { useGetMyReportsQuery } from "@/lib/redux/features/reports/reportApiSlice";
 import { CalendarDays, Flag, Plus } from "lucide-react";
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
+import PageControls from "../shared/PageControls";
 import TabHeading from "./TabHeading";
 
 export default function Reports() {
-	const { data, isLoading, isFetching, isError, refetch } = useGetMyReportsQuery();
+	const [page, setPage] = useState(1);
+	const { currentData: data, isLoading, isFetching, isError, refetch } = useGetMyReportsQuery(page);
+	const totalPages = data?.reports.total_pages ?? page;
+	useEffect(() => {
+		if (data && page > Math.max(totalPages, 1)) setPage(Math.max(totalPages, 1));
+	}, [data, page, totalPages]);
 	const reports = data?.reports.results ?? [];
 
 	return (
@@ -26,7 +32,7 @@ export default function Reports() {
 					</Link>
 				}
 			/>
-			{isLoading ? (
+			{isLoading || (!data && isFetching) ? (
 				<CardsSkeleton cards={3} />
 			) : isError ? (
 				<ErrorState what="your reports" onRetry={refetch} retrying={isFetching} />
@@ -52,6 +58,7 @@ export default function Reports() {
 					No reports sent
 				</EmptyState>
 			)}
+			<PageControls page={page} totalPages={totalPages} onChange={setPage} pending={isFetching} />
 		</>
 	);
 }

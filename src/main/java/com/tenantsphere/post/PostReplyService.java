@@ -2,8 +2,12 @@ package com.tenantsphere.post;
 
 import com.tenantsphere.post.dto.ReplyCreateRequest;
 import com.tenantsphere.post.dto.ReplyResponse;
+import com.tenantsphere.profile.Profile;
 import com.tenantsphere.profile.ProfileRepository;
 import com.tenantsphere.user.User;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,8 +48,16 @@ public class PostReplyService {
     public org.springframework.data.domain.Page<ReplyResponse> listNewestFirst(UUID postId, org.springframework.data.domain.Pageable pageable) {
         Post post = postRepository.findByExternalId(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found."));
-        return replyRepository.findByPostPkid(post.getPkid(), pageable)
-                .map(reply -> ReplyResponse.from(reply, avatarFor(reply.getAuthor())));
+        var replies = replyRepository.findByPostPkid(post.getPkid(), pageable);
+        // The page's avatars in one query, not one per reply.
+        List<Long> authors = replies.getContent().stream().map(reply -> reply.getAuthor().getPkid()).distinct().toList();
+        Map<Long, String> avatars = new HashMap<>();
+        if (!authors.isEmpty()) {
+            for (Profile profile : profileRepository.findAllByUserPkidIn(authors)) {
+                avatars.put(profile.getUser().getPkid(), profile.getAvatar());
+            }
+        }
+        return replies.map(reply -> ReplyResponse.from(reply, avatars.get(reply.getAuthor().getPkid())));
     }
 
     private String avatarFor(User user) {

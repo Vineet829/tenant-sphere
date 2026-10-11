@@ -4,17 +4,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.tenantsphere.auth.dto.RegisterRequest;
 import com.tenantsphere.config.AppProperties;
 import com.tenantsphere.profile.Profile;
 import com.tenantsphere.profile.ProfileRepository;
 import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +38,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,12 +48,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @DataJpaTest(properties = "spring.jpa.show-sql=false")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({VerificationTokenService.class, RegistrationService.class, PasswordResetService.class,
-        AuthLifecycleRegressionTest.Configuration.class})
+        PendingSignUps.class, RequestLimiter.class, AuthLifecycleRegressionTest.Configuration.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 class AuthLifecycleRegressionTest {
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine");
@@ -141,6 +147,130 @@ class AuthLifecycleRegressionTest {
     }
 
     @Test
+    void accountTurnedOffByStaffCannotRequestAnotherActivation() {
+        User user = user(true);
+        database.update("UPDATE users SET is_active = FALSE WHERE pkid = ?", user.getPkid());
+        registration.resendActivation(user.getEmail());
+        assertThat(database.queryForObject("SELECT count(*) FROM verification_tokens", Integer.class)).isZero();
+        verifyNoInteractions(mail);
+    }
+
+    @Test
+    void unusedActivationLinkCannotTurnOnAnAccountStaffTurnedOff() {
+        User user = user(false);
+        String token = tokens.issue(user, VerificationPurpose.ACTIVATION, Duration.ofDays(1));
+        database.update("UPDATE users SET is_active = TRUE WHERE pkid = ?", user.getPkid());
+        database.update("UPDATE users SET is_active = FALSE WHERE pkid = ?", user.getPkid());
+        assertThat(registration.activate(tokens.encodeUid(user), token)).isFalse();
+        assertThat(users.findById(user.getPkid()).orElseThrow().isActive()).isFalse();
+    }
+
+    @Test
+    void databaseRemembersWhenAnAccountWasFirstTurnedOn() {
+        User waiting = user(false);
+        assertThat(activatedAt(waiting)).isNull();
+        assertThat(activatedAt(user(true))).isNotNull();
+
+        String token = tokens.issue(waiting, VerificationPurpose.ACTIVATION, Duration.ofDays(1));
+        assertThat(registration.activate(tokens.encodeUid(waiting), token)).isTrue();
+        Instant first = activatedAt(waiting);
+        assertThat(first).isNotNull();
+        database.update("UPDATE users SET is_active = FALSE WHERE pkid = ?", waiting.getPkid());
+        database.update("UPDATE users SET is_active = TRUE WHERE pkid = ?", waiting.getPkid());
+        assertThat(activatedAt(waiting)).isEqualTo(first);
+    }
+
+    @Autowired private PendingSignUps pendingSignUps;
+
+    @Test
+    void aNewSignUpReplacesAPendingOneWithTheSameEmailWhoseLinkStopsWorking() {
+        User pending = user(false);
+        String token = tokens.issue(pending, VerificationPurpose.ACTIVATION, Duration.ofDays(1));
+        User replacement = registration.register(new RegisterRequest(
+                "owner_" + UUID.randomUUID().toString().replace("-", ""), "Real", "Owner",
+                pending.getEmail().toUpperCase(), "Replaced9!", "Replaced9!"), address());
+
+        assertThat(users.findById(pending.getPkid())).isEmpty();
+        assertThat(registration.activate(tokens.encodeUid(pending), token)).isFalse();
+        assertThat(encoder.matches("Replaced9!", users.findById(replacement.getPkid()).orElseThrow().getPassword()))
+                .isTrue();
+    }
+
+    @Test
+    void aSignUpWithAnEmailThatHasAnAccountGetsTheSameAnswerAndItsOwnerIsTold() {
+        User owner = user(true);
+        long accounts = users.count();
+
+        User answer = registration.register(new RegisterRequest(
+                "late_" + UUID.randomUUID().toString().replace("-", ""), "Late", "Comer",
+                owner.getEmail().toUpperCase(), "Another9!", "Another9!"), address());
+
+        assertThat(answer.getId()).isNotNull().isNotEqualTo(owner.getId());
+        assertThat(answer.getEmail()).isEqualTo(owner.getEmail());
+        assertThat(users.count()).isEqualTo(accounts);
+        assertThat(encoder.matches("Original9!", users.findById(owner.getPkid()).orElseThrow().getPassword()))
+                .isTrue();
+        verify(mail).sendSignUpAttempt(argThat(told -> told.getPkid().equals(owner.getPkid())));
+        verify(mail, never()).sendActivation(any(), any(), any());
+    }
+
+    @Test
+    void aSignUpCountsTowardItsEmailsOnceItSendsOneAndNotWhenRefusedBefore() {
+        String taken = user(true).getUsername();
+        String email = "inbox_" + UUID.randomUUID().toString().replace("-", "") + "@example.invalid";
+        for (int attempt = 0; attempt < 3; attempt++) {
+            assertThatThrownBy(() -> registration.register(signUp(taken, email), address()))
+                    .isInstanceOf(RegistrationException.class);
+        }
+        // Each one replaces the sign-up before it, which was never activated.
+        for (int attempt = 0; attempt < 3; attempt++) {
+            registration.register(signUp("fresh_" + UUID.randomUUID().toString().replace("-", ""), email), address());
+        }
+
+        assertThatThrownBy(() -> registration.register(
+                        signUp("fresh_" + UUID.randomUUID().toString().replace("-", ""), email), address()))
+                .isInstanceOfSatisfying(ResponseStatusException.class,
+                        refused -> assertThat(refused.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS));
+        verify(mail, times(3)).sendActivation(any(), any(), any());
+    }
+
+    @Test
+    void aUsernameOfUnderscoresGetsAProfileAddressThatOpens() {
+        User first = registration.register(signUp("___", UUID.randomUUID() + "@example.invalid"), address());
+        User second = registration.register(signUp("____", UUID.randomUUID() + "@example.invalid"), address());
+
+        assertThat(profiles.findByUserPkid(first.getPkid()).orElseThrow().getSlug()).isEqualTo("profile");
+        assertThat(profiles.findByUserPkid(second.getPkid()).orElseThrow().getSlug()).isEqualTo("profile-1");
+    }
+
+    private static RegisterRequest signUp(String username, String email) {
+        return new RegisterRequest(username, "New", "Resident", email, "Fresh9!pass", "Fresh9!pass");
+    }
+
+    // A network of its own for each sign-up, so only the email's own count adds up.
+    private static String address() {
+        return "network-" + UUID.randomUUID();
+    }
+
+    @Test
+    void pendingSignUpsGoAfterAWeekAndNoOtherAccountsDo() {
+        User oldPending = user(false);
+        User newPending = user(false);
+        User active = user(true);
+        User offByStaff = user(true);
+        database.update("UPDATE users SET is_active = FALSE WHERE pkid = ?", offByStaff.getPkid());
+        User madeInConsole = user(false);
+        database.update("INSERT INTO admin_audit_log (actor_label, resource, object_pkid, object_label, action)"
+                + " VALUES ('admin@example.invalid', 'users', ?, 'made', 'create')", madeInConsole.getPkid());
+        database.update("UPDATE users SET date_joined = NOW() - INTERVAL '8 days' WHERE pkid <> ?", newPending.getPkid());
+
+        assertThat(pendingSignUps.removeExpired()).isOne();
+        assertThat(users.findById(oldPending.getPkid())).isEmpty();
+        for (User kept : List.of(newPending, active, offByStaff, madeInConsole))
+            assertThat(users.findById(kept.getPkid())).isPresent();
+    }
+
+    @Test
     void invalidPurposeUidAndExpiryCannotConsumeToken() {
         User user = user(false);
         User other = user(false);
@@ -187,6 +317,11 @@ class AuthLifecycleRegressionTest {
                 first.getUsername().toUpperCase(), second.getPkid())).isInstanceOf(DataIntegrityViolationException.class);
         assertThatThrownBy(() -> database.update("UPDATE users SET email = ? WHERE pkid = ?",
                 first.getEmail().toUpperCase(), second.getPkid())).isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    private Instant activatedAt(User user) {
+        return database.queryForObject(
+                "SELECT activated_at FROM users WHERE pkid = ?", Instant.class, user.getPkid());
     }
 
     private void ban(User user) {

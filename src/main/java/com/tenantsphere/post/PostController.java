@@ -42,6 +42,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/v1/posts")
 public class PostController {
 
+    // Addresses the API or the client already use for a page of their own, where a post with that
+    // slug could never be opened.
+    private static final Set<String> TAKEN_PATHS = Set.of("my-posts", "top-posts", "popular-tags", "update-post");
+
     private static final int PAGE_SIZE = 9;
     private static final int TOP_POSTS_LIMIT = 6;
     private static final int POPULAR_TAGS_LIMIT = 5;
@@ -69,7 +73,7 @@ public class PostController {
             @RequestParam(name = "page", defaultValue = "1") int page) {
 
         Page<PostResponse> result = postService.toResponses(
-                postRepository.findAllOrdered(pageable(page, PAGE_SIZE)), viewer(principal), true);
+                postRepository.findAllOrdered(pageable(page, PAGE_SIZE)), viewer(principal));
         return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
@@ -81,7 +85,7 @@ public class PostController {
 
         User user = principal.getUser();
         Page<PostResponse> result = postService.toResponses(
-                postRepository.findByAuthor(user.getPkid(), pageable(page, 10)), user, false);
+                postRepository.findByAuthor(user.getPkid(), pageable(page, 10)), user);
         return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
@@ -93,7 +97,7 @@ public class PostController {
 
         User user = principal.getUser();
         Page<PostResponse> result = postService.toResponses(
-                postRepository.findBookmarkedBy(user.getPkid(), pageable(page, 10)), user, true);
+                postRepository.findBookmarkedBy(user.getPkid(), pageable(page, 10)), user);
         return PageResponse.from(result, PageResponse.currentRequestUrl());
     }
 
@@ -161,7 +165,7 @@ public class PostController {
 
         Post post = new Post();
         post.setTitle(request.title());
-        post.setSlug(uniqueSlug(Slugs.of(request.title())));
+        post.setSlug(uniqueSlug(Slugs.of(request.title(), "post")));
         post.setBody(request.body());
         post.setAuthor(user);
         if (request.tags() != null) {
@@ -188,7 +192,7 @@ public class PostController {
     private String uniqueSlug(String base) {
         String candidate = base;
         int suffix = 2;
-        while (postRepository.findBySlug(candidate).isPresent()) {
+        while (TAKEN_PATHS.contains(candidate) || postRepository.findBySlug(candidate).isPresent()) {
             candidate = base + "-" + suffix++;
         }
         return candidate;
@@ -200,7 +204,7 @@ public class PostController {
             tags.add(tagRepository.findByNameIgnoreCase(name).orElseGet(() -> {
                 Tag tag = new Tag();
                 tag.setName(name);
-                tag.setSlug(uniqueTagSlug(Slugs.of(name)));
+                tag.setSlug(uniqueTagSlug(Slugs.of(name, "tag")));
                 return tagRepository.save(tag);
             }));
         }

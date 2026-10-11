@@ -22,20 +22,25 @@ public class ProviderAuthController {
     private final GoogleOAuthService googleOAuthService;
     private final JwtService jwtService;
     private final CookieService cookieService;
+    private final RequestLimiter limiter;
 
     public ProviderAuthController(
             GoogleOAuthService googleOAuthService,
             JwtService jwtService,
-            CookieService cookieService) {
+            CookieService cookieService,
+            RequestLimiter limiter) {
         this.googleOAuthService = googleOAuthService;
         this.jwtService = jwtService;
         this.cookieService = cookieService;
+        this.limiter = limiter;
     }
 
     @GetMapping("/{provider}/")
     public AuthorizationUrlResponse authorizationUrl(
             @PathVariable String provider,
             @RequestParam("redirect_uri") String redirectUri, HttpServletRequest request) {
+        // Each start keeps a session on the server until it is used or expires.
+        limiter.consume(RequestLimit.GOOGLE_SIGN_IN_ADDRESS, request.getRemoteAddr());
         return new AuthorizationUrlResponse(
                 googleOAuthService.authorizationUrl(provider, redirectUri, request));
     }
@@ -50,8 +55,9 @@ public class ProviderAuthController {
         User user = googleOAuthService.login(provider, state, code, request);
         if (request.getSession(false) != null) request.changeSessionId();
         UUID userId = user.getId();
+        UUID session = UUID.randomUUID();
         cookieService.writeAuthCookies(
-                response, jwtService.issueAccessToken(userId), jwtService.issueRefreshToken(userId));
+                response, jwtService.issueAccessToken(userId, session), jwtService.issueRefreshToken(userId, session));
         return new MessageResponse("You are logged in Successful.");
     }
 }

@@ -19,12 +19,12 @@ export const issueApiSlice = baseApiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ["Issue"],
 		}),
-		getMyIssues: builder.query<MyIssuesResponse, void>({
-			query: () => "/issues/me/",
+		getMyIssues: builder.query<MyIssuesResponse, number>({
+			query: (page = 1) => `/issues/me/?page=${page}`,
 			providesTags: ["Issue"],
 		}),
-		getMyAssignedIssues: builder.query<MyAssignedIssuesResponse, string>({
-			query: () => "/issues/assigned/",
+		getMyAssignedIssues: builder.query<MyAssignedIssuesResponse, number>({
+			query: (page = 1) => `/issues/assigned/?page=${page}`,
 			providesTags: ["Issue"],
 		}),
 		getSingleIssue: builder.query<IssueResponse, string>({

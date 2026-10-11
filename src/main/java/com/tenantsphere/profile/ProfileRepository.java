@@ -30,7 +30,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             select p from Profile p
             join fetch p.user u
-            where u.staff = false
+            where u.active = true
+              and u.staff = false
               and u.superuser = false
               and u.guest = false
               and p.occupation = com.tenantsphere.profile.Occupation.TENANT
@@ -41,7 +42,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             select p from Profile p
             join fetch p.user u
-            where u.staff = false
+            where u.active = true
+              and u.staff = false
               and u.superuser = false
               and u.guest = false
               and p.occupation <> com.tenantsphere.profile.Occupation.TENANT
@@ -52,7 +54,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             select p from Profile p
             join fetch p.user u
-            where u.staff = false
+            where u.active = true
+              and u.staff = false
               and u.superuser = false
               and u.guest = false
               and p.occupation = com.tenantsphere.profile.Occupation.TENANT
@@ -66,7 +69,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("""
             select p from Profile p
             join fetch p.user u
-            where u.staff = false
+            where u.active = true
+              and u.staff = false
               and u.superuser = false
               and u.guest = false
               and p.occupation <> com.tenantsphere.profile.Occupation.TENANT

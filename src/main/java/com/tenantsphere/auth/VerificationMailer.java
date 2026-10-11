@@ -62,6 +62,28 @@ public class VerificationMailer {
     }
 
     @Async
+    public void sendSignUpAttempt(User owner) {
+        String link = "%s/forgot-password".formatted(site.domain());
+        send(
+                owner,
+                "Someone tried to sign up with your email",
+                """
+                Hello %s,
+
+                Someone tried to create a %s account with this email address. You \
+                already have an account, so nothing was changed.
+
+                If it was you, sign in instead. If you've forgotten your password, \
+                you can choose a new one here:
+
+                %s
+
+                If it wasn't you, you can ignore this message.
+                """
+                        .formatted(owner.getFirstName(), site.name(), link));
+    }
+
+    @Async
     public void sendPasswordChanged(User user) {
         send(
                 user,

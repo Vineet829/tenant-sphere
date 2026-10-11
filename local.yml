@@ -36,8 +36,10 @@ services:
       dockerfile: ./docker/local/postgres/Dockerfile
     image: tenant_prod_postgres
     container_name: tenant_prod_postgres
+    # Published on this machine only: the database, the mail viewer, which shows every activation
+    # and reset link, and the site are not for the rest of the network.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - tenant_prod_postgres_data:/var/lib/postgresql/data
     env_file:
@@ -49,8 +51,8 @@ services:
     image: docker.io/axllent/mailpit:v1.15
     container_name: tenant_prod_mailpit
     ports:
-      - "8025:8025"
-      - "1025:1025"
+      - "127.0.0.1:8025:8025"
+      - "127.0.0.1:1025:1025"
     volumes:
       - tenant_prod_mailpit_data:/data
     environment:
@@ -87,7 +89,7 @@ services:
     restart: always
     container_name: tenant_nginx
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     volumes:
       - logs_store:/var/log/nginx
     depends_on:
@@ -98,8 +100,7 @@ services:
 
 
 networks:
-  tenant_prod_nw:
-    external: true
+  tenant_prod_nw: {}
 
 volumes:
   tenant_prod_postgres_data: {}

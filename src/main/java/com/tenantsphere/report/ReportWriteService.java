@@ -50,7 +50,7 @@ public class ReportWriteService {
 
         Report report = new Report();
         report.setTitle(request.title());
-        report.setSlug(uniqueSlug(Slugs.of(request.title())));
+        report.setSlug(uniqueSlug(Slugs.of(request.title(), "report")));
         report.setDescription(request.description());
         report.setReportedBy(reporter);
         report.setReportedUser(reported);
@@ -66,7 +66,9 @@ public class ReportWriteService {
                     "Warning: " + reported.getFullName() + " You have been reported!",
                     "A report titled \"" + report.getTitle() + "\" has been filed against you on "
                             + mailService.siteName() + ".");
-        } else if (profile.getReportCount() >= Profile.DEACTIVATION_REPORTERS && reported.isActive()) {
+        } else if (profile.getReportCount() >= Profile.DEACTIVATION_REPORTERS
+                && reported.isActive()
+                && !Profile.keptOnByStaffRole(reported.isStaff(), reported.isSuperuser())) {
             reported.setActive(false);
             userRepository.save(reported);
             sendAfterCommit(

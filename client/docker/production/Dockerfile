@@ -1,4 +1,4 @@
-FROM docker.io/node:20.11-alpine3.18 AS base
+FROM docker.io/node:22-alpine AS base
 
 # stage 1. Install dependencies only when needed
 FROM base AS deps
@@ -27,8 +27,6 @@ WORKDIR ${APP_HOME}
 COPY --from=deps /app/node_modules ./node_modules
 
 COPY . ${APP_HOME}
-
-COPY .env.production .env.production
 
 RUN npm run build
 

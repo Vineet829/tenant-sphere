@@ -1,6 +1,7 @@
 package com.tenantsphere.config;
 
 import com.tenantsphere.auth.JwtCookieAuthenticationFilter;
+import com.tenantsphere.auth.TokenRevocations;
 import com.tenantsphere.admin.AdminLoginView;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import com.vaadin.flow.spring.security.NavigationAccessControlConfigurer;
@@ -42,7 +43,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+        return new BoundedPasswordEncoder(Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8());
     }
 
     @Bean
@@ -60,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http, AuthenticationContext authenticationContext, AppProperties properties,
-            RequestUtil requestUtil) throws Exception {
+            RequestUtil requestUtil, TokenRevocations revocations) throws Exception {
         var csrfRepository = new org.springframework.security.web.csrf.CookieCsrfTokenRepository();
         csrfRepository.setCookieName(properties.cookie().secure() ? "__Host-XSRF-TOKEN" : "XSRF-TOKEN");
         csrfRepository.setCookieCustomizer(cookie -> cookie.path("/").httpOnly(false)
@@ -118,6 +119,16 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .logoutUrl("/admin/logout")
+                // The console's tokens are refused from now on, not only taken from this browser.
+                .addLogoutHandler((request, response, authentication) -> {
+                    if (request.getCookies() == null) return;
+                    for (var cookie : request.getCookies()) {
+                        if (cookie.getName().equals(properties.cookie().accessName())
+                                || cookie.getName().equals(properties.cookie().refreshName())) {
+                            revocations.revoke(cookie.getValue());
+                        }
+                    }
+                })
                 .logoutSuccessUrl("/admin/login")
                 .deleteCookies(properties.cookie().accessName(), properties.cookie().refreshName(),
                         properties.cookie().loggedInName()))

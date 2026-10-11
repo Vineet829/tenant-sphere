@@ -10,7 +10,11 @@ import com.tenantsphere.profile.dto.UpdateProfileResponse;
 import com.tenantsphere.rating.RatingRepository;
 import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,21 +52,19 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public Page<ProfileResponse> listTenants(Pageable pageable, String search) {
         if (hasValue(search)) {
-            return profileRepository
-                    .searchTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable)
-                    .map(this::toResponse);
+            return toResponses(
+                    profileRepository.searchTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable));
         }
-        return profileRepository.findTenantProfiles(pageable).map(this::toResponse);
+        return toResponses(profileRepository.findTenantProfiles(pageable));
     }
 
     @Transactional(readOnly = true)
     public Page<ProfileResponse> listNonTenants(Pageable pageable, String search) {
         if (hasValue(search)) {
-            return profileRepository
-                    .searchNonTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable)
-                    .map(this::toResponse);
+            return toResponses(
+                    profileRepository.searchNonTenantProfiles(search.trim().toLowerCase(Locale.ROOT), pageable));
         }
-        return profileRepository.findNonTenantProfiles(pageable).map(this::toResponse);
+        return toResponses(profileRepository.findNonTenantProfiles(pageable));
     }
 
     @Transactional(readOnly = true)
@@ -151,6 +153,24 @@ public class ProfileService {
 
     private boolean hasValue(String value) {
         return value != null && !value.isBlank();
+    }
+
+    // A directory page's apartments and average ratings in one query each, not two per person.
+    private Page<ProfileResponse> toResponses(Page<Profile> page) {
+        List<Long> users = page.getContent().stream().map(profile -> profile.getUser().getPkid()).toList();
+        Map<Long, ApartmentResponse> homes = new HashMap<>();
+        Map<Long, Double> averages = new HashMap<>();
+        if (!users.isEmpty()) {
+            apartmentRepository.findByTenantPkidIn(users).stream()
+                    .sorted(Comparator.comparing(Apartment::getPkid))
+                    .forEach(apartment -> homes.putIfAbsent(
+                            apartment.getTenant().getPkid(), ApartmentResponse.from(apartment)));
+            ratingRepository.averagesFor(users).forEach(row -> averages.put(row.getUserPkid(), row.getAverage()));
+        }
+        return page.map(profile -> ProfileResponse.of(
+                profile,
+                homes.get(profile.getUser().getPkid()),
+                averages.getOrDefault(profile.getUser().getPkid(), 0.0)));
     }
 
     private ProfileResponse toResponse(Profile profile) {

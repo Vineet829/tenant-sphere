@@ -29,6 +29,7 @@ public class GoogleOAuthService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final GoogleIdentityRepository identities;
+    private final PendingSignUps pendingSignUps;
 
     public GoogleOAuthService(
             GoogleOAuthProperties properties,
@@ -36,7 +37,8 @@ public class GoogleOAuthService {
             GoogleIdentityProvider identityProvider,
             UserRepository userRepository,
             ProfileRepository profileRepository,
-            PasswordEncoder passwordEncoder, GoogleIdentityRepository identities) {
+            PasswordEncoder passwordEncoder, GoogleIdentityRepository identities,
+            PendingSignUps pendingSignUps) {
         this.properties = properties;
         this.stateService = stateService;
         this.identityProvider = identityProvider;
@@ -44,6 +46,7 @@ public class GoogleOAuthService {
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
         this.identities = identities;
+        this.pendingSignUps = pendingSignUps;
     }
 
     public String authorizationUrl(String provider, String redirectUri, HttpServletRequest request) {
@@ -89,6 +92,8 @@ public class GoogleOAuthService {
         User user = identities.findById(info.sub()).map(GoogleIdentity::getUser).orElse(null);
         if (user == null) {
             String email = info.email().trim().toLowerCase(Locale.ROOT);
+            // Google has verified the email, so a sign-up with it that was never activated gives way.
+            pendingSignUps.removeFor(email);
             if (userRepository.existsByEmailIgnoreCase(email)) {
                 throw new GoogleAuthenticationException(
                         "An account with this email already exists. Sign in with your password.");

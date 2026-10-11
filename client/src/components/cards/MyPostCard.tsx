@@ -7,11 +7,18 @@ import { CardsSkeleton } from "@/components/estate/Skeletons";
 import { useGetMyPostsQuery } from "@/lib/redux/features/posts/postApiSlice";
 import { MessagesSquare, PenLine } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import PageControls from "../shared/PageControls";
 
 export default function MyPostCard() {
-	const { data, isLoading, isFetching, isError, refetch } = useGetMyPostsQuery();
+	const [page, setPage] = useState(1);
+	const { currentData: data, isLoading, isFetching, isError, refetch } = useGetMyPostsQuery(page);
+	const totalPages = data?.my_posts.total_pages ?? page;
+	useEffect(() => {
+		if (data && page > Math.max(totalPages, 1)) setPage(Math.max(totalPages, 1));
+	}, [data, page, totalPages]);
 
-	if (isLoading) return <CardsSkeleton cards={2} />;
+	if (isLoading || (!data && isFetching)) return <CardsSkeleton cards={2} />;
 	if (isError) return <ErrorState what="your posts" onRetry={refetch} retrying={isFetching} />;
 
 	const posts = data?.my_posts.results || [];
@@ -34,10 +41,13 @@ export default function MyPostCard() {
 	}
 
 	return (
-		<div className="es-postgrid es-stagger">
-			{posts.map((post, index) => (
-				<PostListItem key={post.id} post={post} index={index} showAuthor={false} />
-			))}
-		</div>
+		<>
+			<div className="es-postgrid es-stagger">
+				{posts.map((post, index) => (
+					<PostListItem key={post.id} post={post} index={index} showAuthor={false} />
+				))}
+			</div>
+			<PageControls page={page} totalPages={totalPages} onChange={setPage} pending={isFetching} />
+		</>
 	);
 }

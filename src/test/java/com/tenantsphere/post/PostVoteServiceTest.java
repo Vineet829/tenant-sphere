@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -256,6 +257,56 @@ class PostVoteServiceTest {
         }
     }
 
+    @Test
+    void postListsArePagedByTheDatabaseAndKeepEveryTagOfEachPost() {
+        String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
+        User author = user("tagger_" + suffix);
+        long garden = tag("garden-" + suffix);
+        long noise = tag("noise-" + suffix);
+        for (int i = 0; i < 3; i++) {
+            UUID postId = post(author);
+            for (long tag : List.of(garden, noise)) {
+                database.update("INSERT INTO post_tags (post_pkid, tag_pkid) VALUES ((SELECT pkid FROM posts WHERE id = ?), ?)",
+                        postId, tag);
+            }
+        }
+        entityManager.flush();
+        entityManager.clear();
+
+        // With fail_on_pagination_over_collection_fetch on, a page that fetched the tags would be refused.
+        var page = posts.findByAuthor(author.getPkid(), PageRequest.of(0, 2));
+        assertThat(page.getContent()).hasSize(2);
+        assertThat(page.getTotalElements()).isEqualTo(3);
+        assertThat(responses.toResponses(page, author).getContent())
+                .allSatisfy(post -> assertThat(post.tags()).containsExactly("garden-" + suffix, "noise-" + suffix));
+        var tagged = posts.findByTagSlug("garden-" + suffix, PageRequest.of(0, 10));
+        assertThat(responses.toTagResponses(tagged, author).getContent())
+                .hasSize(3)
+                .allSatisfy(post -> assertThat(post.tags()).containsExactly("garden-" + suffix, "noise-" + suffix));
+    }
+
+    private long tag(String name) {
+        return database.queryForObject("INSERT INTO tags (name, slug) VALUES (?, ?) RETURNING pkid", Long.class, name, name);
+    }
+
+    @Test
+    void aListCountsEachPostsRepliesAndOnlyThePostsOwnPageShowsThem() {
+        User author = user("lister_" + UUID.randomUUID().toString().replace("-", "").substring(0, 12));
+        UUID postId = post(author);
+        for (int i = 0; i < 2; i++) {
+            database.update("""
+                    INSERT INTO replies (id, post_pkid, author_pkid, body)
+                    VALUES (?, (SELECT pkid FROM posts WHERE id = ?), ?, 'A reply')
+                    """, UUID.randomUUID(), postId, author.getPkid());
+        }
+        Post stored = posts.findByExternalId(postId).orElseThrow();
+
+        var listed = responses.toResponses(new PageImpl<>(List.of(stored)), author).getContent().getFirst();
+        assertThat(listed.repliesCount()).isEqualTo(2);
+        assertThat(listed.replies()).isEmpty();
+        assertThat(responses.toResponse(stored, author).replies()).hasSize(2);
+    }
+
     private void assertStoredCounts(UUID post, int upvotes, int downvotes) {
         assertThat(database.queryForObject("SELECT upvotes FROM posts WHERE id = ?", Integer.class, post)).isEqualTo(upvotes);
         assertThat(database.queryForObject("SELECT downvotes FROM posts WHERE id = ?", Integer.class, post)).isEqualTo(downvotes);
@@ -282,7 +333,7 @@ class PostVoteServiceTest {
         assertThat(detail.isUpvoted()).isEqualTo(upvoted);
         assertThat(detail.isDownvoted()).isEqualTo(downvoted);
         var page = new PageImpl<>(List.of(stored));
-        var feed = responses.toResponses(page, voter, true).getContent().getFirst();
+        var feed = responses.toResponses(page, voter).getContent().getFirst();
         assertThat(feed.isUpvoted()).isEqualTo(upvoted);
         assertThat(feed.isDownvoted()).isEqualTo(downvoted);
         var tagged = responses.toTagResponses(page, voter).getContent().getFirst();

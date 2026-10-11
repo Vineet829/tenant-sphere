@@ -9,6 +9,8 @@ import { tagSlug } from "@/components/estate/format";
 import { useGetPopularTagsQuery, useGetPostsByTagQuery } from "@/lib/redux/features/posts/postApiSlice";
 import { ArrowLeft, Hash } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import PageControls from "../shared/PageControls";
 
 interface SlugParamsProps {
 	params: {
@@ -22,7 +24,12 @@ function nameFromSlug(slug: string) {
 }
 
 export default function PostTagCard({ params }: SlugParamsProps) {
-	const { data, isLoading, isFetching, isError, refetch } = useGetPostsByTagQuery(params.tagSlug);
+	const [page, setPage] = useState(1);
+	const { currentData: data, isLoading, isFetching, isError, refetch } = useGetPostsByTagQuery({ tagSlug: params.tagSlug, page });
+	const totalPages = data?.posts_by_tag.total_pages ?? page;
+	useEffect(() => {
+		if (data && page > Math.max(totalPages, 1)) setPage(Math.max(totalPages, 1));
+	}, [data, page, totalPages]);
 	const { data: tagData } = useGetPopularTagsQuery();
 
 	const posts = data?.posts_by_tag.results || [];
@@ -45,10 +52,10 @@ export default function PostTagCard({ params }: SlugParamsProps) {
 						Posts tagged <em>{tagName}</em>
 					</>
 				}
-				count={isLoading || isError ? undefined : totalCount}
+				count={!data || isError ? undefined : totalCount}
 			/>
 
-			{isLoading ? (
+			{isLoading || (!data && isFetching) ? (
 				<FeedSkeleton rows={3} />
 			) : isError ? (
 				<ErrorState what="these posts" onRetry={refetch} retrying={isFetching} />
@@ -71,6 +78,7 @@ export default function PostTagCard({ params }: SlugParamsProps) {
 					No posts with this tag
 				</EmptyState>
 			)}
+			<PageControls page={page} totalPages={totalPages} onChange={setPage} pending={isFetching} />
 		</div>
 	);
 }

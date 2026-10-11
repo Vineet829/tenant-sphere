@@ -11,6 +11,15 @@ public final class Slugs {
 
     private Slugs() {}
 
+    /**
+     * The value's slug, or the fallback when nothing of it is left, as with a title written wholly in
+     * another script, such as Hindi: an empty slug makes an address nothing can be found at.
+     */
+    public static String of(String value, String fallback) {
+        String slug = of(value);
+        return slug.isEmpty() ? fallback : slug;
+    }
+
     public static String of(String value) {
         String normalized = Normalizer.normalize(value, Normalizer.Form.NFKD)
                 .replaceAll("\\p{M}", "")
