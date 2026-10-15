@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.security.access.AccessDeniedException;
 import jakarta.validation.Valid;
@@ -66,7 +67,11 @@ public class PostController {
         this.contentViewRecorder = contentViewRecorder;
     }
 
+    // A page of posts and its responses are built in one read-only transaction: the
+    // tags are not fetched with the page and load afterwards in one batch, which needs
+    // the page's posts to be still attached.
     @GetMapping("/")
+    @Transactional(readOnly = true)
     @ObjectLabel("posts")
     public PageResponse<PostResponse> list(
             @AuthenticationPrincipal AppUserDetails principal,
@@ -78,6 +83,7 @@ public class PostController {
     }
 
     @GetMapping("/my-posts/")
+    @Transactional(readOnly = true)
     @ObjectLabel("my_posts")
     public PageResponse<PostResponse> myPosts(
             @AuthenticationPrincipal AppUserDetails principal,
@@ -90,6 +96,7 @@ public class PostController {
     }
 
     @GetMapping("/bookmarked/posts/")
+    @Transactional(readOnly = true)
     @ObjectLabel("bookmarked_posts")
     public PageResponse<PostResponse> bookmarked(
             @AuthenticationPrincipal AppUserDetails principal,
@@ -125,6 +132,7 @@ public class PostController {
     }
 
     @GetMapping("/tags/{tagSlug}/")
+    @Transactional(readOnly = true)
     @ObjectLabel("posts_by_tag")
     public PageResponse<PostByTagResponse> byTag(
             @PathVariable String tagSlug,
