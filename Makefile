@@ -1,8 +1,11 @@
-
+# client/node_modules must exist, owned like client/, before Docker mounts a
+# volume there, or Docker creates it as root inside your checkout.
 build:
+	@mkdir -p client/node_modules && { [ "$$(id -u)" != 0 ] || chown "$$(stat -c %u:%g client 2>/dev/null || stat -f %u:%g client)" client/node_modules; }
 	docker compose -f local.yml up --build -d --remove-orphans
 
 up:
+	@mkdir -p client/node_modules && { [ "$$(id -u)" != 0 ] || chown "$$(stat -c %u:%g client 2>/dev/null || stat -f %u:%g client)" client/node_modules; }
 	docker compose -f local.yml up -d
 
 down:

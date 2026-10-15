@@ -549,6 +549,38 @@ class AdminManagementTest {
     }
 
     @Test
+    void removingTheStaffRoleFromAReportedAccountSwitchesItOff() {
+        long staff = createUser("demoted_staff");
+        db.update("UPDATE users SET is_staff=TRUE WHERE pkid=?", staff);
+        for (int i = 0; i < 5; i++) {
+            writes.save(AdminResource.REPORTS, null, null, report(createUser("demote_reporter" + i), staff));
+        }
+        var demote = queries.read(AdminResource.USERS, staff);
+        demote.put("is_staff", false);
+        save(AdminResource.USERS, staff, demote);
+        assertThat(
+                        db.queryForObject(
+                                "SELECT is_active FROM users WHERE pkid=?", Boolean.class, staff))
+                .isFalse();
+        verify(mail, times(1)).send(anyString(), contains("Deactivation"), anyString());
+        var reactivate = queries.read(AdminResource.USERS, staff);
+        reactivate.put("is_active", true);
+        assertThatThrownBy(() -> save(AdminResource.USERS, staff, reactivate))
+                .hasMessageContaining("five different");
+    }
+
+    @Test
+    void editingAUserLeavesTheirProfileVersionAlone() {
+        long user = createUser("renamed_resident");
+        var version = db.queryForObject("SELECT updated_at FROM profiles WHERE user_pkid=?", Object.class, user);
+        var row = queries.read(AdminResource.USERS, user);
+        row.put("first_name", "Renamed");
+        save(AdminResource.USERS, user, row);
+        assertThat(db.queryForObject("SELECT updated_at FROM profiles WHERE user_pkid=?", Object.class, user))
+                .isEqualTo(version);
+    }
+
+    @Test
     void reportsKeepAStaffAccountOnAndItCanStillBeEdited() {
         long staff = createUser("reported_staff");
         db.update("UPDATE users SET is_staff=TRUE WHERE pkid=?", staff);

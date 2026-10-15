@@ -62,8 +62,12 @@ public class Profile extends BaseEntity {
     @Column(name = "slug", nullable = false, unique = true)
     private String slug;
 
-    public boolean isBanned() {
-        return reportCount >= DEACTIVATION_REPORTERS;
+    // Five different reporters lock a resident out: no sign-in, no activation,
+    // and open sessions end. Staff stay in, as above. The owner is passed in
+    // because the user association is lazy and the per-request check runs outside a
+    // transaction.
+    public boolean isBanned(User owner) {
+        return reportCount >= DEACTIVATION_REPORTERS && !keptOnByStaffRole(owner.isStaff(), owner.isSuperuser());
     }
 
     public void recalculateReputation() {

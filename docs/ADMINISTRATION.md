@@ -10,7 +10,7 @@ The Spring backend replaces the registered Django admin models with a Vaadin adm
 - Existing `/supersecret` bookmarks redirect to `/admin/`.
 - Use an active staff or superuser account. Guest/resident accounts cannot enter administration.
 
-This branch's `client/` has no development proxy for `/admin`; open Spring or the local Nginx directly. Any proxy placed in front of the admin must preserve the trailing slash on `/admin/`: Vaadin uses that exact URL for initialization and UI requests.
+The client's development server (`npm run dev`) also passes `/admin` to Spring. Any proxy placed in front of the admin must preserve the trailing slash on `/admin/`: Vaadin uses that exact URL for initialization and UI requests.
 
 Copy `.envs/.env.example` to `.envs/.env.local` or `.envs/.env.production` for the Docker setups. `local.yml` already sets `COOKIE_SECURE=false` and points mail at its Mailpit container, because the local Nginx serves plain HTTP. With `mvn spring-boot:run` over `http://localhost`, set `COOKIE_SECURE=false` yourself: Safari drops `Secure` cookies even on localhost.
 
@@ -78,7 +78,7 @@ Generated IDs, timestamps, slugs, votes, report counts and reputation are not ar
 
 ## Reports and deletion
 
-Deactivation occurs at **five different reporting residents/accounts**. Repeated incidents by one person count once. Self-reporting is rejected. Editing, deleting, or cascading reports updates both affected targets. Removing a report does not reactivate an account automatically; an administrator must review and reactivate it explicitly after the count falls below five. Staff and superuser accounts are never deactivated by reports: their reports are kept for other administrators to review, so residents can't lock the administrators out.
+Deactivation occurs at **five different reporting accounts**, not counting guest accounts. Repeated incidents by one person count once. Self-reporting is rejected. Editing, deleting, or cascading reports updates both affected targets. Removing a report does not reactivate an account automatically; a superuser must review and reactivate it explicitly after the count falls below five. Staff and superuser accounts are never deactivated by reports: their reports are kept for other administrators to review, so residents can't lock the administrators out. A save that leaves an account with five or more reporters with neither staff nor superuser status deactivates it, as a fifth report would.
 
 Deletion requires an explicit confirmation with dependent-record counts and effects. The service checks permission to delete every registered model in the cascade, then verifies that the preview is still current. Bulk batches are limited to 100 selected roots and 5,000 dependent registered records. User deletion also repairs surviving vote totals and report counts. Database triggers remove orphaned post/issue content views.
 

@@ -129,7 +129,7 @@ public class RegistrationService {
     }
 
     private boolean isBanned(User user) {
-        return profileRepository.findByUserPkid(user.getPkid()).map(Profile::isBanned).orElse(false);
+        return profileRepository.findByUserPkid(user.getPkid()).map(profile -> profile.isBanned(user)).orElse(false);
     }
 
     // A username made only of underscores has no letters for a slug, so its profile takes a plain one.

@@ -43,6 +43,25 @@ class AuthBugFixTest {
         verify(passwords).matches("supplied", user.getPassword());
     }
 
+    @Test void reportsNeverBanStaffOrSuperusers() {
+        Profile profile = new Profile(); profile.setReportCount(5);
+        User resident = user(); User staff = user(); staff.setStaff(true); User root = user(); root.setSuperuser(true);
+        assertThat(profile.isBanned(resident)).isTrue();
+        assertThat(profile.isBanned(staff)).isFalse();
+        assertThat(profile.isBanned(root)).isFalse();
+        profile.setReportCount(4);
+        assertThat(profile.isBanned(resident)).isFalse();
+    }
+
+    @Test void reportedStaffCanStillLogIn() {
+        User user = user(); user.setStaff(true); Profile profile = new Profile(); profile.setReportCount(5);
+        when(users.findByEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(user));
+        when(users.findById(user.getPkid())).thenReturn(Optional.of(user));
+        when(profiles.findByUserPkid(user.getPkid())).thenReturn(Optional.of(profile));
+        when(passwords.matches("supplied", user.getPassword())).thenReturn(true);
+        assertThat(auth(passwords).authenticate(user.getEmail(), "supplied")).isSameAs(user);
+    }
+
     @Test void bannedActiveAccountsCannotLogInOrRefresh() {
         User user = user(); Profile profile = new Profile(); profile.setReportCount(5);
         when(users.findByEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(user));

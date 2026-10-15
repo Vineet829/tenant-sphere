@@ -1,7 +1,6 @@
 package com.tenantsphere.auth;
 
 import com.tenantsphere.config.AppProperties;
-import com.tenantsphere.profile.Profile;
 import com.tenantsphere.profile.ProfileRepository;
 import com.tenantsphere.user.User;
 import com.tenantsphere.user.UserRepository;
@@ -74,7 +73,7 @@ public class JwtCookieAuthenticationFilter extends OncePerRequestFilter {
             UUID userId = jwtService.extractUserId(token, TokenType.ACCESS);
             User user = userRepository.findByExternalId(userId).orElse(null);
             if (user == null || !user.isSessionEligible()
-                    || profileRepository.findByUserPkid(user.getPkid()).map(Profile::isBanned).orElse(false)
+                    || profileRepository.findByUserPkid(user.getPkid()).map(profile -> profile.isBanned(user)).orElse(false)
                     || !jwtService.isCurrent(token, user)
                     || revocations.isRevoked(token)) {
                 return;

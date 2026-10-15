@@ -255,12 +255,29 @@ class SecuritySessionRegressionTest {
 
     @Test
     void aBannedAccountsTokensAreRefused() throws Exception {
+        var resident = new User();
+        resident.setId(UUID.randomUUID());
+        resident.setPkid(2L);
+        resident.setActive(true);
+        when(jwt.extractUserId("resident-access", TokenType.ACCESS)).thenReturn(resident.getId());
+        when(jwt.isCurrent(eq("resident-access"), any())).thenReturn(true);
+        when(users.findByExternalId(resident.getId())).thenReturn(Optional.of(resident));
         var banned = new Profile();
         banned.setReportCount(5);
-        when(profiles.findByUserPkid(1L)).thenReturn(Optional.of(banned));
+        when(profiles.findByUserPkid(2L)).thenReturn(Optional.of(banned));
+
+        mvc.perform(get("/api/v1/auth/users/me/").cookie(new Cookie("access", "resident-access")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void aReportedStaffAccountsTokensAreStillAccepted() throws Exception {
+        var reported = new Profile();
+        reported.setReportCount(5);
+        when(profiles.findByUserPkid(1L)).thenReturn(Optional.of(reported));
 
         mvc.perform(get("/api/v1/auth/users/me/").cookie(new Cookie("access", "valid-access")))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk());
     }
 
     @Test

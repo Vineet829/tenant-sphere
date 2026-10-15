@@ -189,6 +189,18 @@ public class AdminRecordService {
         if (r == AdminResource.POSTS) saveTags(id, Objects.toString(values.get("tags"), ""));
         if (r == AdminResource.PROFILES)
             recalculateReports(Set.of(number(values.get("user_pkid"))), Map.of());
+        // Taking away the staff role that kept a reported account on applies the
+        // five-reporter rule again, as a fifth report would. Only then: a recount
+        // moves the profile's version, which would interrupt an open profile edit.
+        if (r == AdminResource.USERS
+                && before != null
+                && Profile.keptOnByStaffRole(
+                        Boolean.TRUE.equals(before.get("is_staff")),
+                        Boolean.TRUE.equals(before.get("is_superuser")))
+                && !Profile.keptOnByStaffRole(
+                        Boolean.TRUE.equals(sql.getOrDefault("is_staff", before.get("is_staff"))),
+                        Boolean.TRUE.equals(sql.getOrDefault("is_superuser", before.get("is_superuser")))))
+            recalculateReports(Set.of(id), Map.of());
         recalculateReports(reportedUsers, oldCounts);
         var after = queries.readInternal(r, id);
         if (r == AdminResource.USERS

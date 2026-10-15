@@ -19,17 +19,16 @@ FROM base as node-run-stage
 ARG APP_HOME=/app
 WORKDIR ${APP_HOME}
 
+# su-exec lets the start script drop from root to the checkout's owner.
+RUN apk add --no-cache su-exec
+
 COPY --from=node-build-stage /node_modules ./node_modules
 
 COPY . ${APP_HOME}
 
-RUN addgroup -g 1001 -S nodejs && \
-  adduser -S nextjs -u 1001 -G nodejs
+COPY ./docker/local/start /usr/local/bin/start
+RUN chmod +x /usr/local/bin/start
 
-RUN chown -R nextjs:nodejs ${APP_HOME}
-
-USER nextjs
-
-CMD [ "npm","run","dev" ]
+CMD [ "start" ]
 
 

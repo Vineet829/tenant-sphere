@@ -24,9 +24,13 @@ services:
       EMAIL_PORT: "1025"
       EMAIL_USE_AUTH: "false"
       EMAIL_USE_TLS: "false"
+    # Waits until PostgreSQL accepts connections: on a first start it is still
+    # creating the database, and the API exits if it cannot connect.
     depends_on:
-      - postgres
-      - mailpit
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
     networks:
       - tenant_prod_nw
 
@@ -44,6 +48,11 @@ services:
       - tenant_prod_postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.envs/.env.local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - tenant_prod_nw
 

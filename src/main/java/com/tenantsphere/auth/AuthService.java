@@ -79,7 +79,7 @@ public class AuthService {
 
     private boolean canSignIn(User user) {
         return user.isSessionEligible() && !profileRepository.findByUserPkid(user.getPkid())
-                .map(Profile::isBanned).orElse(false);
+                .map(profile -> profile.isBanned(user)).orElse(false);
     }
 
     @Transactional(readOnly = true)

@@ -104,8 +104,9 @@ public class GoogleOAuthService {
             identity.setUser(user);
             identities.save(identity);
         }
-        if (!user.isActive() || profileRepository.findByUserPkid(user.getPkid())
-                .map(Profile::isBanned).orElse(false)) {
+        User account = user;
+        if (!account.isActive() || profileRepository.findByUserPkid(account.getPkid())
+                .map(profile -> profile.isBanned(account)).orElse(false)) {
             throw new GoogleAuthenticationException("This account cannot sign in.");
         }
         user.setLastLogin(Instant.now());

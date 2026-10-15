@@ -1,0 +1,7 @@
+#!/bin/sh
+# The checkout is mounted at /app. Run next dev as the owner of the mounted
+# files, as this container sees them, so it can write .next there. Under user
+# namespaces (rootless Docker, Docker Desktop for Linux) your own files show as
+# owned by 0, which maps back to you on the host.
+set -e
+exec su-exec "$(stat -c %u:%g /app)" npm run dev
